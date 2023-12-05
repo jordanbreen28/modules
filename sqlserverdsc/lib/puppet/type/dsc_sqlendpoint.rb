@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlEndpoint',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlEndpoint resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -23,8 +23,9 @@ Puppet::ResourceApi.register_type(
       default:   'property',
     },
     dsc_endpointtype: {
-      type: "Enum['DatabaseMirroring', 'ServiceBroker', 'databasemirroring', 'servicebroker']",
+      type: "Enum['DatabaseMirroring', 'databasemirroring', 'ServiceBroker', 'servicebroker']",
       desc: 'Specifies the type of endpoint. Currently the only types that are supported are the _Database Mirroring_ and the _Service Broker_ type.',
+
 
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -34,6 +35,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -44,6 +46,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The host name of the SQL Server to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -52,6 +55,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'The name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -59,8 +63,9 @@ Puppet::ResourceApi.register_type(
       mof_is_embedded: false,
     },
     dsc_ensure: {
-      type: "Optional[Enum['Present', 'Absent', 'present', 'absent']]",
+      type: "Optional[Enum['Present', 'present', 'Absent', 'absent']]",
       desc: "If the endpoint should be present or absent. Default values is `'Present'`.",
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -71,6 +76,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 4294967295]]',
       desc: 'Specifies the maximum amount of storage in megabytes to allocate for the endpoint to use when storing messages that are to be forwarded.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32',
@@ -79,6 +85,7 @@ Puppet::ResourceApi.register_type(
     dsc_ismessageforwardingenabled: {
       type: 'Optional[Boolean]',
       desc: 'Specifies whether messages received by this endpoint that are for services located elsewhere will be forwarded.',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -89,6 +96,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The owner of the endpoint. Default is the login used for the creation.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -97,6 +105,7 @@ Puppet::ResourceApi.register_type(
     dsc_endpointname: {
       type: 'String',
       desc: 'The name of the endpoint.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -104,8 +113,9 @@ Puppet::ResourceApi.register_type(
       mof_is_embedded: false,
     },
     dsc_state: {
-      type: "Optional[Enum['Started', 'Stopped', 'Disabled', 'started', 'stopped', 'disabled']]",
+      type: "Optional[Enum['Started', 'started', 'Stopped', 'stopped', 'Disabled', 'disabled']]",
       desc: 'Specifies the state of the endpoint. When an endpoint is created and the state is not specified then the endpoint will be started after it is created. The state will not be enforced unless the parameter is specified.',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -116,6 +126,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 65535]]',
       desc: 'The network port the endpoint is listening on. Default value is `5022`, but default value is only used during endpoint creation, it is not enforce.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt16',
@@ -124,6 +135,7 @@ Puppet::ResourceApi.register_type(
     dsc_ipaddress: {
       type: 'Optional[String]',
       desc: "The network IP address the endpoint is listening on. Default value is `'0.0.0.0'` which means listen on any valid IP address. The default value is only used during endpoint creation, it is not enforce.",
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,

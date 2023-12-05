@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlTraceFlag',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlTraceFlag resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -26,6 +26,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[Integer[0, 4294967295]]]',
       desc: 'An array of trace flags to be removed from the existing trace flags.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32[]',
@@ -34,6 +35,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -44,6 +46,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The host name of the _SQL Server_ to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -53,6 +56,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'Forces a restart of the Database Engine service and dependent services after the desired state is set. Default values is $false.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -61,15 +65,27 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'The name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
       mof_type: 'String',
       mof_is_embedded: false,
     },
+    dsc_clearalltraceflags: {
+      type: 'Optional[Boolean]',
+      desc: 'Specifies that there should be no trace flags set on the instance.',
+
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'Boolean',
+      mof_is_embedded: false,
+    },
     dsc_restarttimeout: {
       type: 'Optional[Integer[0, 4294967295]]',
       desc: 'The time the resource waits while the sql server services are restarted. Defaults to 120 seconds',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -80,6 +96,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[Integer[0, 4294967295]]]',
       desc: 'An array of trace flags that startup options should have. This parameter will replace all the current trace flags with the specified trace flags.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32[]',
@@ -89,9 +106,20 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[Integer[0, 4294967295]]]',
       desc: 'An array of trace flags to be added to the existing trace flags.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32[]',
+      mof_is_embedded: false,
+    },
+    ensurable: {
+      type: 'Boolean[false]',
+      desc: 'Default attribute added to all dsc types without an ensure property. This resource is not ensurable.',
+      default: false,
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
       mof_is_embedded: false,
     },
   },

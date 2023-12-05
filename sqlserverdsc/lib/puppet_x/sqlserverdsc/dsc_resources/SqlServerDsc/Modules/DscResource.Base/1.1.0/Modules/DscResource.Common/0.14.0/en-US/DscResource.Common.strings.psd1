@@ -36,4 +36,11 @@ ConvertFrom-StringData @'
     PropertyNotInDesiredState = The parameter '{0}' is not in desired state. (DRC0040)
     PropertyNotInDesiredStateMessage = Property '{0}' is not in desired state. (DRC0041)
     NoMatchKeyMessage = NOTMATCH: Value (type '{0}') for property '{1}' does not match. Current state has the key(s) '{2}' and desired state has not. (DRC0042)
+
+    ## Assert-ElevatedUser
+    ElevatedUser_UserNotElevated = This command must run in an elevated PowerShell session. (DRC0043)
+
+    ## Assert-RequiredCommandParameter
+    RequiredCommandParameter_SpecificParametersMustAllBeSet = The parameters '{0}' must all be specified. (DRC0044)
+    RequiredCommandParameter_SpecificParametersMustAllBeSetWhenParameterExist = The parameters '{0}' must all be specified if either parameter '{1}' is specified. (DRC0045)
 '@

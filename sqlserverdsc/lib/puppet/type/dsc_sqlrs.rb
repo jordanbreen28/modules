@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlRS',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlRS resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -26,14 +26,26 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: '_Reporting Services_ need to be restarted after initialization or settings change. If this parameter is set to `$true`, _Reporting Services_ will not be restarted, even after initialization.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
       mof_is_embedded: false,
     },
+    dsc_encrypt: {
+      type: "Optional[Enum['Mandatory', 'mandatory', 'Optional', 'optional', 'Strict', 'strict']]",
+      desc: 'Specifies how encryption should be enforced when using command `Invoke-SqlCmd`. When not specified, the default value is `Mandatory`.',
+
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
+      mof_is_embedded: false,
+    },
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -44,6 +56,7 @@ Puppet::ResourceApi.register_type(
       type: 'String',
       desc: 'Name of the _SQL Server_ to host the _Reporting Services_ database.',
 
+
       mandatory_for_get: true,
       mandatory_for_set: true,
       mof_type: 'String',
@@ -52,6 +65,7 @@ Puppet::ResourceApi.register_type(
     dsc_databaseinstancename: {
       type: 'String',
       desc: 'Name of the _SQL Server_ instance to host the _Reporting Services_ database.',
+
 
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -62,6 +76,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[String]]',
       desc: "_Report Server_ URL reservations. Optional. If not specified, `'http://+:80'` URL reservation will be used.",
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String[]',
@@ -70,6 +85,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'Name of the _SQL Server Reporting Services_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -80,6 +96,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[String]]',
       desc: "_Report Manager_ or _Report Web App_ URL reservations. Optional. If not specified, `'http://+:80'` URL reservation will be used.",
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String[]',
@@ -88,6 +105,7 @@ Puppet::ResourceApi.register_type(
     dsc_reportsvirtualdirectory: {
       type: 'Optional[String]',
       desc: '_Report Manager_ or _Report Web App_ virtual directory name. Optional.',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -98,6 +116,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: '_Report Server Web Service_ virtual directory. Optional.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -107,6 +126,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'If connections to the _Reporting Services_ must use SSL. If this parameter is not assigned a value, the default is that _Reporting Services_ does not use SSL.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -115,10 +135,21 @@ Puppet::ResourceApi.register_type(
     dsc_isinitialized: {
       type: 'Optional[Boolean]',
       desc: 'Returns if the _Reporting Services_ instance initialized or not.',
+
       behaviour: :read_only,
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
+      mof_is_embedded: false,
+    },
+    ensurable: {
+      type: 'Boolean[false]',
+      desc: 'Default attribute added to all dsc types without an ensure property. This resource is not ensurable.',
+      default: false,
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
       mof_is_embedded: false,
     },
   },

@@ -92,6 +92,11 @@
     Write - Boolean
     Specifies that the resource will only determine if a change is needed if the target node is the active host of the SQL Server instance.
 
+.PARAMETER SeedingMode
+    Write - String
+    Allowed values: Automatic, Manual
+    Specifies the seeding mode. When creating a replica the default value is 'Manual'.
+
 .PARAMETER EndpointPort
     Read - UInt16
     Returns the network port the endpoint is listening on.

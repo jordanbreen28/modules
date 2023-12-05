@@ -1,7 +1,7 @@
 [ClassVersion("1.0.0.0"), FriendlyName("SqlSetup")]
 class DSC_SqlSetup : OMI_BaseResource
 {
-    [Write, Description("The action to be performed. Default value is `'Install'`. **NOTE: AddNode is not currently functional.**"), ValueMap{"Install","Upgrade","InstallFailoverCluster","AddNode","PrepareFailoverCluster","CompleteFailoverCluster"}, Values{"Install","Upgrade","InstallFailoverCluster","AddNode","PrepareFailoverCluster","CompleteFailoverCluster"}] String Action;
+    [Write, Description("The action to be performed. Default value is `'Install'`. <br />> [!NOTE] **AddNode is not currently functional.**"), ValueMap{"Install","Upgrade","InstallFailoverCluster","AddNode","PrepareFailoverCluster","CompleteFailoverCluster"}, Values{"Install","Upgrade","InstallFailoverCluster","AddNode","PrepareFailoverCluster","CompleteFailoverCluster"}] String Action;
     [Required, Description("The path to the root of the source files for installation. I.e and UNC path to a shared resource. Environment variables can be used in the path.")] String SourcePath;
     [Write, EmbeddedInstance("MSFT_Credential"), Description("Credentials used to access the path set in the parameter **SourcePath**. See section [Considerations](#considerations) regarding the parameter **SourceCredential**.")] String SourceCredential;
     [Write, Description("Suppresses reboot.")] Boolean SuppressReboot;
@@ -68,5 +68,7 @@ class DSC_SqlSetup : OMI_BaseResource
     [Write, Description("Feature flags are used to toggle DSC resource functionality on or off. See the DSC resource documentation for what additional functionality exist through a feature flag.")] String FeatureFlag[];
     [Write, Description("Specifies to install the English version of _SQL Server_ on a localized operating system when the installation media includes language packs for both English and the language corresponding to the operating system.")] Boolean UseEnglish;
     [Write, Description("Specifies optional skip rules during setup.")] String SkipRule[];
+    [Write, Description("Specifies the host or network name of the _SQL Server_ instance. If the SQL Server belongs to a cluster or availability group it could be set to the host name for the listener or cluster group. If using a secure connection the specified value should be the same name that is used in the certificate. Default value is the current computer name.")] String ServerName;
+    [Write, Description("Specifies the SQL Server version that should be installed. Only the major version will be used, but the provided value must be set to at least major and minor version (e.g. `14.0`). When providing this parameter the media will not be used to evaluate version. Although, if the setup action is `Upgrade` then setting this parameter will throw an exception as the version from the install media is required.")] String SqlVersion;
     [Read, Description("Returns a boolean value of `$true` if the instance is clustered, otherwise it returns `$false`.")] Boolean IsClustered;
 };

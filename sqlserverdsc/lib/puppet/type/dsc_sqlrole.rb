@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlRole',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlRole resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -25,6 +25,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The host name of the _SQL Server_ to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -43,6 +45,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'The name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -50,8 +53,9 @@ Puppet::ResourceApi.register_type(
       mof_is_embedded: false,
     },
     dsc_ensure: {
-      type: "Optional[Enum['Present', 'Absent', 'present', 'absent']]",
+      type: "Optional[Enum['Present', 'present', 'Absent', 'absent']]",
       desc: "An enumerated value that describes if the server role is added (`'Present'`) or dropped (`'Absent'`). Default value is `'Present'`.",
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -62,6 +66,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[String]]',
       desc: 'The members the server role should include. This parameter will only add members to a server role. Can not be used at the same time as parameter **Members**.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String[]',
@@ -70,6 +75,7 @@ Puppet::ResourceApi.register_type(
     dsc_serverrolename: {
       type: 'String',
       desc: 'The name of of _SQL Server Database Engine_ role to add or remove.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -80,6 +86,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Array[String]]',
       desc: 'The members the server role should have. This parameter will replace all the current server role members with the specified members.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String[]',
@@ -88,6 +95,7 @@ Puppet::ResourceApi.register_type(
     dsc_memberstoexclude: {
       type: 'Optional[Array[String]]',
       desc: "The members the server role should exclude. This parameter will only remove members from a server role. Can only be used when parameter **Ensure** is set to `'Present'`. Can not be used at the same time as parameter **Members**.",
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,

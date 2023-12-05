@@ -8,9 +8,10 @@
     For more information about permission names that can be managed, see the
     property names of the https://docs.microsoft.com/en-us/dotnet/api/microsoft.sqlserver.management.smo.objectpermissionset#properties class.
 
-    >Note: When revoking permission with PermissionState 'GrantWithGrant', both the
-    >grantee and all the other users the grantee has granted the same permission to,
-    >will also get their permission revoked.
+    > [!NOTE]
+    > When revoking permission with PermissionState 'GrantWithGrant', both the
+    > grantee and all the other users the grantee has granted the same permission to,
+    > will also get their permission revoked.
 
     ## Requirements
 

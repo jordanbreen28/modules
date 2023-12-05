@@ -1,6 +1,6 @@
 {
     "name":  "dsc-sqlserverdsc",
-    "version":  "16.0.0-0-1",
+    "version":  "16.5.0-0-1",
     "author":  "dsc",
     "summary":  "Module with DSC resources for deployment and configuration of Microsoft SQL Server.",
     "license":  "Apache-2.0",
@@ -25,12 +25,12 @@
     "requirements":  [
                          {
                              "name":  "puppet",
-                             "version_requirement":  ">= 6.0.0 < 8.0.0"
+                             "version_requirement":  ">= 7.0.0 < 9.0.0"
                          }
                      ],
-    "pdk-version":  "2.5.0",
-    "template-url":  "https://github.com/puppetlabs/pdk-templates#2.5.0",
-    "template-ref":  "tags/2.5.0-0-g369d483",
+    "pdk-version":  "2.7.1",
+    "template-url":  "https://github.com/puppetlabs/pdk-templates#3.0.0",
+    "template-ref":  "tags/3.0.0-0-g5bfc1c0",
     "issues_url":  "https://github.com/dsccommunity/SqlServerDsc/issues",
     "project_page":  "https://github.com/dsccommunity/SqlServerDsc",
     "tags":  [
@@ -42,6 +42,6 @@
                                 "guid":  "693ee082-ed36-45a7-b490-88b07c86b42f",
                                 "author":  "DSC Community",
                                 "name":  "SqlServerDsc",
-                                "version":  "16.0.0"
+                                "version":  "16.5.0"
                             }
 }

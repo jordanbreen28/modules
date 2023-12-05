@@ -47,7 +47,7 @@
 
 .PARAMETER CompatibilityLevel
     Write - String
-    Allowed values: Version80, Version90, Version100, Version110, Version120, Version130, Version140, Version150
+    Allowed values: Version80, Version90, Version100, Version110, Version120, Version130, Version140, Version150, Version160
     Specifies the version of the SQL Database Compatibility Level to use for the specified database.
 
 .PARAMETER RecoveryModel

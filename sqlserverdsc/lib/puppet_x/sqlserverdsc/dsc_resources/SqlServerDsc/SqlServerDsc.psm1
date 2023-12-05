@@ -1,4 +1,6 @@
-#Region './prefix.ps1' 0
+#Region '.\prefix.ps1' 0
+using module .\Modules\DscResource.Base
+
 $script:dscResourceCommonModulePath = Join-Path -Path $PSScriptRoot -ChildPath 'Modules/DscResource.Common'
 Import-Module -Name $script:dscResourceCommonModulePath
 
@@ -7,20 +9,31 @@ $script:sqlServerDscCommonModulePath = Join-Path -Path $PSScriptRoot -ChildPath 
 Import-Module -Name $script:sqlServerDscCommonModulePath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
-#EndRegion './prefix.ps1' 9
-#Region './Enum/1.Ensure.ps1' 0
+#EndRegion '.\prefix.ps1' 11
+#Region '.\Classes\001.SqlReason.ps1' 0
 <#
     .SYNOPSIS
-        The possible states for the DSC resource parameter Ensure.
+        The reason a property of a DSC resource is not in desired state.
+
+    .DESCRIPTION
+        A DSC resource can have a read-only property `Reasons` that the compliance
+        part (audit via Azure Policy) of Azure AutoManage Machine Configuration
+        uses. The property Reasons holds an array of SqlReason. Each SqlReason
+        explains why a property of a DSC resource is not in desired state.
 #>
 
-enum Ensure
+class SqlReason
 {
-    Present
-    Absent
+    [DscProperty()]
+    [System.String]
+    $Code
+
+    [DscProperty()]
+    [System.String]
+    $Phrase
 }
-#EndRegion './Enum/1.Ensure.ps1' 11
-#Region './Classes/002.DatabasePermission.ps1' 0
+#EndRegion '.\Classes\001.SqlReason.ps1' 22
+#Region '.\Classes\002.DatabasePermission.ps1' 0
 <#
     .SYNOPSIS
         The possible database permission states.
@@ -66,64 +79,93 @@ class DatabasePermission : IComparable, System.IEquatable[Object]
     [DscProperty(Mandatory)]
     [AllowEmptyCollection()]
     [ValidateSet(
+        'AdministerDatabaseBulkOperations',
         'Alter',
-        'AlterAnyAsymmetricKey',
         'AlterAnyApplicationRole',
         'AlterAnyAssembly',
+        'AlterAnyAsymmetricKey',
         'AlterAnyCertificate',
+        'AlterAnyColumnEncryptionKey',
+        'AlterAnyColumnMasterKey',
+        'AlterAnyContract',
         'AlterAnyDatabaseAudit',
-        'AlterAnyDataspace',
+        'AlterAnyDatabaseDdlTrigger',
         'AlterAnyDatabaseEventNotification',
+        'AlterAnyDatabaseEventSession',
+        'AlterAnyDatabaseEventSessionAddEvent',
+        'AlterAnyDatabaseEventSessionAddTarget',
+        'AlterAnyDatabaseEventSessionDisable',
+        'AlterAnyDatabaseEventSessionDropEvent',
+        'AlterAnyDatabaseEventSessionDropTarget',
+        'AlterAnyDatabaseEventSessionEnable',
+        'AlterAnyDatabaseEventSessionOption',
+        'AlterAnyDatabaseScopedConfiguration',
+        'AlterAnyDataspace',
         'AlterAnyExternalDataSource',
         'AlterAnyExternalFileFormat',
+        'AlterAnyExternalJob',
+        'AlterAnyExternalLanguage',
+        'AlterAnyExternalLibrary',
+        'AlterAnyExternalStream',
         'AlterAnyFulltextCatalog',
         'AlterAnyMask',
         'AlterAnyMessageType',
+        'AlterAnyRemoteServiceBinding',
         'AlterAnyRole',
         'AlterAnyRoute',
-        'AlterAnyRemoteServiceBinding',
-        'AlterAnyContract',
-        'AlterAnySymmetricKey',
         'AlterAnySchema',
         'AlterAnySecurityPolicy',
+        'AlterAnySensitivityClassification',
         'AlterAnyService',
-        'AlterAnyDatabaseDdlTrigger',
+        'AlterAnySymmetricKey',
         'AlterAnyUser',
+        'AlterLedger',
+        'AlterLedgerConfiguration',
         'Authenticate',
         'BackupDatabase',
         'BackupLog',
-        'Control',
+        'Checkpoint',
         'Connect',
         'ConnectReplication',
-        'Checkpoint',
+        'Control',
         'CreateAggregate',
-        'CreateAsymmetricKey',
+        'CreateAnyDatabaseEventSession',
         'CreateAssembly',
+        'CreateAsymmetricKey',
         'CreateCertificate',
+        'CreateContract',
         'CreateDatabase',
-        'CreateDefault',
         'CreateDatabaseDdlEventNotification',
-        'CreateFunction',
+        'CreateDefault',
+        'CreateExternalLanguage',
+        'CreateExternalLibrary',
         'CreateFulltextCatalog',
+        'CreateFunction',
         'CreateMessageType',
         'CreateProcedure',
         'CreateQueue',
+        'CreateRemoteServiceBinding',
         'CreateRole',
         'CreateRoute',
         'CreateRule',
-        'CreateRemoteServiceBinding',
-        'CreateContract',
-        'CreateSymmetricKey',
         'CreateSchema',
-        'CreateSynonym',
         'CreateService',
+        'CreateSymmetricKey',
+        'CreateSynonym',
         'CreateTable',
         'CreateType',
+        'CreateUser',
         'CreateView',
         'CreateXmlSchemaCollection',
         'Delete',
+        'DropAnyDatabaseEventSession',
+        'EnableLedger',
         'Execute',
+        'ExecuteAnyExternalEndpoint',
+        'ExecuteAnyExternalScript',
         'Insert',
+        'KillDatabaseConnection',
+        'OwnershipChaining',
         'References',
         'Select',
         'Showplan',
@@ -131,11 +173,25 @@ class DatabasePermission : IComparable, System.IEquatable[Object]
         'TakeOwnership',
         'Unmask',
         'Update',
+        'ViewAnyColumnEncryptionKeyDefinition',
+        'ViewAnyColumnMasterKeyDefinition',
+        'ViewAnySensitivityClassification',
+        'ViewCryptographicallySecuredDefinition',
+        'ViewDatabasePerformanceState',
+        'ViewDatabaseSecurityAudit',
+        'ViewDatabaseSecurityState',
+        'ViewDatabaseState',
         'ViewDefinition',
-        'ViewDatabaseState'
+        'ViewLedgerContent',
+        'ViewPerformanceDefinition',
+        'ViewSecurityDefinition'
     )]
     [System.String[]]
     $Permission
+
+    DatabasePermission ()
+    {
+    }
 
     [System.Boolean] Equals([System.Object] $object)
     {
@@ -226,20 +282,8 @@ class DatabasePermission : IComparable, System.IEquatable[Object]
         return $returnValue
     }
 }
-#EndRegion './Classes/002.DatabasePermission.ps1' 206
-#Region './Classes/002.Reason.ps1' 0
-class Reason
-{
-    [DscProperty()]
-    [System.String]
-    $Code
-
-    [DscProperty()]
-    [System.String]
-    $Phrase
-}
-#EndRegion './Classes/002.Reason.ps1' 11
-#Region './Classes/002.ServerPermission.ps1' 0
+#EndRegion '.\Classes\002.DatabasePermission.ps1' 249
+#Region '.\Classes\002.ServerPermission.ps1' 0
 <#
     .SYNOPSIS
         The possible server permission states.
@@ -323,6 +367,11 @@ class ServerPermission : IComparable, System.IEquatable[Object]
     [System.String[]]
     $Permission
 
+
+    ServerPermission ()
+    {
+    }
+
     <#
         TODO: It was not possible to move this to a parent class. But since these are
               generic functions for DatabasePermission and ServerPermission we
@@ -422,270 +471,164 @@ class ServerPermission : IComparable, System.IEquatable[Object]
         return $returnValue
     }
 }
-#EndRegion './Classes/002.ServerPermission.ps1' 183
-#Region './Classes/010.ResourceBase.ps1' 0
+#EndRegion '.\Classes\002.ServerPermission.ps1' 188
+#Region '.\Classes\004.StartupParameters.ps1' 0
 <#
     .SYNOPSIS
-        A class with methods that are equal for all class-based resources.
+        A class to handle startup parameters of a manged computer service object.
 
-    .DESCRIPTION
-        A class with methods that are equal for all class-based resources.
+    .EXAMPLE
+        $startupParameters = [StartupParameters]::Parse(((Get-SqlDscManagedComputer).Services | ? type -eq 'SqlServer').StartupParameters)
+        $startupParameters | fl
+        $startupParameters.ToString()
+
+        Parses the startup parameters of the database engine default instance on the
+        current node, and then outputs the resulting object. Also shows how the object
+        can be turned back to a startup parameters string by calling ToString().
 
     .NOTES
-        This class should be able to be inherited by all DSC resources. This class
-        shall not contain any DSC properties, neither shall it contain anything
-        specific to only a single resource.
+        This class supports an array of data file paths, log file paths, and error
+        log paths though currently it seems that there can only be one of each.
+        This class was made with arrays in case there is an unknown edge case where
+        it is possible to have more than one of those paths.
 #>
-
-class ResourceBase
+class StartupParameters
 {
-    # Property for holding localization strings
-    hidden [System.Collections.Hashtable] $localizedData = @{}
+    [System.String[]]
+    $DataFilePath
 
-    # Property for derived class to set properties that should not be enforced.
-    hidden [System.String[]] $ExcludeDscProperties = @()
+    [System.String[]]
+    $LogFilePath
 
-    # Default constructor
-    ResourceBase()
+    [System.String[]]
+    $ErrorLogPath
+
+    [System.UInt32[]]
+    $TraceFlag
+
+    [System.UInt32[]]
+    $InternalTraceFlag
+
+    StartupParameters ()
     {
-        <#
-            TODO: When this fails, for example when the localized string file is missing
-                  the LCM returns the error 'Failed to create an object of PowerShell
-                  class SqlDatabasePermission' instead of the actual error that occurred.
-        #>
-        $this.localizedData = Get-LocalizedDataRecursive -ClassName ($this | Get-ClassName -Recurse)
     }
 
-    [ResourceBase] Get()
+    static [StartupParameters] Parse([System.String] $InstanceStartupParameters)
     {
-        $this.Assert()
+        Write-Debug -Message (
+            $script:localizedData.StartupParameters_DebugParsingStartupParameters -f 'StartupParameters.Parse()', $InstanceStartupParameters
+        )
 
-        # Get all key properties.
-        $keyProperty = $this | Get-DscProperty -Type 'Key'
+        $startupParameters = [StartupParameters]::new()
 
-        Write-Verbose -Message ($this.localizedData.GetCurrentState -f $this.GetType().Name, ($keyProperty | ConvertTo-Json -Compress))
+        $startupParameterValues = $InstanceStartupParameters -split ';'
 
-        $getCurrentStateResult = $this.GetCurrentState($keyProperty)
-
-        $dscResourceObject = [System.Activator]::CreateInstance($this.GetType())
-
-        # Set values returned from the derived class' GetCurrentState().
-        foreach ($propertyName in $this.PSObject.Properties.Name)
-        {
-            if ($propertyName -in @($getCurrentStateResult.Keys))
-            {
-                $dscResourceObject.$propertyName = $getCurrentStateResult.$propertyName
-            }
-        }
-
-        $keyPropertyAddedToCurrentState = $false
-
-        # Set key property values unless it was returned from the derived class' GetCurrentState().
-        foreach ($propertyName in $keyProperty.Keys)
-        {
-            if ($propertyName -notin @($getCurrentStateResult.Keys))
-            {
-                # Add the key value to the instance to be returned.
-                $dscResourceObject.$propertyName = $this.$propertyName
-
-                $keyPropertyAddedToCurrentState = $true
-            }
-        }
-
-        if (($this | Test-ResourceHasDscProperty -Name 'Ensure') -and -not $getCurrentStateResult.ContainsKey('Ensure'))
-        {
-            # Evaluate if we should set Ensure property.
-            if ($keyPropertyAddedToCurrentState)
-            {
-                <#
-                    A key property was added to the current state, assume its because
-                    the object did not exist in the current state. Set Ensure to Absent.
-                #>
-                $dscResourceObject.Ensure = [Ensure]::Absent
-                $getCurrentStateResult.Ensure = [Ensure]::Absent
-            }
-            else
-            {
-                $dscResourceObject.Ensure = [Ensure]::Present
-                $getCurrentStateResult.Ensure = [Ensure]::Present
-            }
-        }
-
-        <#
-            Returns all enforced properties not in desires state, or $null if
-            all enforced properties are in desired state.
-        #>
-        $propertiesNotInDesiredState = $this.Compare($getCurrentStateResult, @())
-
-        <#
-            Return the correct values for Reasons property if the derived DSC resource
-            has such property and it hasn't been already set by GetCurrentState().
-        #>
-        if (($this | Test-ResourceHasDscProperty -Name 'Reasons') -and -not $getCurrentStateResult.ContainsKey('Reasons'))
-        {
-            # Always return an empty array if all properties are in desired state.
-            $dscResourceObject.Reasons = $propertiesNotInDesiredState |
-                ConvertTo-Reason -ResourceName $this.GetType().Name
-        }
-
-        # Return properties.
-        return $dscResourceObject
-    }
-
-    [void] Set()
-    {
-        # Get all key properties.
-        $keyProperty = $this | Get-DscProperty -Type 'Key'
-
-        Write-Verbose -Message ($this.localizedData.SetDesiredState -f $this.GetType().Name, ($keyProperty | ConvertTo-Json -Compress))
-
-        $this.Assert()
-
-        <#
-            Returns all enforced properties not in desires state, or $null if
-            all enforced properties are in desired state.
-        #>
-        $propertiesNotInDesiredState = $this.Compare()
-
-        if ($propertiesNotInDesiredState)
-        {
-            $propertiesToModify = $propertiesNotInDesiredState | ConvertFrom-CompareResult
-
-            $propertiesToModify.Keys |
+        $startupParameters.TraceFlag = [System.UInt32[]] @(
+            $startupParameterValues |
+                Where-Object -FilterScript {
+                    $_ -cmatch '^-T\d+'
+                } |
                 ForEach-Object -Process {
-                    Write-Verbose -Message ($this.localizedData.SetProperty -f $_, $propertiesToModify.$_)
+                    [System.UInt32] $_.TrimStart('-T')
                 }
+        )
 
-            <#
-                Call the Modify() method with the properties that should be enforced
-                and was not in desired state.
-            #>
-            $this.Modify($propertiesToModify)
-        }
-        else
+        Write-Debug -Message (
+            $script:localizedData.StartupParameters_DebugFoundTraceFlags -f 'StartupParameters.Parse()', ($startupParameters.TraceFlag -join ', ')
+        )
+
+        $startupParameters.DataFilePath = [System.String[]] @(
+            $startupParameterValues |
+                Where-Object -FilterScript {
+                    $_ -cmatch '^-d'
+                } |
+                ForEach-Object -Process {
+                    $_.TrimStart('-d')
+                }
+        )
+
+        $startupParameters.LogFilePath = [System.String[]] @(
+            $startupParameterValues |
+                Where-Object -FilterScript {
+                    $_ -cmatch '^-l'
+                } |
+                ForEach-Object -Process {
+                    $_.TrimStart('-l')
+                }
+        )
+
+        $startupParameters.ErrorLogPath = [System.String[]] @(
+            $startupParameterValues |
+                Where-Object -FilterScript {
+                    $_ -cmatch '^-e'
+                } |
+                ForEach-Object -Process {
+                    $_.TrimStart('-e')
+                }
+        )
+
+        $startupParameters.InternalTraceFlag = [System.UInt32[]] @(
+            $startupParameterValues |
+                Where-Object -FilterScript {
+                    $_ -cmatch '^-t\d+'
+                } |
+                ForEach-Object -Process {
+                    [System.UInt32] $_.TrimStart('-t')
+                }
+        )
+
+        return $startupParameters
+    }
+
+    [System.String] ToString()
+    {
+        $startupParametersValues = [System.String[]] @()
+
+        if ($this.DataFilePath)
         {
-            Write-Verbose -Message $this.localizedData.NoPropertiesToSet
+            $startupParametersValues += $this.DataFilePath |
+                ForEach-Object -Process {
+                    '-d{0}' -f $_
+                }
         }
-    }
 
-    [System.Boolean] Test()
-    {
-        # Get all key properties.
-        $keyProperty = $this | Get-DscProperty -Type 'Key'
-
-        Write-Verbose -Message ($this.localizedData.TestDesiredState -f $this.GetType().Name, ($keyProperty | ConvertTo-Json -Compress))
-
-        $this.Assert()
-
-        $isInDesiredState = $true
-
-        <#
-            Returns all enforced properties not in desires state, or $null if
-            all enforced properties are in desired state.
-        #>
-        $propertiesNotInDesiredState = $this.Compare()
-
-        if ($propertiesNotInDesiredState)
+        if ($this.ErrorLogPath)
         {
-            $isInDesiredState = $false
+            $startupParametersValues += $this.ErrorLogPath |
+                ForEach-Object -Process {
+                    '-e{0}' -f $_
+                }
         }
 
-        if ($isInDesiredState)
+        if ($this.LogFilePath)
         {
-            Write-Verbose $this.localizedData.InDesiredState
+            $startupParametersValues += $this.LogFilePath |
+                ForEach-Object -Process {
+                    '-l{0}' -f $_
+                }
         }
-        else
+
+        if ($this.TraceFlag)
         {
-            Write-Verbose $this.localizedData.NotInDesiredState
+            $startupParametersValues += $this.TraceFlag |
+                ForEach-Object -Process {
+                    '-T{0}' -f $_
+                }
         }
 
-        return $isInDesiredState
-    }
-
-    <#
-        Returns a hashtable containing all properties that should be enforced and
-        are not in desired state, or $null if all enforced properties are in
-        desired state.
-
-        This method should normally not be overridden.
-    #>
-    hidden [System.Collections.Hashtable[]] Compare()
-    {
-        # Get the current state, all properties except Read properties .
-        $currentState = $this.Get() | Get-DscProperty -Type @('Key', 'Mandatory', 'Optional')
-
-        return $this.Compare($currentState, @())
-    }
-
-    <#
-        Returns a hashtable containing all properties that should be enforced and
-        are not in desired state, or $null if all enforced properties are in
-        desired state.
-
-        This method should normally not be overridden.
-    #>
-    hidden [System.Collections.Hashtable[]] Compare([System.Collections.Hashtable] $currentState, [System.String[]] $excludeProperties)
-    {
-        # Get the desired state, all assigned properties that has an non-null value.
-        $desiredState = $this | Get-DscProperty -Type @('Key', 'Mandatory', 'Optional') -HasValue
-
-        $CompareDscParameterState = @{
-            CurrentValues     = $currentState
-            DesiredValues     = $desiredState
-            Properties        = $desiredState.Keys
-            ExcludeProperties = ($excludeProperties + $this.ExcludeDscProperties) | Select-Object -Unique
-            IncludeValue      = $true
-            # This is needed to sort complex types.
-            SortArrayValues   = $true
+        if ($this.InternalTraceFlag)
+        {
+            $startupParametersValues += $this.InternalTraceFlag |
+                ForEach-Object -Process {
+                    '-t{0}' -f $_
+                }
         }
 
-        <#
-            Returns all enforced properties not in desires state, or $null if
-            all enforced properties are in desired state.
-        #>
-        return (Compare-DscParameterState @CompareDscParameterState)
-    }
-
-    # This method should normally not be overridden.
-    hidden [void] Assert()
-    {
-        # Get the properties that has a non-null value and is not of type Read.
-        $desiredState = $this | Get-DscProperty -Type @('Key', 'Mandatory', 'Optional') -HasValue
-
-        $this.AssertProperties($desiredState)
-    }
-
-    <#
-        This method can be overridden if resource specific property asserts are
-        needed. The parameter properties will contain the properties that was
-        assigned a value.
-    #>
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('AvoidEmptyNamedBlocks', '')]
-    hidden [void] AssertProperties([System.Collections.Hashtable] $properties)
-    {
-    }
-
-    <#
-        This method must be overridden by a resource. The parameter properties will
-        contain the properties that should be enforced and that are not in desired
-        state.
-    #>
-    hidden [void] Modify([System.Collections.Hashtable] $properties)
-    {
-        throw $this.localizedData.ModifyMethodNotImplemented
-    }
-
-    <#
-        This method must be overridden by a resource. The parameter properties will
-        contain the key properties.
-    #>
-    hidden [System.Collections.Hashtable] GetCurrentState([System.Collections.Hashtable] $properties)
-    {
-        throw $this.localizedData.GetCurrentStateMethodNotImplemented
+        return $startupParametersValues -join ';'
     }
 }
-#EndRegion './Classes/010.ResourceBase.ps1' 261
-#Region './Classes/011.SqlResourceBase.ps1' 0
+#EndRegion '.\Classes\004.StartupParameters.ps1' 155
+#Region '.\Classes\011.SqlResourceBase.ps1' 0
 <#
     .SYNOPSIS
         The SqlResource base have generic properties and methods for the class-based
@@ -731,10 +674,11 @@ class SqlResourceBase : ResourceBase
     $Credential
 
     [DscProperty(NotConfigurable)]
-    [Reason[]]
+    [SqlReason[]]
     $Reasons
 
-    SqlResourceBase () : base ()
+    # Passing the module's base directory to the base constructor.
+    SqlResourceBase () : base ($PSScriptRoot)
     {
         $this.SqlServerObject = $null
     }
@@ -754,6 +698,7 @@ class SqlResourceBase : ResourceBase
             $connectSqlDscDatabaseEngineParameters = @{
                 ServerName   = $this.ServerName
                 InstanceName = $this.InstanceName
+                ErrorAction  = 'Stop'
             }
 
             if ($this.Credential)
@@ -767,8 +712,8 @@ class SqlResourceBase : ResourceBase
         return $this.SqlServerObject
     }
 }
-#EndRegion './Classes/011.SqlResourceBase.ps1' 82
-#Region './Classes/020.SqlAudit.ps1' 0
+#EndRegion '.\Classes\011.SqlResourceBase.ps1' 84
+#Region '.\Classes\020.SqlAudit.ps1' 0
 <#
     .SYNOPSIS
         The `SqlAudit` DSC resource is used to create, modify, or remove
@@ -1031,8 +976,11 @@ class SqlAudit : SqlResourceBase
 
         $serverObject = $this.GetServerObject()
 
-        $auditObject = $serverObject |
+        $auditObjectArray = $serverObject |
             Get-SqlDscAudit -Name $properties.Name -ErrorAction 'SilentlyContinue'
+
+        # Pick the only object in the array.
+        $auditObject = $auditObjectArray | Select-Object -First 1
 
         if ($auditObject)
         {
@@ -1040,7 +988,7 @@ class SqlAudit : SqlResourceBase
 
             if ($auditObject.DestinationType -in @('ApplicationLog', 'SecurityLog'))
             {
-                $currentState.LogType = $auditObject.DestinationType
+                $currentState.LogType = $auditObject.DestinationType.ToString()
             }
 
             if ($auditObject.FilePath)
@@ -1120,8 +1068,11 @@ class SqlAudit : SqlResourceBase
             #>
             if ($this.Ensure -eq [Ensure]::Present)
             {
-                $auditObject = $serverObject |
+                $auditObjectArray = $serverObject |
                     Get-SqlDscAudit -Name $this.Name -ErrorAction 'Stop'
+
+                # Pick the only object in the array.
+                $auditObject = $auditObjectArray | Select-Object -First 1
 
                 if ($auditObject)
                 {
@@ -1178,7 +1129,7 @@ class SqlAudit : SqlResourceBase
                         }
 
                         # Get all optional properties that has an assigned value.
-                        $assignedOptionalDscProperties = $this | Get-DscProperty -HasValue -Type 'Optional' -ExcludeName @(
+                        $assignedOptionalDscProperties = $this | Get-DscProperty -HasValue -Attribute 'Optional' -ExcludeName @(
                             # Remove optional properties that is not an audit property.
                             'ServerName'
                             'Ensure'
@@ -1336,7 +1287,7 @@ class SqlAudit : SqlResourceBase
     hidden [System.Object] CreateAudit()
     {
         # Get all properties that has an assigned value.
-        $assignedDscProperties = $this | Get-DscProperty -HasValue -Type @(
+        $assignedDscProperties = $this | Get-DscProperty -HasValue -Attribute @(
             'Key'
             'Optional'
         ) -ExcludeName @(
@@ -1363,8 +1314,8 @@ class SqlAudit : SqlResourceBase
         return $auditObject
     }
 }
-#EndRegion './Classes/020.SqlAudit.ps1' 595
-#Region './Classes/020.SqlDatabasePermission.ps1' 0
+#EndRegion '.\Classes\020.SqlAudit.ps1' 601
+#Region '.\Classes\020.SqlDatabasePermission.ps1' 0
 <#
     .SYNOPSIS
         The `SqlDatabasePermission` DSC resource is used to grant, deny or revoke
@@ -1375,9 +1326,10 @@ class SqlAudit : SqlResourceBase
         permissions for a user in a database. For more information about permissions,
         please read the article [Permissions (Database Engine)](https://docs.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine).
 
-        >**Note:** When revoking permission with PermissionState 'GrantWithGrant', both the
-        >grantee and _all the other users the grantee has granted the same permission to_,
-        >will also get their permission revoked.
+        > [!NOTE]
+        > When revoking permission with PermissionState 'GrantWithGrant', both the
+        > grantee and _all the other users the grantee has granted the same permission_
+        > _to_, will also get their permission revoked.
 
         ## Requirements
 
@@ -1614,7 +1566,7 @@ class SqlDatabasePermission : SqlResourceBase
             }
         }
 
-        $isPropertyPermissionToIncludeAssigned = $this | Test-ResourceDscPropertyIsAssigned -Name 'PermissionToInclude'
+        $isPropertyPermissionToIncludeAssigned = $this | Test-DscProperty -Name 'PermissionToInclude' -HasValue
 
         if ($isPropertyPermissionToIncludeAssigned)
         {
@@ -1664,7 +1616,7 @@ class SqlDatabasePermission : SqlResourceBase
             }
         }
 
-        $isPropertyPermissionToExcludeAssigned = $this | Test-ResourceDscPropertyIsAssigned -Name 'PermissionToExclude'
+        $isPropertyPermissionToExcludeAssigned = $this | Test-DscProperty -Name 'PermissionToExclude' -HasValue
 
         if ($isPropertyPermissionToExcludeAssigned)
         {
@@ -1754,7 +1706,7 @@ class SqlDatabasePermission : SqlResourceBase
 
         if ($properties.ContainsKey('Permission'))
         {
-            $keyProperty = $this | Get-DscProperty -Type 'Key'
+            $keyProperty = $this | Get-DscProperty -Attribute 'Key'
 
             $currentState = $this.GetCurrentState($keyProperty)
 
@@ -2010,8 +1962,8 @@ class SqlDatabasePermission : SqlResourceBase
         }
     }
 }
-#EndRegion './Classes/020.SqlDatabasePermission.ps1' 646
-#Region './Classes/020.SqlPermission.ps1' 0
+#EndRegion '.\Classes\020.SqlDatabasePermission.ps1' 647
+#Region '.\Classes\020.SqlPermission.ps1' 0
 <#
     .SYNOPSIS
         The `SqlPermission` DSC resource is used to grant, deny or revoke
@@ -2022,9 +1974,10 @@ class SqlDatabasePermission : SqlResourceBase
         Server permissions for a login. For more information about permissions,
         please read the article [Permissions (Database Engine)](https://docs.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine).
 
-        >**Note:** When revoking permission with PermissionState 'GrantWithGrant', both the
-        >grantee and _all the other users the grantee has granted the same permission to_,
-        >will also get their permission revoked.
+        > [!NOTE]
+        > When revoking permission with PermissionState 'GrantWithGrant', both the
+        > grantee and _all the other users the grantee has granted the same permission_
+        > _to_, will also get their permission revoked.
 
         ## Requirements
 
@@ -2253,7 +2206,7 @@ class SqlPermission : SqlResourceBase
             }
         }
 
-        $isPropertyPermissionToIncludeAssigned = $this | Test-ResourceDscPropertyIsAssigned -Name 'PermissionToInclude'
+        $isPropertyPermissionToIncludeAssigned = $this | Test-DscProperty -Name 'PermissionToInclude' -HasValue
 
         if ($isPropertyPermissionToIncludeAssigned)
         {
@@ -2303,7 +2256,7 @@ class SqlPermission : SqlResourceBase
             }
         }
 
-        $isPropertyPermissionToExcludeAssigned = $this | Test-ResourceDscPropertyIsAssigned -Name 'PermissionToExclude'
+        $isPropertyPermissionToExcludeAssigned = $this | Test-DscProperty -Name 'PermissionToExclude' -HasValue
 
         if ($isPropertyPermissionToExcludeAssigned)
         {
@@ -2390,7 +2343,7 @@ class SqlPermission : SqlResourceBase
 
         if ($properties.ContainsKey('Permission'))
         {
-            $keyProperty = $this | Get-DscProperty -Type 'Key'
+            $keyProperty = $this | Get-DscProperty -Attribute 'Key'
 
             $currentState = $this.GetCurrentState($keyProperty)
 
@@ -2650,585 +2603,3556 @@ class SqlPermission : SqlResourceBase
         }
     }
 }
-#EndRegion './Classes/020.SqlPermission.ps1' 639
-#Region './Private/ConvertFrom-CompareResult.ps1' 0
+#EndRegion '.\Classes\020.SqlPermission.ps1' 640
+#Region '.\Private\Assert-Feature.ps1' 0
 <#
     .SYNOPSIS
-        Returns a hashtable with property name and their expected value.
-
-    .PARAMETER CompareResult
-       The result from Compare-DscParameterState.
-
-    .EXAMPLE
-        ConvertFrom-CompareResult -CompareResult (Compare-DscParameterState)
-
-        Returns a hashtable that contain all the properties not in desired state
-        and their expected value.
-
-    .OUTPUTS
-        [System.Collections.Hashtable]
-#>
-function ConvertFrom-CompareResult
-{
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [System.Collections.Hashtable[]]
-        $CompareResult
-    )
-
-    begin
-    {
-        $returnHashtable = @{}
-    }
-
-    process
-    {
-        $CompareResult | ForEach-Object -Process {
-            $returnHashtable[$_.Property] = $_.ExpectedValue
-        }
-    }
-
-    end
-    {
-        return $returnHashtable
-    }
-}
-#EndRegion './Private/ConvertFrom-CompareResult.ps1' 45
-#Region './Private/ConvertTo-Reason.ps1' 0
-<#
-    .SYNOPSIS
-        Returns a array of the type `[Reason]`.
+        Assert that a feature is supported by a Microsoft SQL Server major version.
 
     .DESCRIPTION
-        This command converts the array of properties that is returned by the command
-        `Compare-DscParameterState`. The result is an array of the type `[Reason]` that
-        can be returned in a DSC resource's property **Reasons**.
+        Assert that a feature is supported by a Microsoft SQL Server major version.
 
-    .PARAMETER Property
-       The result from the command Compare-DscParameterState.
+    .PARAMETER Feature
+       Specifies the feature to evaluate.
 
-    .PARAMETER ResourceName
-       The name of the resource. Will be used to populate the property Code with
-       the correct value.
+    .PARAMETER ProductVersion
+       Specifies the product version of the Microsoft SQL Server. At minimum the
+       major version must be provided.
 
     .EXAMPLE
-        ConvertTo-Reason -Property (Compare-DscParameterState) -ResourceName 'MyResource'
+        Assert-Feature -Feature 'RS' -ProductVersion '14'
 
-        Returns an array of `[Reason]` that contain all the properties not in desired
-        state and why a specific property is not in desired state.
+        Throws an exception if the feature is not supported.
 
     .OUTPUTS
-        [Reason[]]
+        None.
 #>
-function ConvertTo-Reason
+function Assert-Feature
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when the output type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
     [CmdletBinding()]
-    [OutputType([Reason[]])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [AllowEmptyCollection()]
-        [AllowNull()]
-        [System.Collections.Hashtable[]]
-        $Property,
+        [System.String[]]
+        $Feature,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $ResourceName
+        $ProductVersion
     )
-
-    begin
-    {
-        # Always return an empty array if there are no properties to add.
-        $reasons = [Reason[]] @()
-    }
 
     process
     {
-        foreach ($currentProperty in $Property)
+        foreach ($currentFeature in $Feature)
         {
-            if ($currentProperty.ExpectedValue -is [System.Enum])
+            if (-not ($currentFeature | Test-SqlDscIsSupportedFeature -ProductVersion $ProductVersion))
             {
-                # Return the string representation of the value (instead of the numeric value).
-                $propertyExpectedValue = $currentProperty.ExpectedValue.ToString()
-            }
-            else
-            {
-                $propertyExpectedValue = $currentProperty.ExpectedValue
-            }
-
-            if ($property.ActualValue -is [System.Enum])
-            {
-                # Return the string representation of the value so that conversion to json is correct.
-                $propertyActualValue = $currentProperty.ActualValue.ToString()
-            }
-            else
-            {
-                $propertyActualValue = $currentProperty.ActualValue
-            }
-
-            <#
-                In PowerShell 7 the command ConvertTo-Json returns 'null' on null
-                value, but not in Windows PowerShell. Switch to output empty string
-                if value is null.
-            #>
-            if ($PSVersionTable.PSEdition -eq 'Desktop')
-            {
-                if ($null -eq $propertyExpectedValue)
-                {
-                    $propertyExpectedValue = ''
-                }
-
-                if ($null -eq $propertyActualValue)
-                {
-                    $propertyActualValue = ''
-                }
-            }
-
-            # Convert the value to Json to be able to easily visualize complex types
-            $propertyActualValueJson = $propertyActualValue | ConvertTo-Json -Compress
-            $propertyExpectedValueJson = $propertyExpectedValue | ConvertTo-Json -Compress
-
-            # If the property name contain the word Path, remove '\\' from path.
-            if ($currentProperty.Property -match 'Path')
-            {
-                $propertyActualValueJson = $propertyActualValueJson -replace '\\\\', '\'
-                $propertyExpectedValueJson = $propertyExpectedValueJson -replace '\\\\', '\'
-            }
-
-            $reasons += [Reason] @{
-                Code   = '{0}:{0}:{1}' -f $ResourceName, $currentProperty.Property
-                # Convert the object to JSON to handle complex types.
-                Phrase = 'The property {0} should be {1}, but was {2}' -f @(
-                    $currentProperty.Property,
-                    $propertyExpectedValueJson,
-                    $propertyActualValueJson
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        ($script:localizedData.Feature_Assert_NotSupportedFeature -f $currentFeature, $ProductVersion),
+                        'AF0001', # cSpell: disable-line
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $currentFeature
+                    )
                 )
             }
         }
     }
-
-    end
-    {
-        return $reasons
-    }
 }
-#EndRegion './Private/ConvertTo-Reason.ps1' 120
-#Region './Private/Get-ClassName.ps1' 0
+#EndRegion '.\Private\Assert-Feature.ps1' 55
+#Region '.\Private\Assert-ManagedServiceType.ps1' 0
 <#
     .SYNOPSIS
-        Get the class name of the passed object, and optional an array with
-        all inherited classes.
+        Assert that a computer managed service is of a certain type.
 
-    .PARAMETER InputObject
-       The object to be evaluated.
+    .DESCRIPTION
+        Assert that a computer managed service is of a certain type. If it is the
+        wrong type an exception is thrown.
 
-    .PARAMETER Recurse
-       Specifies if the class name of inherited classes shall be returned. The
-       recursive stops when the first object of the type `[System.Object]` is
-       found.
+    .PARAMETER ServiceObject
+        Specifies the Service object to evaluate.
+
+    .PARAMETER ServiceType
+        Specifies the normalized service type to evaluate.
 
     .EXAMPLE
-        Get-ClassName -InputObject $this -Recurse
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Assert-ManagedServiceType -ServiceObject $serviceObject -ServiceType 'DatabaseEngine'
 
-        Get the class name of the current instance and all the inherited (parent)
-        classes.
+        Asserts that the computer managed service object is of the type Database Engine.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        $serviceObject | Assert-ManagedServiceType -ServiceType 'DatabaseEngine'
+
+        Asserts that the computer managed service object is of the type Database Engine.
 
     .OUTPUTS
-        [System.String[]]
+        None.
 #>
-function Get-ClassName
+function Assert-ManagedServiceType
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Because the rule does not understands that the command returns [System.String[]] when using , (comma) in the return statement')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType()]
     [CmdletBinding()]
-    [OutputType([System.String[]])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [PSObject]
-        $InputObject,
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
 
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Recurse
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('DatabaseEngine', 'SqlServerAgent', 'Search', 'IntegrationServices', 'AnalysisServices', 'ReportingServices', 'SQLServerBrowser', 'NotificationServices')]
+        [System.String]
+        $ServiceType
     )
 
-    # Create a list of the inherited class names
-    $class = @($InputObject.GetType().FullName)
-
-    if ($Recurse.IsPresent)
+    process
     {
-        $parentClass = $InputObject.GetType().BaseType
+        $normalizedServiceType = ConvertFrom-ManagedServiceType -ServiceType $ServiceObject.Type
 
-        while ($parentClass -ne [System.Object])
+        if ($normalizedServiceType -ne $ServiceType)
         {
-            $class += $parentClass.FullName
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    ($script:localizedData.ManagedServiceType_Assert_WrongServiceType -f $ServiceType, $normalizedServiceType),
+                    'AMST0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $ServiceObject
+                )
+            )
+        }
+    }
+}
+#EndRegion '.\Private\Assert-ManagedServiceType.ps1' 64
+#Region '.\Private\Assert-SetupActionProperties.ps1' 0
+<#
+    .SYNOPSIS
+        Assert that the bound parameters are set as required
 
-            $parentClass = $parentClass.BaseType
+    .DESCRIPTION
+        Assert that required parameters has been specified, and throws an exception if not.
+
+    .PARAMETER Property
+       A hashtable containing the parameters to evaluate. Normally this is set to
+       $PSBoundParameters.
+
+    .PARAMETER SetupAction
+       A string value representing the setup action that is gonna be executed.
+
+    .EXAMPLE
+        Assert-SetupActionProperties -Property $PSBoundParameters -SetupAction 'Install'
+
+        Throws an exception if the bound parameters are not in the correct state.
+
+    .OUTPUTS
+        None.
+
+    .NOTES
+        This function is used by the command Invoke-SetupAction to verify that
+        the bound parameters are in the required state.
+#>
+function Assert-SetupActionProperties
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'The command uses plural noun to describe that it contain a collection of asserts.')]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $Property,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $SetupAction
+    )
+
+    if ($Property.ContainsKey('Features'))
+    {
+        $setupExecutableFileVersion = $Property.MediaPath |
+            Join-Path -ChildPath 'setup.exe' |
+            Get-FileVersionInformation
+
+        $Property.Features |
+            Assert-Feature -ProductVersion $setupExecutableFileVersion.ProductVersion
+    }
+
+    # If one of the properties PBStartPortRange and PBEndPortRange are specified, then both must be specified.
+    $assertParameters = @('PBStartPortRange', 'PBEndPortRange')
+
+    $assertRequiredCommandParameterParameters = @{
+        BoundParameterList = $Property
+        RequiredParameter  = $assertParameters
+        IfParameterPresent = $assertParameters
+    }
+
+    Assert-BoundParameter @assertRequiredCommandParameterParameters
+
+    # The parameter UseSqlRecommendedMemoryLimits is mutually exclusive to SqlMinMemory and SqlMaxMemory.
+    Assert-BoundParameter -BoundParameterList $Property -MutuallyExclusiveList1 @(
+        'UseSqlRecommendedMemoryLimits'
+    ) -MutuallyExclusiveList2 @(
+        'SqlMinMemory'
+        'SqlMaxMemory'
+    )
+
+    # If Role is set to SPI_AS_NewFarm then the specific parameters are required.
+    if ($Property.ContainsKey('Role') -and $Property.Role -eq 'SPI_AS_NewFarm')
+    {
+        Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @(
+            'FarmAccount'
+            'FarmPassword'
+            'Passphrase'
+            'FarmAdminiPort' # cspell: disable-line
+        )
+    }
+
+    # If the parameter SecurityMode is set to 'SQL' then the parameter SAPwd is required.
+    if ($Property.ContainsKey('SecurityMode') -and $Property.SecurityMode -eq 'SQL')
+    {
+        Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('SAPwd')
+    }
+
+    # If the parameter FileStreamLevel is set and is greater or equal to 2 then the parameter FileStreamShareName is required.
+    if ($Property.ContainsKey('FileStreamLevel') -and $Property.FileStreamLevel -ge 2)
+    {
+        Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('FileStreamShareName')
+    }
+
+    # If a *SvcAccount is specified then the accompanying *SvcPassword must be set unless it is a (global) managed service account, virtual account, or a built-in account.
+    $accountProperty = @(
+        'PBEngSvcAccount'
+        'PBDMSSvcAccount' # cSpell: disable-line
+        'AgtSvcAccount'
+        'ASSvcAccount'
+        'FarmAccount'
+        'SqlSvcAccount'
+        'ISSvcAccount'
+        'RSSvcAccount'
+    )
+
+    foreach ($currentAccountProperty in $accountProperty)
+    {
+        if ($currentAccountProperty -in $Property.Keys)
+        {
+            # If not (global) managed service account, virtual account, or a built-in account.
+            if ((Test-AccountRequirePassword -Name $Property.$currentAccountProperty))
+            {
+                $assertPropertyName = $currentAccountProperty -replace 'Account', 'Password'
+
+                Assert-BoundParameter -BoundParameterList $Property -RequiredParameter $assertPropertyName
+            }
         }
     }
 
-    return , [System.String[]] $class
-}
-#EndRegion './Private/Get-ClassName.ps1' 56
-#Region './Private/Get-DscProperty.ps1' 0
+    # If feature AzureExtension is specified then the all the Azure* parameters must be set (except AzureArcProxy).
+    if ($Property.ContainsKey('Features') -and $Property.Features -contains 'AZUREEXTENSION') # cSpell: disable-line
+    {
+        Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @(
+            'AzureSubscriptionId'
+            'AzureResourceGroup'
+            'AzureRegion'
+            'AzureTenantId'
+            'AzureServicePrincipal'
+            'AzureServicePrincipalSecret'
+            'ProductCoveredBySA'
+        )
+    }
 
-<#
-    .SYNOPSIS
-        Returns DSC resource properties that is part of a class-based DSC resource.
+    # If feature is SQLENGINE, then for specified setup actions the parameter AgtSvcAccount is mandatory.
+    if ($SetupAction -in ('CompleteImage', 'InstallFailoverCluster', 'PrepareFailoverCluster', 'AddNode'))
+    {
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'SQLENGINE')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('AgtSvcAccount')
+        }
+    }
 
-    .DESCRIPTION
-        Returns DSC resource properties that is part of a class-based DSC resource.
-        The properties can be filtered using name, type, or has been assigned a value.
+    if ($SetupAction -in ('InstallFailoverCluster', 'PrepareFailoverCluster', 'AddNode'))
+    {
+        # The parameter ASSvcAccount is mandatory if feature AS is installed and setup action is InstallFailoverCluster, PrepareFailoverCluster, or AddNode.
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'AS')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('ASSvcAccount')
+        }
 
-    .PARAMETER InputObject
-        The object that contain one or more key properties.
+        # The parameter SqlSvcAccount is mandatory if feature SQLENGINE is installed and setup action is InstallFailoverCluster, PrepareFailoverCluster, or AddNode.
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'SQLENGINE')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('SqlSvcAccount')
+        }
 
-    .PARAMETER Name
-        Specifies one or more property names to return. If left out all properties
-        are returned.
+        # The parameter ISSvcAccount is mandatory if feature IS is installed and setup action is InstallFailoverCluster, PrepareFailoverCluster, or AddNode.
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'IS')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('ISSvcAccount')
+        }
 
-    .PARAMETER Type
-        Specifies one or more property types to return. If left out all property
-        types are returned.
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'RS')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @('RSSvcAccount')
+        }
+    }
 
-    .PARAMETER HasValue
-        Specifies to return only properties that has been assigned a non-null value.
-        If left out all properties are returned regardless if there is a value
-        assigned or not.
+    # The ASServerMode value PowerPivot is not allowed when parameter set is InstallFailoverCluster or CompleteFailoverCluster.
+    if ($SetupAction -in ('InstallFailoverCluster', 'CompleteFailoverCluster'))
+    {
+        if ($Property.ContainsKey('ASServerMode') -and $Property.ASServerMode -eq 'PowerPivot')
+        {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    ($script:localizedData.InstallSqlServerProperties_ASServerModeInvalidValue -f $SetupAction),
+                    'ASAP0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    'Command parameters'
+                )
+            )
+        }
+    }
 
-    .EXAMPLE
-        Get-DscProperty -InputObject $this
+    # The ASServerMode value PowerPivot is not allowed when parameter set is InstallFailoverCluster or CompleteFailoverCluster.
+    if ($SetupAction -in ('AddNode'))
+    {
+        if ($Property.ContainsKey('RsInstallMode') -and $Property.RsInstallMode -ne 'FilesOnlyMode')
+        {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    ($script:localizedData.InstallSqlServerProperties_RsInstallModeInvalidValue -f $SetupAction),
+                    'ASAP0002', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    'Command parameters'
+                )
+            )
+        }
+    }
 
-        Returns all DSC resource properties of the DSC resource.
-
-    .EXAMPLE
-        Get-DscProperty -InputObject $this -Name @('MyProperty1', 'MyProperty2')
-
-        Returns the specified DSC resource properties names of the DSC resource.
-
-    .EXAMPLE
-        Get-DscProperty -InputObject $this -Type @('Mandatory', 'Optional')
-
-        Returns the specified DSC resource property types of the DSC resource.
-
-    .EXAMPLE
-        Get-DscProperty -InputObject $this -Type @('Optional') -HasValue
-
-        Returns the specified DSC resource property types of the DSC resource,
-        but only those properties that has been assigned a non-null value.
-
-    .OUTPUTS
-        [System.Collections.Hashtable]
-#>
-function Get-DscProperty
-{
-    [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
-    param
-    (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [PSObject]
-        $InputObject,
-
-        [Parameter()]
-        [System.String[]]
-        $Name,
-
-        [Parameter()]
-        [System.String[]]
-        $ExcludeName,
-
-        [Parameter()]
-        [ValidateSet('Key', 'Mandatory', 'NotConfigurable', 'Optional')]
-        [System.String[]]
-        $Type,
-
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $HasValue
-    )
-
-    $property = $InputObject.PSObject.Properties.Name |
-        Where-Object -FilterScript {
-            <#
-                Return all properties if $Name is not assigned, or if assigned
-                just those properties.
-            #>
-            (-not $Name -or $_ -in $Name) -and
-
-            <#
-                Return all properties if $ExcludeName is not assigned. Skip
-                property if it is included in $ExcludeName.
-            #>
-            (-not $ExcludeName -or ($_ -notin $ExcludeName)) -and
-
-            # Only return the property if it is a DSC property.
-            $InputObject.GetType().GetMember($_).CustomAttributes.Where(
-                {
-                    $_.AttributeType.Name -eq 'DscPropertyAttribute'
-                }
+    if ($SetupAction -in ('Install'))
+    {
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'SQLENGINE')
+        {
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @(
+                'SqlSysAdminAccounts'
             )
         }
 
-    if (-not [System.String]::IsNullOrEmpty($property))
-    {
-        if ($PSBoundParameters.ContainsKey('Type'))
+        if ($Property.ContainsKey('Features') -and $Property.Features -contains 'AS')
         {
-            $propertiesOfType = @()
-
-            $propertiesOfType += $property | Where-Object -FilterScript {
-                $InputObject.GetType().GetMember($_).CustomAttributes.Where(
-                    {
-                        <#
-                            To simplify the code, ignoring that this will compare
-                            MemberNAme against type 'Optional' which does not exist.
-                        #>
-                        $_.NamedArguments.MemberName -in $Type
-                    }
-                ).NamedArguments.TypedValue.Value -eq $true
-            }
-
-            # Include all optional parameter if it was requested.
-            if ($Type -contains 'Optional')
-            {
-                $propertiesOfType += $property | Where-Object -FilterScript {
-                    $InputObject.GetType().GetMember($_).CustomAttributes.Where(
-                        {
-                            $_.NamedArguments.MemberName -notin @('Key', 'Mandatory', 'NotConfigurable')
-                        }
-                    )
-                }
-            }
-
-            $property = $propertiesOfType
+            Assert-BoundParameter -BoundParameterList $Property -RequiredParameter @(
+                'ASSysAdminAccounts'
+            )
         }
     }
-
-    # Return a hashtable containing each key property and its value.
-    $getPropertyResult = @{}
-
-    foreach ($currentProperty in $property)
-    {
-        if ($HasValue.IsPresent)
-        {
-            $isAssigned = Test-ResourceDscPropertyIsAssigned -Name $currentProperty -InputObject $InputObject
-
-            if (-not $isAssigned)
-            {
-                continue
-            }
-        }
-
-        $getPropertyResult.$currentProperty = $InputObject.$currentProperty
-    }
-
-    return $getPropertyResult
 }
-#EndRegion './Private/Get-DscProperty.ps1' 154
-#Region './Private/Get-LocalizedDataRecursive.ps1' 0
+#EndRegion '.\Private\Assert-SetupActionProperties.ps1' 218
+#Region '.\Private\ConvertFrom-ManagedServiceType.ps1' 0
 <#
     .SYNOPSIS
-        Get the localization strings data from one or more localization string files.
-        This can be used in classes to be able to inherit localization strings
-        from one or more parent (base) classes.
+        Converts a managed service type name to a normalized service type name.
 
-        The order of class names passed to parameter `ClassName` determines the order
-        of importing localization string files. First entry's localization string file
-        will be imported first, then next entry's localization string file, and so on.
-        If the second (or any consecutive) entry's localization string file contain a
-        localization string key that existed in a previous imported localization string
-        file that localization string key will be ignored. Making it possible for a
-        child class to override localization strings from one or more parent (base)
-        classes.
+    .DESCRIPTION
+        Converts a managed service type name to its normalized service type name
+        equivalent.
 
-    .PARAMETER ClassName
-        An array of class names, normally provided by `Get-ClassName -Recurse`.
+    .PARAMETER ServiceType
+        Specifies the managed service type to convert to the correct normalized
+        service type name.
 
     .EXAMPLE
-        Get-LocalizedDataRecursive -ClassName $InputObject.GetType().FullName
+        ConvertFrom-ManagedServiceType -ServiceType 'SqlServer'
 
-        Returns a hashtable containing all the localized strings for the current
-        instance.
-
-    .EXAMPLE
-        Get-LocalizedDataRecursive -ClassName (Get-ClassNamn -InputObject $this -Recurse)
-
-        Returns a hashtable containing all the localized strings for the current
-        instance and any inherited (parent) classes.
-
-    .OUTPUTS
-        [System.Collections.Hashtable]
+        Returns the normalized service type name 'DatabaseEngine' .
 #>
-function Get-LocalizedDataRecursive
+function ConvertFrom-ManagedServiceType
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
     [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
     param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.ManagedServiceType]
+        $ServiceType
+    )
+
+    process
+    {
+        # Map the normalized service type to a valid value from the managed service type.
+        switch ($ServiceType)
+        {
+            'SqlServer'
+            {
+                $serviceTypeValue = 'DatabaseEngine'
+
+                break
+            }
+
+            'SqlAgent'
+            {
+                $serviceTypeValue = 'SqlServerAgent'
+
+                break
+            }
+
+            'Search'
+            {
+                $serviceTypeValue = 'Search'
+
+                break
+            }
+
+            'SqlServerIntegrationService'
+            {
+                $serviceTypeValue = 'IntegrationServices'
+
+                break
+            }
+
+            'AnalysisServer'
+            {
+                $serviceTypeValue = 'AnalysisServices'
+
+                break
+            }
+
+            'ReportServer'
+            {
+                $serviceTypeValue = 'ReportingServices'
+
+                break
+            }
+
+            'SqlBrowser'
+            {
+                $serviceTypeValue = 'SQLServerBrowser'
+
+                break
+            }
+
+            'NotificationServer'
+            {
+                $serviceTypeValue = 'NotificationServices'
+
+                break
+            }
+
+            default
+            {
+                <#
+                    This catches any future values in the enum ManagedServiceType
+                    that are not yet supported.
+                #>
+                $writeErrorParameters = @{
+                    Message      = $script:localizedData.ManagedServiceType_ConvertFrom_UnknownServiceType -f $ServiceType
+                    Category     = 'InvalidOperation'
+                    ErrorId      = 'CFMST0001' # CSpell: disable-line
+                    TargetObject = $ServiceType
+                }
+
+                Write-Error @writeErrorParameters
+
+                break
+            }
+        }
+
+        return $serviceTypeValue
+    }
+}
+#EndRegion '.\Private\ConvertFrom-ManagedServiceType.ps1' 112
+#Region '.\Private\ConvertTo-ManagedServiceType.ps1' 0
+<#
+    .SYNOPSIS
+        Converts a normalized service type name to a managed service type name.
+
+    .DESCRIPTION
+        Converts a normalized service type name to its managed service type name
+        equivalent.
+
+    .PARAMETER ServiceType
+        Specifies the normalized service type to convert to the correct manged
+        service type.
+
+    .EXAMPLE
+        ConvertTo-ManagedServiceType -ServiceType 'DatabaseEngine'
+
+        Returns the manged service type name for the normalized service type 'DatabaseEngine'.
+#>
+function ConvertTo-ManagedServiceType
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateSet('DatabaseEngine', 'SqlServerAgent', 'Search', 'IntegrationServices', 'AnalysisServices', 'ReportingServices', 'SQLServerBrowser', 'NotificationServices')]
+        [System.String]
+        $ServiceType
+    )
+
+    process
+    {
+        # Map the normalized service type to a valid value from the managed service type.
+        switch ($ServiceType)
+        {
+            'DatabaseEngine'
+            {
+                $serviceTypeValue = 'SqlServer'
+
+                break
+            }
+
+            'SqlServerAgent'
+            {
+                $serviceTypeValue = 'SqlAgent'
+
+                break
+            }
+
+            'Search'
+            {
+                $serviceTypeValue = 'Search'
+
+                break
+            }
+
+            'IntegrationServices'
+            {
+                $serviceTypeValue = 'SqlServerIntegrationService'
+
+                break
+            }
+
+            'AnalysisServices'
+            {
+                $serviceTypeValue = 'AnalysisServer'
+
+                break
+            }
+
+            'ReportingServices'
+            {
+                $serviceTypeValue = 'ReportServer'
+
+                break
+            }
+
+            'SQLServerBrowser'
+            {
+                $serviceTypeValue = 'SqlBrowser'
+
+                break
+            }
+
+            'NotificationServices'
+            {
+                $serviceTypeValue = 'NotificationServer'
+
+                break
+            }
+        }
+
+        return $serviceTypeValue -as [Microsoft.SqlServer.Management.Smo.Wmi.ManagedServiceType]
+    }
+}
+#EndRegion '.\Private\ConvertTo-ManagedServiceType.ps1' 94
+#Region '.\Private\ConvertTo-RedactedText.ps1' 0
+<#
+    .SYNOPSIS
+        Redacts a text from one or more specified phrases.
+
+    .DESCRIPTION
+        Redacts a text using best effort from one or more specified phrases. For
+        it to work the sensitiv phrases must be known and passed into the parameter
+        RedactText. If any single character in a phrase is wrong the sensitiv
+        information will not be redacted. The redaction is case-insensitive.
+
+    .PARAMETER Text
+        Specifies the text that will be redacted.
+
+    .PARAMETER RedactPhrase
+        Specifies one or more phrases to redact from the text. Text strings will
+        be escaped so they will not be interpreted as regular expressions (RegEx).
+
+    .PARAMETER RedactWith
+        Specifies a phrase that will be used as redaction.
+
+    .EXAMPLE
+        ConvertTo-RedactedText -Text 'My secret phrase: secret123' -RedactPhrase 'secret123'
+
+        Returns the text with the phrases redacted with the default redaction phrase.
+
+    .EXAMPLE
+        ConvertTo-RedactedText -Text 'My secret phrase: secret123' -RedactPhrase 'secret123' -RedactWith '----'
+
+        Returns the text with the phrases redacted to '----'.
+#>
+function ConvertTo-RedactedText
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [System.String]
+        $Text,
+
+        [Parameter(Mandatory = $true)]
         [System.String[]]
-        $ClassName
+        $RedactPhrase,
+
+        [Parameter()]
+        [System.String]
+        $RedactWith = '*******'
+    )
+
+    process
+    {
+        $redactedText = $Text
+
+        foreach ($redactString in $RedactPhrase)
+        {
+            <#
+                Escaping the string to handle strings which could look like
+                regular expressions, like passwords.
+            #>
+            $escapedRedactedString = [System.Text.RegularExpressions.Regex]::Escape($redactString)
+
+            $redactedText = $redactedText -ireplace $escapedRedactedString, $RedactWith # cSpell: ignore ireplace
+        }
+
+        return $redactedText
+    }
+}
+#EndRegion '.\Private\ConvertTo-RedactedText.ps1' 67
+#Region '.\Private\Get-FileVersionInformation.ps1' 0
+<#
+    .SYNOPSIS
+        Returns the version information for a file.
+
+    .DESCRIPTION
+        Returns the version information for a file.
+
+    .PARAMETER FilePath
+        Specifies the file for which to return the version information.
+
+    .EXAMPLE
+        Get-FileVersionInformation -FilePath 'E:\setup.exe'
+
+        Returns the version information for the file setup.exe.
+
+    .EXAMPLE
+        Get-FileVersionInformation -FilePath (Get-Item -Path 'E:\setup.exe')
+
+        Returns the version information for the file setup.exe.
+
+    .OUTPUTS
+        [System.String]
+#>
+function Get-FileVersionInformation
+{
+    [OutputType([System.Diagnostics.FileVersionInfo])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [System.IO.FileInfo]
+        $FilePath
+    )
+
+    process
+    {
+        $file = Get-Item -Path $FilePath -ErrorAction 'Stop'
+
+        if ($file.PSIsContainer)
+        {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    $script:localizedData.FileVersionInformation_Get_FilePathIsNotFile,
+                    'GFPVI0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidArgument,
+                    $file.FullName
+                )
+            )
+        }
+
+        return $file.VersionInfo
+    }
+}
+#EndRegion '.\Private\Get-FileVersionInformation.ps1' 54
+#Region '.\Private\Get-SMOModuleCalculatedVersion.ps1' 0
+<#
+    .SYNOPSIS
+        Returns the calculated version of an SMO PowerShell module.
+
+    .DESCRIPTION
+        Returns the calculated version of an SMO PowerShell module.
+
+        For SQLServer, the version is calculated using the System.Version
+        field with '-preview' appended for pre-release versions . For
+        example: 21.1.1 or 22.0.49-preview
+
+        For SQLPS, the version is calculated using the path of the module. For
+        example:
+        C:\Program Files (x86)\Microsoft SQL Server\130\Tools\PowerShell\Modules
+        returns 130
+
+    .PARAMETER PSModuleInfo
+        Specifies the PSModuleInfo object for which to return the calculated version.
+
+    .EXAMPLE
+        Get-SMOModuleCalculatedVersion -PSModuleInfo (Get-Module -Name 'sqlps')
+
+        Returns the calculated version as a string.
+
+    .OUTPUTS
+        [System.String]
+#>
+function Get-SMOModuleCalculatedVersion
+{
+    [OutputType([System.String])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [System.Management.Automation.PSModuleInfo]
+        $PSModuleInfo
+    )
+
+    process
+    {
+        $version = $null
+
+        if ($PSModuleInfo.Name -eq 'SQLPS')
+        {
+            <#
+                Parse the build version number '120', '130' from the Path.
+                Older version of SQLPS did not have correct versioning.
+            #>
+            $version = (Select-String -InputObject $PSModuleInfo.Path -Pattern '\\([0-9]{3})\\' -List).Matches.Groups[1].Value
+        }
+        else
+        {
+            $version = $PSModuleInfo.Version.ToString()
+
+            if ($PSModuleInfo.PrivateData.PSData.Prerelease)
+            {
+                $version = '{0}-{1}' -f $PSModuleInfo.Version, $PSModuleInfo.PrivateData.PSData.Prerelease
+            }
+        }
+
+        return $version
+    }
+}
+#EndRegion '.\Private\Get-SMOModuleCalculatedVersion.ps1' 64
+#Region '.\Private\Invoke-SetupAction.ps1' 0
+<#
+    .SYNOPSIS
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+    .DESCRIPTION
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER Install
+        Specifies the setup action Install.
+
+    .PARAMETER Uninstall
+        Specifies the setup action Uninstall.
+
+    .PARAMETER PrepareImage
+        Specifies the setup action PrepareImage.
+
+    .PARAMETER CompleteImage
+        Specifies the setup action CompleteImage.
+
+    .PARAMETER Upgrade
+        Specifies the setup action Upgrade.
+
+    .PARAMETER EditionUpgrade
+        Specifies the setup action EditionUpgrade.
+
+    .PARAMETER Repair
+        Specifies the setup action Repair.
+
+    .PARAMETER RebuildDatabase
+        Specifies the setup action RebuildDatabase.
+
+    .PARAMETER InstallFailoverCluster
+        Specifies the setup action InstallFailoverCluster.
+
+    .PARAMETER PrepareFailoverCluster
+        Specifies the setup action PrepareFailoverCluster.
+
+    .PARAMETER CompleteFailoverCluster
+        Specifies the setup action CompleteFailoverCluster.
+
+    .PARAMETER AddNode
+        Specifies the setup action AddNode.
+
+    .PARAMETER RemoveNode
+        Specifies the setup action RemoveNode.
+
+    .PARAMETER ConfigurationFile
+        Specifies an configuration file to use during SQL Server setup. This
+        parameter cannot be used together with any of the setup actions, but instead
+        it is expected that the configuration file specifies what setup action to
+        run.
+
+    .PARAMETER AcceptLicensingTerms
+        Required parameter to be able to run unattended install. By specifying this
+        parameter you acknowledge the acceptance all license terms and notices for
+        the specified features, the terms and notices that the Microsoft SQL Server
+        setup executable normally ask for.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER SuppressPrivacyStatementNotice
+        See the notes section for more information.
+
+    .PARAMETER IAcknowledgeEntCalLimits
+        See the notes section for more information.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER UpdateEnabled
+        See the notes section for more information.
+
+    .PARAMETER UpdateSource
+        See the notes section for more information.
+
+    .PARAMETER Features
+        See the notes section for more information.
+
+    .PARAMETER Role
+        See the notes section for more information.
+
+    .PARAMETER InstallSharedDir
+        See the notes section for more information.
+
+    .PARAMETER InstallSharedWowDir
+        See the notes section for more information.
+
+    .PARAMETER InstanceDir
+        See the notes section for more information.
+
+    .PARAMETER InstanceId
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBStartPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBEndPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBScaleOut
+        See the notes section for more information.
+
+    .PARAMETER ProductKey
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER ASBackupDir
+        See the notes section for more information.
+
+    .PARAMETER ASCollation
+        See the notes section for more information.
+
+    .PARAMETER ASConfigDir
+        See the notes section for more information.
+
+    .PARAMETER ASDataDir
+        See the notes section for more information.
+
+    .PARAMETER ASLogDir
+        See the notes section for more information.
+
+    .PARAMETER ASTempDir
+        See the notes section for more information.
+
+    .PARAMETER ASServerMode
+        See the notes section for more information.
+
+    .PARAMETER ASSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ASSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ASSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER ASSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER ASProviderMSOLAP
+        See the notes section for more information.
+
+    .PARAMETER FarmAccount
+        See the notes section for more information.
+
+    .PARAMETER FarmPassword
+        See the notes section for more information.
+
+    .PARAMETER Passphrase
+        See the notes section for more information.
+
+    .PARAMETER FarmAdminiPort
+        See the notes section for more information.
+
+    .PARAMETER BrowserSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER FTUpgradeOption
+        See the notes section for more information.
+
+    .PARAMETER EnableRanU
+        See the notes section for more information.
+
+    .PARAMETER InstallSqlDataDir
+        See the notes section for more information.
+
+    .PARAMETER SqlBackupDir
+        See the notes section for more information.
+
+    .PARAMETER SecurityMode
+        See the notes section for more information.
+
+    .PARAMETER SAPwd
+        See the notes section for more information.
+
+    .PARAMETER SqlCollation
+        See the notes section for more information.
+
+    .PARAMETER AddCurrentUserAsSqlAdmin
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER SqlSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileCount
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcInstantFileInit
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlMaxDop
+        See the notes section for more information.
+
+    .PARAMETER UseSqlRecommendedMemoryLimits
+        See the notes section for more information.
+
+    .PARAMETER SqlMinMemory
+        See the notes section for more information.
+
+    .PARAMETER SqlMaxMemory
+        See the notes section for more information.
+
+    .PARAMETER FileStreamLevel
+        See the notes section for more information.
+
+    .PARAMETER FileStreamShareName
+        See the notes section for more information.
+
+    .PARAMETER ISSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ISSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ISSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER AllowUpgradeForSSRSSharePointMode
+        See the notes section for more information.
+
+    .PARAMETER NpEnabled
+        See the notes section for more information.
+
+    .PARAMETER TcpEnabled
+        See the notes section for more information.
+
+    .PARAMETER RsInstallMode
+        See the notes section for more information.
+
+    .PARAMETER RSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER RSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER RSSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER MPYCacheDirectory
+        See the notes section for more information.
+
+    .PARAMETER MRCacheDirectory
+        See the notes section for more information.
+
+    .PARAMETER SqlInstJava
+        See the notes section for more information.
+
+    .PARAMETER SqlJavaDir
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterGroup
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterDisks
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterNetworkName
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterIPAddresses
+        See the notes section for more information.
+
+    .PARAMETER ConfirmIPDependencyChange
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterRollOwnership
+        See the notes section for more information.
+
+    .PARAMETER AzureSubscriptionId
+        See the notes section for more information.
+
+    .PARAMETER AzureResourceGroup
+        See the notes section for more information.
+
+    .PARAMETER AzureRegion
+        See the notes section for more information.
+
+    .PARAMETER AzureTenantId
+        See the notes section for more information.
+
+    .PARAMETER AzureServicePrincipal
+        See the notes section for more information.
+
+    .PARAMETER AzureServicePrincipalSecret
+        See the notes section for more information.
+
+    .PARAMETER AzureArcProxy
+        See the notes section for more information.
+
+    .PARAMETER SkipRules
+        See the notes section for more information.
+
+    .PARAMETER ProductCoveredBySA
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Invoke-SetupAction -Install -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\'
+
+        Installs the database engine for the named instance MyInstance.
+
+    .EXAMPLE
+        Invoke-SetupAction -Install -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE','ARC' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\' -AzureSubscriptionId 'MySubscriptionId' -AzureResourceGroup 'MyRG' -AzureRegion 'West-US' -AzureTenantId 'MyTenantId' -AzureServicePrincipal 'MyPrincipalName' -AzureServicePrincipalSecret ('MySecret' | ConvertTo-SecureString -AsPlainText -Force)
+
+        Installs the database engine for the named instance MyInstance and onboard the server to Azure Arc.
+
+    .EXAMPLE
+        Invoke-SetupAction -Install -AcceptLicensingTerms -MediaPath 'E:\' -AzureSubscriptionId 'MySubscriptionId' -AzureResourceGroup 'MyRG' -AzureRegion 'West-US' -AzureTenantId 'MyTenantId' -AzureServicePrincipal 'MyPrincipalName' -AzureServicePrincipalSecret ('MySecret' | ConvertTo-SecureString -AsPlainText -Force)
+
+        Installs the Azure Arc Agent on the server.
+
+    .EXAMPLE
+        Invoke-SetupAction -ConfigurationFile 'MySqlConfig.ini' -MediaPath 'E:\'
+
+        Installs SQL Server using the configuration file 'MySqlConfig.ini'.
+
+    .EXAMPLE
+        Invoke-SetupAction -Uninstall -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Uninstalls the database engine from the named instance MyInstance.
+
+    .EXAMPLE
+        Invoke-SetupAction -PrepareImage -AcceptLicensingTerms -Features 'SQLENGINE' -InstanceId 'MyInstance' -MediaPath 'E:\'
+
+        Prepares the server for using the database engine for an instance named 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -CompleteImage -AcceptLicensingTerms -MediaPath 'E:\'
+
+        Completes install on a server that was previously prepared (by using prepare image).
+
+    .EXAMPLE
+        Invoke-SetupAction -Upgrade -AcceptLicensingTerms -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Upgrades the instance 'MyInstance' with the SQL Server version that is provided by the media path.
+
+    .EXAMPLE
+        Invoke-SetupAction -EditionUpgrade -AcceptLicensingTerms -ProductKey 'NewEditionProductKey' -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Upgrades the instance 'MyInstance' with the SQL Server edition that is provided by the media path.
+
+    .EXAMPLE
+        Invoke-SetupAction -Repair -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Repairs the database engine of the instance 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -RebuildDatabase -InstanceName 'MyInstance' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\'
+
+        Rebuilds the database of the instance 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -InstallFailoverCluster -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -InstallSqlDataDir 'D:\MSSQL\Data' -SqlSysAdminAccounts @('MyAdminAccount') -FailoverClusterNetworkName 'TestCluster01A' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Installs the database engine in a failover cluster with the instance name 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -PrepareFailoverCluster -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Prepares to installs the database engine in a failover cluster with the instance name 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -CompleteFailoverCluster -InstanceName 'MyInstance' -InstallSqlDataDir 'D:\MSSQL\Data' -SqlSysAdminAccounts @('MyAdminAccount') -FailoverClusterNetworkName 'TestCluster01A' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Completes the install of the database engine in the failover cluster with the instance name 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -AddNode -AcceptLicensingTerms -InstanceName 'MyInstance' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Adds the node to the failover cluster for the instance 'MyInstance'.
+
+    .EXAMPLE
+        Invoke-SetupAction -RemoveNode -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Removes the node from the failover cluster of the instance 'MyInstance'.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+
+        For RebuildDatabase the parameter SAPwd must be set if the instance was
+        installed with SecurityMode = 'SQL'.
+#>
+function Invoke-SetupAction
+{
+    # cSpell: ignore PBDMS Admini AZUREEXTENSION
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Install,
+
+        [Parameter(ParameterSetName = 'Uninstall', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Uninstall,
+
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $PrepareImage,
+
+        [Parameter(ParameterSetName = 'CompleteImage', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $CompleteImage,
+
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Upgrade,
+
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $EditionUpgrade,
+
+        [Parameter(ParameterSetName = 'Repair', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Repair,
+
+        [Parameter(ParameterSetName = 'RebuildDatabase', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $RebuildDatabase,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $InstallFailoverCluster,
+
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $PrepareFailoverCluster,
+
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $CompleteFailoverCluster,
+
+        [Parameter(ParameterSetName = 'AddNode', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $AddNode,
+
+        [Parameter(ParameterSetName = 'RemoveNode', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $RemoveNode,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile', Mandatory = $true)]
+        [ValidateScript({
+                if (-not (Test-Path -Path $_))
+                {
+                    throw $script:localizedData.Server_ConfigurationFileNotFound
+                }
+
+                return $true
+            })]
+        [System.String]
+        $ConfigurationFile,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'AddNode', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteImage', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $AcceptLicensingTerms,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SuppressPrivacyStatementNotice,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Management.Automation.SwitchParameter]
+        $IAcknowledgeEntCalLimits,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({
+                if (-not (Test-Path -Path (Join-Path -Path $_ -ChildPath 'setup.exe')))
+                {
+                    throw $script:localizedData.Server_MediaPathNotFound
+                }
+
+                return $true
+            })]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Uninstall', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Repair', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'RebuildDatabase', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'AddNode', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'RemoveNode', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $InstanceName,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Management.Automation.SwitchParameter]
+        $Enu,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Management.Automation.SwitchParameter]
+        $UpdateEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $UpdateSource,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Repair', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Uninstall', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateSet(
+            'SQL',
+            'SQLEngine', # Part of parent feature SQL
+            'Replication', # Part of parent feature SQL
+            'FullText', # Part of parent feature SQL
+            'DQ', # Part of parent feature SQL
+            'PolyBase', # Part of parent feature SQL
+            'PolyBaseCore', # Part of parent feature SQL
+            'PolyBaseJava', # Part of parent feature SQL
+            'AdvancedAnalytics', # Part of parent feature SQL
+            'SQL_INST_MR', # Part of parent feature SQL
+            'SQL_INST_MPY', # Part of parent feature SQL
+            'SQL_INST_JAVA', # Part of parent feature SQL
+            'AS',
+            'RS',
+            'RS_SHP',
+            'RS_SHPWFE', # cspell: disable-line
+            'DQC',
+            'IS',
+            'IS_Master', # Part of parent feature IS
+            'IS_Worker', # Part of parent feature IS
+            'MDS',
+            'SQL_SHARED_MPY',
+            'SQL_SHARED_MR',
+            'Tools',
+            'BC', # Part of parent feature Tools
+            'Conn', # Part of parent feature Tools
+            'DREPLAY_CTLR', # Part of parent feature Tools (cspell: disable-line)
+            'DREPLAY_CLT', # Part of parent feature Tools (cspell: disable-line)
+            'SNAC_SDK', # Part of parent feature Tools (cspell: disable-line)
+            'SDK', # Part of parent feature Tools
+            'LocalDB', # Part of parent feature Tools
+            'AZUREEXTENSION'
+        )]
+        [System.String[]]
+        $Features,
+
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [ValidateSet(
+            'ALLFeatures_WithDefaults',
+            'SPI_AS_NewFarm',
+            'SPI_AS_ExistingFarm'
+        )]
+        [System.String]
+        $Role,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstallSharedDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstallSharedWowDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstanceDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstanceId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $PBEngSvcAccount,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $PBEngSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBEngSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $PBDMSSvcAccount, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $PBDMSSvcPassword, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBDMSSvcStartupType, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.UInt16]
+        $PBStartPortRange,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.UInt16]
+        $PBEndPortRange,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Repair')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Management.Automation.SwitchParameter]
+        $PBScaleOut,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [System.String]
+        $ProductKey, # This is argument PID but $PID is reserved variable.
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $AgtSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $AgtSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $AgtSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASBackupDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASCollation,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASConfigDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASDataDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $ASTempDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateSet('Multidimensional', 'PowerPivot', 'Tabular')]
+        [System.String]
+        $ASServerMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $ASSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $ASSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $ASSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String[]]
+        $ASSysAdminAccounts,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $ASProviderMSOLAP,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $FarmAccount,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $FarmPassword,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $Passphrase,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 65536)]
+        [System.UInt16]
+        $FarmAdminiPort, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $BrowserSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateSet('Rebuild', 'Reset', 'Import')]
+        [System.String]
+        $FTUpgradeOption,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [System.Management.Automation.SwitchParameter]
+        $EnableRanU,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [System.String]
+        $InstallSqlDataDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlBackupDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateSet('SQL')]
+        [System.String]
+        $SecurityMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.Security.SecureString]
+        $SAPwd,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlCollation,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $AddCurrentUserAsSqlAdmin,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $SqlSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $SqlSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $SqlSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String[]]
+        $SqlSysAdminAccounts,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlTempDbDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlTempDbLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.UInt16]
+        $SqlTempDbFileCount,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbFileSize,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbFileGrowth,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbLogFileSize,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'RebuildDatabase')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbLogFileGrowth,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlUserDbDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SqlSvcInstantFileInit,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $SqlUserDbLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 32767)]
+        [System.UInt16]
+        $SqlMaxDop,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $UseSqlRecommendedMemoryLimits,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 2147483647)]
+        [System.UInt32]
+        $SqlMinMemory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 2147483647)]
+        [System.UInt32]
+        $SqlMaxMemory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateRange(0, 3)]
+        [System.UInt16]
+        $FileStreamLevel,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $FileStreamShareName,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $ISSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $ISSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $ISSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [System.Management.Automation.SwitchParameter]
+        $AllowUpgradeForSSRSSharePointMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [System.Management.Automation.SwitchParameter]
+        $NpEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [System.Management.Automation.SwitchParameter]
+        $TcpEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [ValidateSet('SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode')]
+        [System.String]
+        $RsInstallMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.String]
+        $RSSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [System.Security.SecureString]
+        $RSSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $RSSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $MPYCacheDirectory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $MRCacheDirectory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SqlInstJava,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $SqlJavaDir,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String]
+        $FailoverClusterGroup,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [System.String[]]
+        $FailoverClusterDisks,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [System.String]
+        $FailoverClusterNetworkName,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'AddNode', Mandatory = $true)]
+        [System.String[]]
+        $FailoverClusterIPAddresses,
+
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [Parameter(ParameterSetName = 'RemoveNode')]
+        [System.Management.Automation.SwitchParameter]
+        $ConfirmIPDependencyChange,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateRange(0, 2)]
+        [System.UInt16]
+        $FailoverClusterRollOwnership,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureSubscriptionId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureResourceGroup,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureRegion,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureTenantId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureServicePrincipal,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.Security.SecureString]
+        $AzureServicePrincipalSecret,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent')]
+        [System.String]
+        $AzureArcProxy,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'EditionUpgrade')]
+        [System.String[]]
+        $SkipRules,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'CompleteImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'CompleteFailoverCluster')]
+        [Parameter(ParameterSetName = 'AddNode')]
+        [Parameter(ParameterSetName = 'EditionUpgrade')]
+        [System.Management.Automation.SwitchParameter]
+        $ProductCoveredBySA,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    if ($Force.IsPresent)
+    {
+        $ConfirmPreference = 'None'
+    }
+
+    Assert-ElevatedUser -ErrorAction 'Stop'
+
+    switch ($PSCmdlet.ParameterSetName)
+    {
+        'InstallRole'
+        {
+            $setupAction = 'Install'
+
+            break
+        }
+
+        'InstallAzureArcAgent'
+        {
+            $setupAction = 'Install'
+
+            <#
+                For this setup action the parameter Features is not part of the
+                parameter set, so this can be safely set.
+            #>
+            $PSBoundParameters.Features = @('AZUREEXTENSION')
+
+            break
+        }
+
+        default
+        {
+            $setupAction = $PSCmdlet.ParameterSetName
+
+            break
+        }
+    }
+
+    Assert-SetupActionProperties -Property $PSBoundParameters -SetupAction $setupAction -ErrorAction 'Stop'
+
+    $setupArgument = '/QUIET /ACTION={0}' -f $setupAction
+
+    if ($DebugPreference -in @('Continue', 'Inquire'))
+    {
+        $setupArgument += ' /INDICATEPROGRESS' # cspell: disable-line
+    }
+
+    if ($AcceptLicensingTerms.IsPresent)
+    {
+        $setupArgument += ' /IACCEPTSQLSERVERLICENSETERMS' # cspell: disable-line
+
+        if ($PSBoundParameters.ContainsKey('Features'))
+        {
+            if ($PSBoundParameters.Features -contains 'SQL_SHARED_MR' )
+            {
+                $setupArgument += ' /IACCEPTROPENLICENSETERMS' # cspell: disable-line
+            }
+
+            if ($PSBoundParameters.Features -contains 'SQL_SHARED_MPY' )
+            {
+                $setupArgument += ' /IACCEPTPYTHONLICENSETERMS' # cspell: disable-line
+            }
+        }
+    }
+
+    $ignoreParameters = @(
+        $PSCmdlet.ParameterSetName
+        'Install' # Must add this exclusively because of parameter set InstallAzureArcAgent
+        'AcceptLicensingTerms'
+        'MediaPath'
+        'Timeout'
+        'Force'
+    )
+
+    $ignoreParameters += [System.Management.Automation.PSCmdlet]::CommonParameters
+    $ignoreParameters += [System.Management.Automation.PSCmdlet]::OptionalCommonParameters
+
+    $boundParameterName = $PSBoundParameters.Keys.Where({ $_ -notin $ignoreParameters })
+
+    $sensitiveValue = @()
+
+    $pathParameter = @(
+        'InstallSharedDir'
+        'InstallSharedWowDir'
+        'InstanceDir'
+        'ASBackupDir'
+        'ASConfigDir'
+        'ASDataDir'
+        'ASLogDir'
+        'ASTempDir'
+        'InstallSqlDataDir'
+        'SqlBackupDir'
+        'SqlTempDbDir'
+        'SqlTempDbLogDir'
+        'SqlUserDbDir'
+        'SqlUserDbLogDir'
+        'MPYCacheDirectory'
+        'MRCacheDirectory'
+        'SqlJavaDir'
+    )
+
+    <#
+        Remove trialing backslash from paths so they are not interpreted as
+        escape-characters for a double-quote.
+        See issue https://github.com/dsccommunity/SqlServerDsc/issues/1254.
+    #>
+    $boundParameterName.Where( { $_ -in $pathParameter } ).ForEach({
+            # Must not change paths that reference a root directory (they are handle differently later)
+            if ($PSBoundParameters.$_ -notmatch '^[a-zA-Z]:\\$')
+            {
+                $PSBoundParameters.$_ = $PSBoundParameters.$_.TrimEnd('\')
+            }
+        })
+
+    # Loop through all bound parameters and build arguments for the setup executable.
+    foreach ($parameterName in $boundParameterName)
+    {
+        # Make sure parameter is upper-case.
+        $parameterName = $parameterName.ToUpper()
+
+        $setupArgument += ' /{0}' -f $parameterName
+
+        switch ($parameterName)
+        {
+            <#
+                Must be handled differently because it is an array and have a comma
+                separating the values, and the value shall be upper-case.
+            #>
+            { $_ -in @('FEATURES', 'ROLE') }
+            {
+                $setupArgument += '={0}' -f ($PSBoundParameters.$parameterName.ToUpper() -join ',')
+
+                break
+            }
+
+            # Must be handled differently because the value MUST be upper-case.
+            'ASSERVERMODE' # cspell: disable-line
+            {
+                $setupArgument += '={0}' -f $PSBoundParameters.$parameterName.ToUpper()
+
+                break
+            }
+
+            # Must be handled differently because the parameter name could not be $PID.
+            'PRODUCTKEY' # cspell: disable-line
+            {
+                # Remove the argument that was added above.
+                $setupArgument = $setupArgument -replace ' \/{0}' -f $parameterName
+
+                $sensitiveValue += $PSBoundParameters.$parameterName
+
+                $setupArgument += ' /PID="{0}"' -f $PSBoundParameters.$parameterName
+
+                break
+            }
+
+            # Must be handled differently because the argument name shall have an underscore in the argument.
+            'SQLINSTJAVA' # cspell: disable-line
+            {
+                # Remove the argument that was added above.
+                $setupArgument = $setupArgument -replace ' \/{0}' -f $parameterName
+
+                $setupArgument += ' /SQL_INST_JAVA'
+
+                break
+            }
+
+            # Must be handled differently because each value shall be separated by a semi-colon.
+            'FAILOVERCLUSTERDISKS' # cspell: disable-line
+            {
+                $setupArgument += '="{0}"' -f ($PSBoundParameters.$parameterName -join ';')
+
+                break
+            }
+
+            # Must be handled differently because two parameters shall become one argument.
+            { $_ -in ('PBSTARTPORTRANGE', 'PBENDPORTRANGE') } # cspell: disable-line
+            {
+                # Remove the argument that was added above.
+                $setupArgument = $setupArgument -replace ' \/{0}' -f $parameterName
+
+                # Only set argument if it is not present already.
+                if ($setupArgument -notmatch '\/PBPORTRANGE') # cspell: disable-line
+                {
+                    # cspell: disable-next
+                    $setupArgument += ' /PBPORTRANGE={0}-{1}' -f $PSBoundParameters.PBStartPortRange, $PSBoundParameters.PBEndPortRange
+                }
+
+                break
+            }
+
+            { $PSBoundParameters.$parameterName -is [System.Management.Automation.SwitchParameter] }
+            {
+                <#
+                    If a switch parameter is not included below then those arguments
+                    shall not have any value after argument name, e.g. '/ENU'.
+                #>
+                switch ($parameterName)
+                {
+                    # Arguments that shall have the value set to the boolean numeric representation.
+                    { $parameterName -in ('ASPROVIDERMSOLAP', 'NPENABLED', 'TCPENABLED', 'CONFIRMIPDEPENDENCYCHANGE') } # cspell: disable-line
+                    {
+                        $setupArgument += '={0}' -f [System.Byte] $PSBoundParameters.$parameterName.ToBool()
+
+                        break
+                    }
+
+                    <#
+                        Arguments that shall have the value set to the boolean string representation.
+                        Excluding parameter names that shall be handled differently, those arguments
+                        shall not have any value after argument name, e.g. '/ENU'.
+                    #>
+                    { $parameterName -in @('UPDATEENABLED', 'PBSCALEOUT', 'SQLSVCINSTANTFILEINIT', 'ALLOWUPGRADEFORSSRSSHAREPOINTMODE', 'ADDCURRENTUSERASSQLADMIN', 'IACKNOWLEDGEENTCALLIMITS') } # cspell: disable-line
+                    {
+                        $setupArgument += '={0}' -f $PSBoundParameters.$parameterName.ToString()
+
+                        break
+                    }
+                }
+
+                break
+            }
+
+            <#
+                Must be handled differently because it is an numeric value and does not need to
+                be surrounded by double-quote.
+            #>
+            { $PSBoundParameters.$parameterName | Test-IsNumericType }
+            {
+                $setupArgument += '={0}' -f ($PSBoundParameters.$parameterName -join '" "')
+
+                break
+            }
+
+            <#
+                Must be handled differently because it is an array and have a space
+                separating the values, and each value is surrounded by double-quote.
+            #>
+            { $PSBoundParameters.$parameterName -is [System.Array] }
+            {
+                $setupArgument += '="{0}"' -f ($PSBoundParameters.$parameterName -join '" "')
+
+                break
+            }
+
+            { $PSBoundParameters.$parameterName -is [System.Security.SecureString] }
+            {
+                $passwordClearText = $PSBoundParameters.$parameterName | ConvertFrom-SecureString -AsPlainText
+
+                $sensitiveValue += $passwordClearText
+
+                $setupArgument += '="{0}"' -f $passwordClearText
+
+                break
+            }
+
+            default
+            {
+                <#
+                    When there is backslash followed by a double-quote then the backslash
+                    is treated as an escape character for the double-quote. For arguments
+                    that holds a path and the value references a root directory, e.g. 'E:\',
+                    then the value must not be surrounded by double-quotes. Other paths
+                    should be surrounded by double-quotes as they can contain spaces.
+                    See issue https://github.com/dsccommunity/SqlServerDsc/issues/1254.
+                #>
+                if ($PSBoundParameters.$parameterName -match '^[a-zA-Z]:\\$')
+                {
+                    $setupArgument += '={0}' -f $PSBoundParameters.$parameterName
+                }
+                else
+                {
+                    $setupArgument += '="{0}"' -f $PSBoundParameters.$parameterName
+                }
+                break
+            }
+        }
+    }
+
+    $verboseSetupArgument = $setupArgument
+
+    # Obfuscate sensitive values.
+    foreach ($currentSensitiveValue in $sensitiveValue)
+    {
+        $escapedRegExString = [System.Text.RegularExpressions.Regex]::Escape($currentSensitiveValue)
+
+        $verboseSetupArgument = $verboseSetupArgument -replace $escapedRegExString, '********'
+    }
+
+    # Clear sensitive values.
+    $sensitiveValue = $null
+
+    Write-Verbose -Message ($script:localizedData.Server_SetupArguments -f $verboseSetupArgument)
+
+    $verboseDescriptionMessage = $script:localizedData.Server_Install_ShouldProcessVerboseDescription -f $PSCmdlet.ParameterSetName
+    $verboseWarningMessage = $script:localizedData.Server_Install_ShouldProcessVerboseWarning -f $PSCmdlet.ParameterSetName
+    $captionMessage = $script:localizedData.Server_Install_ShouldProcessCaption
+
+    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+    {
+        $expandedMediaPath = [System.Environment]::ExpandEnvironmentVariables($MediaPath)
+
+        $startProcessParameters = @{
+            FilePath     = Join-Path -Path $expandedMediaPath -ChildPath 'setup.exe'
+            ArgumentList = $setupArgument
+            Timeout      = $Timeout
+        }
+
+        # Clear setupArgument to remove any sensitive values.
+        $setupArgument = $null
+
+        # Run setup executable.
+        $processExitCode = Start-SqlSetupProcess @startProcessParameters
+
+        $setupExitMessage = ($script:localizedData.Server_SetupExitMessage -f $processExitCode)
+
+        if ($processExitCode -eq 3010)
+        {
+            Write-Warning -Message (
+                '{0} {1}' -f $setupExitMessage, $script:localizedData.Server_SetupSuccessfulRebootRequired
+            )
+        }
+        elseif ($processExitCode -ne 0)
+        {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    ('{0} {1}' -f $setupExitMessage, $script:localizedData.Server_SetupFailed),
+                    'ISA0001', # cspell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $InstanceName
+                )
+            )
+        }
+        else
+        {
+            Write-Verbose -Message (
+                '{0} {1}' -f $setupExitMessage, ($script:localizedData.Server_SetupSuccessful)
+            )
+        }
+    }
+}
+#EndRegion '.\Private\Invoke-SetupAction.ps1' 1715
+#Region '.\Public\Add-SqlDscNode.ps1' 0
+<#
+    .SYNOPSIS
+        Add a SQL Server node to an Failover Cluster instance (FCI).
+
+    .DESCRIPTION
+        Add a SQL Server node to an Failover Cluster instance (FCI).
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER AcceptLicensingTerms
+        Required parameter to be able to run unattended install. By specifying this
+        parameter you acknowledge the acceptance all license terms and notices for
+        the specified features, the terms and notices that the Microsoft SQL Server
+        setup executable normally ask for.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER IAcknowledgeEntCalLimits
+        See the notes section for more information.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER UpdateEnabled
+        See the notes section for more information.
+
+    .PARAMETER UpdateSource
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBStartPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBEndPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBScaleOut
+        See the notes section for more information.
+
+    .PARAMETER ProductKey
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ASSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ASSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ISSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ISSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER RsInstallMode
+        See the notes section for more information.
+
+    .PARAMETER RSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER RSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterIPAddresses
+        See the notes section for more information.
+
+    .PARAMETER ConfirmIPDependencyChange
+        See the notes section for more information.
+
+    .PARAMETER ProductCoveredBySA
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Add-SqlDscNode -AcceptLicensingTerms -InstanceName 'MyInstance' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Adds the current node's SQL Server instance 'MyInstance' to the Failover Cluster instance.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+#>
+function Add-SqlDscNode
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $AcceptLicensingTerms,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IAcknowledgeEntCalLimits,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Enu,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $UpdateEnabled,
+
+        [Parameter()]
+        [System.String]
+        $UpdateSource,
+
+        [Parameter()]
+        [System.String]
+        $PBEngSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $PBEngSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBEngSvcStartupType,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBStartPortRange,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBEndPortRange,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PBScaleOut,
+
+        [Parameter()]
+        [System.String]
+        $ProductKey, # This is argument PID but $PID is reserved variable.
+
+        [Parameter()]
+        [System.String]
+        $AgtSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $AgtSvcPassword,
+
+        [Parameter()]
+        [System.String]
+        $ASSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $ASSvcPassword,
+
+        [Parameter()]
+        [System.String]
+        $SqlSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $SqlSvcPassword,
+
+        [Parameter()]
+        [System.String]
+        $ISSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $ISSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode')]
+        [System.String]
+        $RsInstallMode,
+
+        [Parameter()]
+        [System.String]
+        $RSSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $RSSvcPassword,
+
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $FailoverClusterIPAddresses,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ConfirmIPDependencyChange,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProductCoveredBySA,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction -AddNode @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Add-SqlDscNode.ps1' 257
+#Region '.\Public\Add-SqlDscTraceFlag.ps1' 0
+<#
+    .SYNOPSIS
+        Add trace flags to a Database Engine instance.
+
+    .DESCRIPTION
+        Add trace flags on a Database Engine instance, keeping any trace flags
+        currently set.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object on which to add the trace flags.
+
+    .PARAMETER ServerName
+        Specifies the server name where the instance exist.
+
+    .PARAMETER InstanceName
+       Specifies the instance name on which to remove the trace flags.
+
+    .PARAMETER TraceFlag
+        Specifies the trace flags to add.
+
+    .PARAMETER Force
+        Specifies that the trace flag should be added without any confirmation.
+
+    .EXAMPLE
+        Add-SqlDscTraceFlag -TraceFlag 4199
+
+        Adds the trace flag 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Add-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199
+
+        Adds the trace flag 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        Add-SqlDscTraceFlag -InstanceName 'SQL2022' -TraceFlag 4199,3226
+
+        Adds the trace flags 4199 and 3226 on the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine' -InstanceName 'SQL2022'
+        Add-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199,3226
+
+        Adds the trace flags 4199 and 3226 on the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .OUTPUTS
+        None.
+#>
+function Add-SqlDscTraceFlag
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType()]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER',
+
+        [Parameter(Mandatory = $true)]
+        [System.UInt32[]]
+        $TraceFlag,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
     )
 
     begin
     {
-        $localizedData = @{}
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
     }
 
     process
     {
-        foreach ($name in $ClassName)
+        if ($PSCmdlet.ParameterSetName -eq 'ByServiceObject')
         {
-            if ($name -match '\.psd1')
-            {
-                # Assume we got full file name.
-                $localizationFileName = $name
+            $InstanceName = $ServiceObject.Name -replace '^MSSQL\$'
+        }
+
+        # Copy $PSBoundParameters to keep it intact.
+        $getSqlDscTraceFlagParameters = @{} + $PSBoundParameters
+
+        $commonParameters = [System.Management.Automation.PSCmdlet]::OptionalCommonParameters
+
+        # Remove parameters that Get-SqlDscTraceFLag does not have/support.
+        $commonParameters + @('Force', 'TraceFlag') |
+            ForEach-Object -Process {
+                $getSqlDscTraceFlagParameters.Remove($_)
             }
-            else
-            {
-                # Assume we only got class name.
-                $localizationFileName = '{0}.strings.psd1' -f $name
-            }
 
-            Write-Debug -Message ('Importing localization data from {0}' -f $localizationFileName)
+        $currentTraceFlags = Get-SqlDscTraceFlag @getSqlDscTraceFlagParameters -ErrorAction 'Stop'
 
-            # Get localized data for the class
-            $classLocalizationStrings = Get-LocalizedData -DefaultUICulture 'en-US' -FileName $localizationFileName -ErrorAction 'Stop'
-
-            # Append only previously unspecified keys in the localization data
-            foreach ($key in $classLocalizationStrings.Keys)
-            {
-                if (-not $localizedData.ContainsKey($key))
-                {
-                    $localizedData[$key] = $classLocalizationStrings[$key]
+        $desiredTraceFlags = [System.UInt32[]] $currentTraceFlags + @(
+            $TraceFlag |
+                ForEach-Object -Process {
+                    # Add only when it does not already exist.
+                    if ($_ -notin $currentTraceFlags)
+                    {
+                        $_
+                    }
                 }
-            }
+        )
+
+        $verboseDescriptionMessage = $script:localizedData.TraceFlag_Add_ShouldProcessVerboseDescription -f $InstanceName, ($TraceFlag -join ', ')
+        $verboseWarningMessage = $script:localizedData.TraceFlag_Add_ShouldProcessVerboseWarning -f $InstanceName
+        $captionMessage = $script:localizedData.TraceFlag_Add_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            # Copy $PSBoundParameters to keep it intact.
+            $setSqlDscTraceFlagParameters = @{} + $PSBoundParameters
+
+            $setSqlDscTraceFlagParameters.TraceFLag = $desiredTraceFlags
+
+            Set-SqlDscTraceFlag @setSqlDscTraceFlagParameters -ErrorAction 'Stop'
         }
     }
-
-    end
-    {
-        Write-Debug -Message ('Localization data: {0}' -f ($localizedData | ConvertTo-JSON))
-
-        return $localizedData
-    }
 }
-#EndRegion './Private/Get-LocalizedDataRecursive.ps1' 88
-#Region './Private/Test-ResourceDscPropertyIsAssigned.ps1' 0
+#EndRegion '.\Public\Add-SqlDscTraceFlag.ps1' 137
+#Region '.\Public\Complete-SqlDscFailoverCluster.ps1' 0
 <#
     .SYNOPSIS
-        Tests whether the class-based resource property is assigned a non-null value.
+        Completes the SQL Server instance installation in the Failover Cluster
+        instance.
 
     .DESCRIPTION
-        Tests whether the class-based resource property is assigned a non-null value.
+        Completes the SQL Server instance installation in the Failover Cluster
+        instance that was prepared using `Install-SqlDscServer` with the parameter
+        `-PrepareFailoverCluster`.
 
-    .PARAMETER InputObject
-        Specifies the object that contain the property.
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
 
-    .PARAMETER Name
-        Specifies the name of the property.
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
 
-    .EXAMPLE
-        Test-ResourceDscPropertyIsAssigned -InputObject $this -Name 'MyDscProperty'
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
 
-        Returns $true or $false whether the property is assigned or not.
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER ProductKey
+        See the notes section for more information.
+
+    .PARAMETER ASBackupDir
+        See the notes section for more information.
+
+    .PARAMETER ASCollation
+        See the notes section for more information.
+
+    .PARAMETER ASConfigDir
+        See the notes section for more information.
+
+    .PARAMETER ASDataDir
+        See the notes section for more information.
+
+    .PARAMETER ASLogDir
+        See the notes section for more information.
+
+    .PARAMETER ASTempDir
+        See the notes section for more information.
+
+    .PARAMETER ASServerMode
+        See the notes section for more information.
+
+    .PARAMETER ASSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER ASProviderMSOLAP
+        See the notes section for more information.
+
+    .PARAMETER InstallSqlDataDir
+        See the notes section for more information.
+
+    .PARAMETER SqlBackupDir
+        See the notes section for more information.
+
+    .PARAMETER SecurityMode
+        See the notes section for more information.
+
+    .PARAMETER SAPwd
+        See the notes section for more information.
+
+    .PARAMETER SqlCollation
+        See the notes section for more information.
+
+    .PARAMETER SqlSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileCount
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER RsInstallMode
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterGroup
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterDisks
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterNetworkName
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterIPAddresses
+        See the notes section for more information.
+
+    .PARAMETER ConfirmIPDependencyChange
+        See the notes section for more information.
+
+    .PARAMETER ProductCoveredBySA
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
 
     .OUTPUTS
-        [System.Boolean]
+        None.
+
+    .EXAMPLE
+        Complete-SqlDscFailoverCluster -InstanceName 'MyInstance' -InstallSqlDataDir 'D:\MSSQL\Data' -SqlSysAdminAccounts @('MyAdminAccount') -FailoverClusterNetworkName 'TestCluster01A' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Completes the installation of the SQL Server instance 'MyInstance' in the
+        Failover Cluster instance.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
 #>
-function Test-ResourceDscPropertyIsAssigned
+function Complete-SqlDscFailoverCluster
 {
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
     param
     (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [PSObject]
-        $InputObject,
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Name
-    )
-
-    $isAssigned = -not ($null -eq $InputObject.$Name)
-
-    return $isAssigned
-}
-#EndRegion './Private/Test-ResourceDscPropertyIsAssigned.ps1' 41
-#Region './Private/Test-ResourceHasDscProperty.ps1' 0
-<#
-    .SYNOPSIS
-        Tests whether the class-based resource has the specified property.
-
-    .DESCRIPTION
-        Tests whether the class-based resource has the specified property.
-
-    .PARAMETER InputObject
-        Specifies the object that should be tested for existens of the specified
-        property.
-
-    .PARAMETER Name
-        Specifies the name of the property.
-
-    .PARAMETER HasValue
-        Specifies if the property should be evaluated to have a non-value. If
-        the property exist but is assigned `$null` the command returns `$false`.
-
-    .EXAMPLE
-        Test-ResourceHasDscProperty -InputObject $this -Name 'MyDscProperty'
-
-        Returns $true or $false whether the property exist or not.
-
-    .EXAMPLE
-        Test-ResourceHasDscProperty -InputObject $this -Name 'MyDscProperty' -HasValue
-
-        Returns $true if the property exist and is assigned a non-null value, if not
-        $false is returned.
-
-    .OUTPUTS
-        [System.Boolean]
-#>
-function Test-ResourceHasDscProperty
-{
-    [CmdletBinding()]
-    [OutputType([System.Boolean])]
-    param
-    (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [PSObject]
-        $InputObject,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Name,
+        $InstanceName,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
-        $HasValue
+        $Enu,
+
+        [Parameter()]
+        [System.String]
+        $ProductKey, # This is argument PID but $PID is reserved variable.
+
+        [Parameter()]
+        [System.String]
+        $ASBackupDir,
+
+        [Parameter()]
+        [System.String]
+        $ASCollation,
+
+        [Parameter()]
+        [System.String]
+        $ASConfigDir,
+
+        [Parameter()]
+        [System.String]
+        $ASDataDir,
+
+        [Parameter()]
+        [System.String]
+        $ASLogDir,
+
+        [Parameter()]
+        [System.String]
+        $ASTempDir,
+
+        [Parameter()]
+        [ValidateSet('Multidimensional', 'PowerPivot', 'Tabular')]
+        [System.String]
+        $ASServerMode,
+
+        [Parameter()]
+        [System.String[]]
+        $ASSysAdminAccounts,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ASProviderMSOLAP,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstallSqlDataDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlBackupDir,
+
+        [Parameter()]
+        [ValidateSet('SQL')]
+        [System.String]
+        $SecurityMode,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $SAPwd,
+
+        [Parameter()]
+        [System.String]
+        $SqlCollation,
+
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $SqlSysAdminAccounts,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbLogDir,
+
+        [Parameter()]
+        [System.UInt16]
+        $SqlTempDbFileCount,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbFileGrowth,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbLogFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbLogFileGrowth,
+
+        [Parameter()]
+        [System.String]
+        $SqlUserDbDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlUserDbLogDir,
+
+        [Parameter()]
+        [ValidateSet('SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode')]
+        [System.String]
+        $RsInstallMode,
+
+        [Parameter()]
+        [System.String]
+        $FailoverClusterGroup,
+
+        [Parameter()]
+        [System.String[]]
+        $FailoverClusterDisks,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $FailoverClusterNetworkName,
+
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $FailoverClusterIPAddresses,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ConfirmIPDependencyChange,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProductCoveredBySA,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
     )
 
-    $hasProperty = $false
-
-    $isDscProperty = (Get-DscProperty @PSBoundParameters).ContainsKey($Name)
-
-    if ($isDscProperty)
-    {
-        $hasProperty = $true
-    }
-
-    return $hasProperty
+    Invoke-SetupAction -CompleteFailoverCluster @PSBoundParameters -ErrorAction 'Stop'
 }
-#EndRegion './Private/Test-ResourceHasDscProperty.ps1' 63
-#Region './Public/Connect-SqlDscDatabaseEngine.ps1' 0
+#EndRegion '.\Public\Complete-SqlDscFailoverCluster.ps1' 311
+#Region '.\Public\Complete-SqlDscImage.ps1' 0
+<#
+    .SYNOPSIS
+        Completes the image installation of an SQL Server instance.
+
+    .DESCRIPTION
+        Completes the image installation of an SQL Server instance that was prepared
+        using `Install-SqlDscServer` with the parameter `-PrepareImage`.
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER AcceptLicensingTerms
+        Required parameter to be able to run unattended install. By specifying this
+        parameter you acknowledge the acceptance all license terms and notices for
+        the specified features, the terms and notices that the Microsoft SQL Server
+        setup executable normally ask for.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER InstanceId
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBStartPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBEndPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBScaleOut
+        See the notes section for more information.
+
+    .PARAMETER ProductKey
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER BrowserSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER EnableRanU
+        See the notes section for more information.
+
+    .PARAMETER InstallSqlDataDir
+        See the notes section for more information.
+
+    .PARAMETER SqlBackupDir
+        See the notes section for more information.
+
+    .PARAMETER SecurityMode
+        See the notes section for more information.
+
+    .PARAMETER SAPwd
+        See the notes section for more information.
+
+    .PARAMETER SqlCollation
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER SqlSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileCount
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER FileStreamLevel
+        See the notes section for more information.
+
+    .PARAMETER FileStreamShareName
+        See the notes section for more information.
+
+    .PARAMETER NpEnabled
+        See the notes section for more information.
+
+    .PARAMETER TcpEnabled
+        See the notes section for more information.
+
+    .PARAMETER RsInstallMode
+        See the notes section for more information.
+
+    .PARAMETER RSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER RSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER RSSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER ProductCoveredBySA
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Complete-SqlDscImage -AcceptLicensingTerms -MediaPath 'E:\'
+
+        Completes the image installation of the SQL Server default instance that
+        was prepared using `Install-SqlDscServer` with the parameter `-PrepareImage`.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+#>
+function Complete-SqlDscImage
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $AcceptLicensingTerms,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter()]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Enu,
+
+        [Parameter()]
+        [System.String]
+        $InstanceId,
+
+        [Parameter()]
+        [System.String]
+        $PBEngSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $PBEngSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBEngSvcStartupType,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBStartPortRange,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBEndPortRange,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PBScaleOut,
+
+        [Parameter()]
+        [System.String]
+        $ProductKey, # This is argument PID but $PID is reserved variable.
+
+        [Parameter()]
+        [System.String]
+        $AgtSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $AgtSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $AgtSvcStartupType,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $BrowserSvcStartupType,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $EnableRanU,
+
+        [Parameter()]
+        [System.String]
+        $InstallSqlDataDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlBackupDir,
+
+        [Parameter()]
+        [ValidateSet('SQL')]
+        [System.String]
+        $SecurityMode,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $SAPwd,
+
+        [Parameter()]
+        [System.String]
+        $SqlCollation,
+
+        [Parameter()]
+        [System.String]
+        $SqlSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $SqlSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $SqlSvcStartupType,
+
+        [Parameter()]
+        [System.String[]]
+        $SqlSysAdminAccounts,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbLogDir,
+
+        [Parameter()]
+        [System.UInt16]
+        $SqlTempDbFileCount,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbFileGrowth,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbLogFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbLogFileGrowth,
+
+        [Parameter()]
+        [System.String]
+        $SqlUserDbDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlUserDbLogDir,
+
+        [Parameter()]
+        [ValidateRange(0, 3)]
+        [System.UInt16]
+        $FileStreamLevel,
+
+        [Parameter()]
+        [System.String]
+        $FileStreamShareName,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $NpEnabled,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $TcpEnabled,
+
+        [Parameter()]
+        [ValidateSet('SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode')]
+        [System.String]
+        $RsInstallMode,
+
+        [Parameter()]
+        [System.String]
+        $RSSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $RSSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $RSSvcStartupType,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ProductCoveredBySA,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction -CompleteImage @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Complete-SqlDscImage.ps1' 380
+#Region '.\Public\Connect-SqlDscDatabaseEngine.ps1' 0
 <#
     .SYNOPSIS
         Connect to a SQL Server Database Engine and return the server object.
+
+    .DESCRIPTION
+        This command connects to a  SQL Server Database Engine instance and returns
+        the Server object.
 
     .PARAMETER ServerName
         String containing the host name of the SQL Server to connect to.
@@ -3255,6 +6179,9 @@ function Test-ResourceHasDscProperty
     .PARAMETER StatementTimeout
         Set the query StatementTimeout in seconds. Default 600 seconds (10 minutes).
 
+    .PARAMETER Encrypt
+        Specifies if encryption should be used.
+
     .EXAMPLE
         Connect-SqlDscDatabaseEngine
 
@@ -3271,7 +6198,7 @@ function Test-ResourceHasDscProperty
         Connects to the instance 'MyInstance' on the server 'sql.company.local'.
 
     .OUTPUTS
-        None.
+        `[Microsoft.SqlServer.Management.Smo.Server]`
 #>
 function Connect-SqlDscDatabaseEngine
 {
@@ -3304,16 +6231,24 @@ function Connect-SqlDscDatabaseEngine
         [Parameter()]
         [ValidateNotNull()]
         [System.Int32]
-        $StatementTimeout = 600
+        $StatementTimeout = 600,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Encrypt
     )
 
     # Call the private function.
     return (Connect-Sql @PSBoundParameters)
 }
-#EndRegion './Public/Connect-SqlDscDatabaseEngine.ps1' 85
-#Region './Public/ConvertFrom-SqlDscDatabasePermission.ps1' 0
+#EndRegion '.\Public\Connect-SqlDscDatabaseEngine.ps1' 96
+#Region '.\Public\ConvertFrom-SqlDscDatabasePermission.ps1' 0
 <#
     .SYNOPSIS
+        Converts a DatabasePermission object into an object of the type
+        Microsoft.SqlServer.Management.Smo.DatabasePermissionSet.
+
+    .DESCRIPTION
         Converts a DatabasePermission object into an object of the type
         Microsoft.SqlServer.Management.Smo.DatabasePermissionSet.
 
@@ -3362,10 +6297,14 @@ function ConvertFrom-SqlDscDatabasePermission
         return $permissionSet
     }
 }
-#EndRegion './Public/ConvertFrom-SqlDscDatabasePermission.ps1' 51
-#Region './Public/ConvertFrom-SqlDscServerPermission.ps1' 0
+#EndRegion '.\Public\ConvertFrom-SqlDscDatabasePermission.ps1' 55
+#Region '.\Public\ConvertFrom-SqlDscServerPermission.ps1' 0
 <#
     .SYNOPSIS
+        Converts a ServerPermission object into an object of the type
+        Microsoft.SqlServer.Management.Smo.ServerPermissionSet.
+
+    .DESCRIPTION
         Converts a ServerPermission object into an object of the type
         Microsoft.SqlServer.Management.Smo.ServerPermissionSet.
 
@@ -3414,10 +6353,14 @@ function ConvertFrom-SqlDscServerPermission
         return $permissionSet
     }
 }
-#EndRegion './Public/ConvertFrom-SqlDscServerPermission.ps1' 51
-#Region './Public/ConvertTo-SqlDscDatabasePermission.ps1' 0
+#EndRegion '.\Public\ConvertFrom-SqlDscServerPermission.ps1' 55
+#Region '.\Public\ConvertTo-SqlDscDatabasePermission.ps1' 0
 <#
     .SYNOPSIS
+        Converts a collection of Microsoft.SqlServer.Management.Smo.DatabasePermissionInfo
+        objects into an array of DatabasePermission objects.
+
+    .DESCRIPTION
         Converts a collection of Microsoft.SqlServer.Management.Smo.DatabasePermissionInfo
         objects into an array of DatabasePermission objects.
 
@@ -3518,10 +6461,14 @@ function ConvertTo-SqlDscDatabasePermission
         return $permissions
     }
 }
-#EndRegion './Public/ConvertTo-SqlDscDatabasePermission.ps1' 103
-#Region './Public/ConvertTo-SqlDscServerPermission.ps1' 0
+#EndRegion '.\Public\ConvertTo-SqlDscDatabasePermission.ps1' 107
+#Region '.\Public\ConvertTo-SqlDscServerPermission.ps1' 0
 <#
     .SYNOPSIS
+        Converts a collection of Microsoft.SqlServer.Management.Smo.ServerPermissionInfo
+        objects into an array of ServerPermission objects.
+
+    .DESCRIPTION
         Converts a collection of Microsoft.SqlServer.Management.Smo.ServerPermissionInfo
         objects into an array of ServerPermission objects.
 
@@ -3622,11 +6569,14 @@ function ConvertTo-SqlDscServerPermission
         return $permissions
     }
 }
-#EndRegion './Public/ConvertTo-SqlDscServerPermission.ps1' 103
-#Region './Public/Disable-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\ConvertTo-SqlDscServerPermission.ps1' 107
+#Region '.\Public\Disable-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Disables a server audit.
+
+    .DESCRIPTION
+        This command disables a server audit in a SQL Server Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -3638,7 +6588,7 @@ function ConvertTo-SqlDscServerPermission
         Specifies the name of the server audit to be disabled.
 
     .PARAMETER Force
-        Specifies that the audit should be disabled with out any confirmation.
+        Specifies that the audit should be disabled without any confirmation.
 
     .PARAMETER Refresh
         Specifies that the **ServerObject**'s audits should be refreshed before
@@ -3691,38 +6641,112 @@ function Disable-SqlDscAudit
         $Refresh
     )
 
-    if ($Force.IsPresent)
+    process
     {
-        $ConfirmPreference = 'None'
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
-    {
-        $getSqlDscAuditParameters = @{
-            ServerObject = $ServerObject
-            Name = $Name
-            Refresh = $Refresh
-            ErrorAction = 'Stop'
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
         }
 
-        # If this command does not find the audit it will throw an exception.
-        $AuditObject = Get-SqlDscAudit @getSqlDscAuditParameters
-    }
+        if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
+        {
+            $getSqlDscAuditParameters = @{
+                ServerObject = $ServerObject
+                Name         = $Name
+                Refresh      = $Refresh
+                ErrorAction  = 'Stop'
+            }
 
-    $verboseDescriptionMessage = $script:localizedData.Audit_Disable_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
-    $verboseWarningMessage = $script:localizedData.Audit_Disable_ShouldProcessVerboseWarning -f $AuditObject.Name
-    $captionMessage = $script:localizedData.Audit_Disable_ShouldProcessCaption
+            # If this command does not find the audit it will throw an exception.
+            $auditObjectArray = Get-SqlDscAudit @getSqlDscAuditParameters
 
-    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-    {
-        $AuditObject.Disable()
+            # Pick the only object in the array.
+            $AuditObject = $auditObjectArray | Select-Object -First 1
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.Audit_Disable_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
+        $verboseWarningMessage = $script:localizedData.Audit_Disable_ShouldProcessVerboseWarning -f $AuditObject.Name
+        $captionMessage = $script:localizedData.Audit_Disable_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            $AuditObject.Disable()
+        }
     }
 }
-#EndRegion './Public/Disable-SqlDscAudit.ps1' 95
-#Region './Public/Enable-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\Disable-SqlDscAudit.ps1' 104
+#Region '.\Public\Disconnect-SqlDscDatabaseEngine.ps1' 0
+<#
+    .SYNOPSIS
+        Disconnect from a SQL Server Database Engine instance.
+
+    .DESCRIPTION
+        Disconnect from a SQL Server Database Engine instance.
+
+    .PARAMETER ServerObject
+        Specifies a current server connection object.
+
+    .PARAMETER Force
+        Specifies that there is no confirmation before disconnect.
+
+    .EXAMPLE
+        $serverObject = Connect-SqlDscDatabaseEngine
+        Disconnect-SqlDscDatabaseEngine -ServerObject $serverObject
+
+        Connects and then disconnects from the default instance on the local server.
+
+    .EXAMPLE
+        Connect-SqlDscDatabaseEngine | Disconnect-SqlDscDatabaseEngine
+
+        Connects and then disconnects from the default instance on the local server.
+
+    .OUTPUTS
+        None.
+#>
+function Disconnect-SqlDscDatabaseEngine
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType([System.Data.DataSet])]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Server]
+        $ServerObject,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    begin
+    {
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+    }
+
+    process
+    {
+        $verboseDescriptionMessage = $script:localizedData.DatabaseEngine_Disconnect_ShouldProcessVerboseDescription -f $ServerObject.InstanceName
+        $verboseWarningMessage = $script:localizedData.DatabaseEngine_Disconnect_ShouldProcessVerboseWarning -f $ServerObject.InstanceName
+        $captionMessage = $script:localizedData.DatabaseEngine_Disconnect_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            $ServerObject.ConnectionContext.Disconnect()
+        }
+    }
+}
+#EndRegion '.\Public\Disconnect-SqlDscDatabaseEngine.ps1' 64
+#Region '.\Public\Enable-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Enables a server audit.
+
+    .DESCRIPTION
+        This command enables a server audit in a SQL Server Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -3734,7 +6758,7 @@ function Disable-SqlDscAudit
         Specifies the name of the server audit to be enabled.
 
     .PARAMETER Force
-        Specifies that the audit should be enabled with out any confirmation.
+        Specifies that the audit should be enabled without any confirmation.
 
     .PARAMETER Refresh
         Specifies that the **ServerObject**'s audits should be refreshed before
@@ -3787,38 +6811,47 @@ function Enable-SqlDscAudit
         $Refresh
     )
 
-    if ($Force.IsPresent)
+    process
     {
-        $ConfirmPreference = 'None'
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
-    {
-        $getSqlDscAuditParameters = @{
-            ServerObject = $ServerObject
-            Name = $Name
-            Refresh = $Refresh
-            ErrorAction = 'Stop'
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
         }
 
-        # If this command does not find the audit it will throw an exception.
-        $AuditObject = Get-SqlDscAudit @getSqlDscAuditParameters
-    }
+        if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
+        {
+            $getSqlDscAuditParameters = @{
+                ServerObject = $ServerObject
+                Name         = $Name
+                Refresh      = $Refresh
+                ErrorAction  = 'Stop'
+            }
 
-    $verboseDescriptionMessage = $script:localizedData.Audit_Enable_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
-    $verboseWarningMessage = $script:localizedData.Audit_Enable_ShouldProcessVerboseWarning -f $AuditObject.Name
-    $captionMessage = $script:localizedData.Audit_Enable_ShouldProcessCaption
+            # If this command does not find the audit it will throw an exception.
+            $auditObjectArray = Get-SqlDscAudit @getSqlDscAuditParameters
 
-    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-    {
-        $AuditObject.Enable()
+            # Pick the only object in the array.
+            $AuditObject = $auditObjectArray | Select-Object -First 1
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.Audit_Enable_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
+        $verboseWarningMessage = $script:localizedData.Audit_Enable_ShouldProcessVerboseWarning -f $AuditObject.Name
+        $captionMessage = $script:localizedData.Audit_Enable_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            $AuditObject.Enable()
+        }
     }
 }
-#EndRegion './Public/Enable-SqlDscAudit.ps1' 95
-#Region './Public/Get-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\Enable-SqlDscAudit.ps1' 104
+#Region '.\Public\Get-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Get server audit.
+
+    .DESCRIPTION
+        This command gets a server audit from a SQL Server Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -3840,12 +6873,13 @@ function Enable-SqlDscAudit
         Get the audit named **MyFileAudit**.
 
     .OUTPUTS
-        `[Microsoft.SqlServer.Management.Smo.Audit]`.
+        `[Microsoft.SqlServer.Management.Smo.Audit]`
 #>
 function Get-SqlDscAudit
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Because the rule does not understands that the command returns [System.String[]] when using , (comma) in the return statement')]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
-    [OutputType([Microsoft.SqlServer.Management.Smo.Audit])]
+    [OutputType([Microsoft.SqlServer.Management.Smo.Audit[]])]
     [CmdletBinding()]
     param
     (
@@ -3853,7 +6887,7 @@ function Get-SqlDscAudit
         [Microsoft.SqlServer.Management.Smo.Server]
         $ServerObject,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [System.String]
         $Name,
 
@@ -3862,34 +6896,146 @@ function Get-SqlDscAudit
         $Refresh
     )
 
-    if ($Refresh.IsPresent)
+    process
     {
-        # Make sure the audits are up-to-date to get any newly created audits.
-        $ServerObject.Audits.Refresh()
-    }
-
-    $auditObject = $ServerObject.Audits[$Name]
-
-    if (-not $AuditObject)
-    {
-        $missingAuditMessage = $script:localizedData.Audit_Missing -f $Name
-
-        $writeErrorParameters = @{
-            Message = $missingAuditMessage
-            Category = 'InvalidOperation'
-            ErrorId = 'GSDA0001' # cspell: disable-line
-            TargetObject = $Name
+        if ($Refresh.IsPresent)
+        {
+            # Make sure the audits are up-to-date to get any newly created audits.
+            $ServerObject.Audits.Refresh()
         }
 
-        Write-Error @writeErrorParameters
-    }
+        $auditObject = @()
 
-    return $auditObject
+        if ($PSBoundParameters.ContainsKey('Name'))
+        {
+            $auditObject = $ServerObject.Audits[$Name]
+
+            if (-not $AuditObject)
+            {
+                $missingAuditMessage = $script:localizedData.Audit_Missing -f $Name
+
+                $writeErrorParameters = @{
+                    Message      = $missingAuditMessage
+                    Category     = 'InvalidOperation'
+                    ErrorId      = 'GSDA0001' # cspell: disable-line
+                    TargetObject = $Name
+                }
+
+                Write-Error @writeErrorParameters
+            }
+        }
+        else
+        {
+            $auditObject = $ServerObject.Audits
+        }
+
+        return , [Microsoft.SqlServer.Management.Smo.Audit[]] $auditObject
+    }
 }
-#EndRegion './Public/Get-SqlDscAudit.ps1' 71
-#Region './Public/Get-SqlDscDatabasePermission.ps1' 0
+#EndRegion '.\Public\Get-SqlDscAudit.ps1' 87
+#Region '.\Public\Get-SqlDscConfigurationOption.ps1' 0
 <#
     .SYNOPSIS
+        Get server configuration option.
+
+    .DESCRIPTION
+        This command gets the available configuration options from a SQL Server Database Engine instance.
+
+    .PARAMETER ServerObject
+        Specifies current server connection object.
+
+    .PARAMETER Name
+        Specifies the name of the configuration option to get.
+
+    .PARAMETER Refresh
+        Specifies that the **ServerObject**'s configuration property should be
+        refreshed before trying get the available configuration options. This is
+        helpful when run values or configuration values have been modified outside
+        of the specified **ServerObject**.
+
+    .EXAMPLE
+        $serverObject = Connect-SqlDscDatabaseEngine -InstanceName 'MyInstance'
+        $sqlServerObject | Get-SqlDscConfigurationOption
+
+        Get all the available configuration options.
+
+    .EXAMPLE
+        $serverObject = Connect-SqlDscDatabaseEngine -InstanceName 'MyInstance'
+        $sqlServerObject | Get-SqlDscConfigurationOption -Name '*threshold*'
+
+        Get the configuration options that contains the word **threshold**.
+
+    .OUTPUTS
+        `[Microsoft.SqlServer.Management.Smo.ConfigProperty[]]`
+#>
+function Get-SqlDscConfigurationOption
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Because the rule does not understands that the command returns [System.String[]] when using , (comma) in the return statement')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType([Microsoft.SqlServer.Management.Smo.ConfigProperty[]])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Server]
+        $ServerObject,
+
+        [Parameter()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Refresh
+    )
+
+    process
+    {
+        if ($Refresh.IsPresent)
+        {
+            # Make sure the configuration option values are up-to-date.
+            $serverObject.Configuration.Refresh()
+        }
+
+        if ($PSBoundParameters.ContainsKey('Name'))
+        {
+            $configurationOption = $serverObject.Configuration.Properties |
+                Where-Object -FilterScript {
+                    $_.DisplayName -like $Name
+                }
+
+            if (-not $configurationOption)
+            {
+                $missingConfigurationOptionMessage = $script:localizedData.ConfigurationOption_Get_Missing -f $Name
+
+                $writeErrorParameters = @{
+                    Message = $missingConfigurationOptionMessage
+                    Category = 'InvalidOperation'
+                    ErrorId = 'GSDCO0001' # cspell: disable-line
+                    TargetObject = $Name
+                }
+
+                Write-Error @writeErrorParameters
+            }
+        }
+        else
+        {
+            $configurationOption = $serverObject.Configuration.Properties.ForEach({ $_ })
+        }
+
+        return , [Microsoft.SqlServer.Management.Smo.ConfigProperty[]] (
+            $configurationOption |
+                Sort-Object -Property 'DisplayName'
+        )
+    }
+}
+#EndRegion '.\Public\Get-SqlDscConfigurationOption.ps1' 96
+#Region '.\Public\Get-SqlDscDatabasePermission.ps1' 0
+<#
+    .SYNOPSIS
+        Returns the current permissions for the database principal.
+
+    .DESCRIPTION
         Returns the current permissions for the database principal.
 
     .PARAMETER ServerObject
@@ -3943,50 +7089,387 @@ function Get-SqlDscDatabasePermission
         $Name
     )
 
-    $getSqlDscDatabasePermissionResult = $null
-
-    $sqlDatabaseObject = $null
-
-    if ($ServerObject.Databases)
+    # cSpell: ignore GSDDP
+    process
     {
-        $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
-    }
+        $getSqlDscDatabasePermissionResult = $null
 
-    if ($sqlDatabaseObject)
-    {
-        $testSqlDscIsDatabasePrincipalParameters = @{
-            ServerObject      = $ServerObject
-            DatabaseName      = $DatabaseName
-            Name              = $Name
-            ExcludeFixedRoles = $true
+        $sqlDatabaseObject = $null
+
+        if ($ServerObject.Databases)
+        {
+            $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
         }
 
-        $isDatabasePrincipal = Test-SqlDscIsDatabasePrincipal @testSqlDscIsDatabasePrincipalParameters
-
-        if ($isDatabasePrincipal)
+        if ($sqlDatabaseObject)
         {
-            $getSqlDscDatabasePermissionResult = $sqlDatabaseObject.EnumDatabasePermissions($Name)
+            $testSqlDscIsDatabasePrincipalParameters = @{
+                ServerObject      = $ServerObject
+                DatabaseName      = $DatabaseName
+                Name              = $Name
+                ExcludeFixedRoles = $true
+            }
+
+            $isDatabasePrincipal = Test-SqlDscIsDatabasePrincipal @testSqlDscIsDatabasePrincipalParameters
+
+            if ($isDatabasePrincipal)
+            {
+                $getSqlDscDatabasePermissionResult = $sqlDatabaseObject.EnumDatabasePermissions($Name)
+            }
+            else
+            {
+                $missingPrincipalMessage = $script:localizedData.DatabasePermission_MissingPrincipal -f $Name, $DatabaseName
+
+                Write-Error -Message $missingPrincipalMessage -Category 'InvalidOperation' -ErrorId 'GSDDP0001' -TargetObject $Name
+            }
         }
         else
         {
-            $missingPrincipalMessage = $script:localizedData.DatabasePermission_MissingPrincipal -f $Name, $DatabaseName
+            $missingDatabaseMessage = $script:localizedData.DatabasePermission_MissingDatabase -f $DatabaseName
 
-            Write-Error -Message $missingPrincipalMessage -Category 'InvalidOperation' -ErrorId 'GSDDP0001' -TargetObject $Name
+            Write-Error -Message $missingDatabaseMessage -Category 'InvalidOperation' -ErrorId 'GSDDP0002' -TargetObject $DatabaseName
         }
-    }
-    else
-    {
-        $missingDatabaseMessage = $script:localizedData.DatabasePermission_MissingDatabase -f $DatabaseName
 
-        Write-Error -Message $missingDatabaseMessage -Category 'InvalidOperation' -ErrorId 'GSDDP0002' -TargetObject $DatabaseName
+        return , [Microsoft.SqlServer.Management.Smo.DatabasePermissionInfo[]] $getSqlDscDatabasePermissionResult
     }
-
-    return , [Microsoft.SqlServer.Management.Smo.DatabasePermissionInfo[]] $getSqlDscDatabasePermissionResult
 }
-#EndRegion './Public/Get-SqlDscDatabasePermission.ps1' 96
-#Region './Public/Get-SqlDscServerPermission.ps1' 0
+#EndRegion '.\Public\Get-SqlDscDatabasePermission.ps1' 103
+#Region '.\Public\Get-SqlDscManagedComputer.ps1' 0
 <#
     .SYNOPSIS
+        Returns the managed computer object.
+
+    .DESCRIPTION
+        Returns the managed computer object, by default for the node the command
+        is run on.
+
+    .PARAMETER ServerName
+       Specifies the server name for which to return the managed computer object.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputer
+
+        Returns the managed computer object for the current node.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputer -ServerName 'MyServer'
+
+        Returns the managed computer object for the server 'MyServer'.
+
+    .OUTPUTS
+        `[Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer]`
+#>
+function Get-SqlDscManagedComputer
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when the output type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]    [OutputType([Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String]
+        $ServerName = (Get-ComputerName)
+    )
+
+    Write-Verbose -Message (
+        $script:localizedData.ManagedComputer_GetState -f $ServerName
+    )
+
+    $managedComputerObject = New-Object -TypeName 'Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer' -ArgumentList $ServerName
+
+    return $managedComputerObject
+}
+#EndRegion '.\Public\Get-SqlDscManagedComputer.ps1' 44
+#Region '.\Public\Get-SqlDscManagedComputerService.ps1' 0
+<#
+    .SYNOPSIS
+        Returns one or more managed computer service objects.
+
+    .DESCRIPTION
+        Returns one or more managed computer service objects, by default for the
+        node the command is run on.
+
+    .PARAMETER ManagedComputerObject
+        Specifies the Managed Computer object to return the services from.
+
+    .PARAMETER ServerName
+       Specifies the server name to return the services from.
+
+    .PARAMETER InstanceName
+       Specifies the instance name to return the services for, this will exclude
+       any service that does not have the instance name in the service name.
+
+    .PARAMETER ServiceType
+       Specifies one or more service types to return the services for.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputer | Get-SqlDscManagedComputerService
+
+        Returns all the managed computer service objects for the current node.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputerService
+
+        Returns all the managed computer service objects for the current node.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputerService -ServerName 'MyServer'
+
+        Returns all the managed computer service objects for the server 'MyServer'.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine','AnalysisServices'
+
+        Returns all the managed computer service objects for service types
+        'DatabaseEngine' and 'AnalysisServices'.
+
+    .EXAMPLE
+        Get-SqlDscManagedComputerService -InstanceName 'SQL2022'
+
+        Returns all the managed computer service objects for instance SQL2022.
+
+    .OUTPUTS
+        `[Microsoft.SqlServer.Management.Smo.Wmi.Service[]]`
+#>
+function Get-SqlDscManagedComputerService
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when the output type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]    [OutputType([Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer])]
+    [OutputType([Microsoft.SqlServer.Management.Smo.Wmi.Service[]])]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServerObject', Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer]
+        $ManagedComputerObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter()]
+        [System.String[]]
+        $InstanceName,
+
+        [Parameter()]
+        [ValidateSet('DatabaseEngine', 'SQLServerAgent', 'Search', 'IntegrationServices', 'AnalysisServices', 'ReportingServices', 'SQLServerBrowser', 'NotificationServices')]
+        [System.String[]]
+        $ServiceType
+    )
+
+    begin
+    {
+        if ($PSCmdlet.ParameterSetName -eq 'ByServerName')
+        {
+            $ManagedComputerObject = Get-SqlDscManagedComputer -ServerName $ServerName
+        }
+
+        Write-Verbose -Message (
+            $script:localizedData.ManagedComputerService_GetState -f $ServerName
+        )
+
+        $serviceObject = $null
+    }
+
+    process
+    {
+        if ($ManagedComputerObject)
+        {
+            if ($serviceObject)
+            {
+                $serviceObject += $ManagedComputerObject.Services
+            }
+            else
+            {
+                $serviceObject = $ManagedComputerObject.Services
+            }
+        }
+    }
+
+    end
+    {
+        if ($serviceObject)
+        {
+            if ($PSBoundParameters.ContainsKey('ServiceType'))
+            {
+                $managedServiceType = $ServiceType |
+                    ConvertTo-ManagedServiceType
+
+                $serviceObject = $serviceObject |
+                    Where-Object -FilterScript {
+                        $_.Type -in $managedServiceType
+                    }
+            }
+
+            if ($PSBoundParameters.ContainsKey('InstanceName'))
+            {
+                $serviceObject = $serviceObject |
+                    Where-Object -FilterScript {
+                        $_.Name -match ('\${0}$' -f $InstanceName)
+                    }
+            }
+        }
+
+        return $serviceObject
+    }
+}
+#EndRegion '.\Public\Get-SqlDscManagedComputerService.ps1' 133
+#Region '.\Public\Get-SqlDscPreferredModule.ps1' 0
+<#
+    .SYNOPSIS
+        Get the first available (preferred) module that is installed.
+
+    .DESCRIPTION
+        Get the first available (preferred) module that is installed.
+
+        If the environment variable `SMODefaultModuleName` is set to a module name
+        that name will be used as the preferred module name instead of the default
+        module 'SqlServer'.
+
+        If the envrionment variable `SMODefaultModuleVersion` is set, then that
+        specific version of the preferred module will be searched for.
+
+    .PARAMETER Name
+        Specifies the list of the (preferred) modules to search for, in order.
+        Defaults to 'SqlServer' and then 'SQLPS'.
+
+    .PARAMETER Refresh
+        Specifies if the session environment variable PSModulePath should be refreshed
+        with the paths from other environment variable targets (Machine and User).
+
+    .EXAMPLE
+        Get-SqlDscPreferredModule
+
+        Returns the SqlServer PSModuleInfo object if it is installed, otherwise it
+        will return SQLPS PSModuleInfo object if is is installed. If neither is
+        installed `$null` is returned.
+
+    .EXAMPLE
+        Get-SqlDscPreferredModule -Refresh
+
+        Updates the session environment variable PSModulePath and then returns the
+        SqlServer PSModuleInfo object if it is installed, otherwise it will return SQLPS
+        PSModuleInfo object if is is installed. If neither is installed `$null` is
+        returned.
+
+    .EXAMPLE
+        Get-SqlDscPreferredModule -Name @('MyModule', 'SQLPS')
+
+        Returns the MyModule PSModuleInfo object if it is installed, otherwise it will
+        return SQLPS PSModuleInfo object if is is installed. If neither is installed
+        `$null` is returned.
+
+    .NOTES
+
+#>
+function Get-SqlDscPreferredModule
+{
+    [OutputType([PSModuleInfo])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [System.String[]]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Refresh
+    )
+
+    if (-not $PSBoundParameters.ContainsKey('Name'))
+    {
+        if ($env:SMODefaultModuleName)
+        {
+            $Name = @($env:SMODefaultModuleName, 'SQLPS')
+        }
+        else
+        {
+            $Name = @('SqlServer', 'SQLPS')
+        }
+    }
+
+    if ($Refresh.IsPresent)
+    {
+        # Only run on Windows that has Machine state.
+        if (-not ($IsLinux -or $IsMacOS))
+        {
+            <#
+                After installing SQL Server the current PowerShell session doesn't know
+                about the new path that was added for the SQLPS module. This reloads
+                PowerShell session environment variable PSModulePath to make sure it
+                contains all paths.
+            #>
+
+            $modulePath = Get-PSModulePath -FromTarget 'Session', 'User', 'Machine'
+
+            Set-PSModulePath -Path $modulePath
+        }
+    }
+
+    $availableModule = $null
+
+    $availableModules = Get-Module -Name $Name -ListAvailable |
+        ForEach-Object -Process {
+            @{
+                PSModuleInfo = $_
+                CalculatedVersion = $_ | Get-SMOModuleCalculatedVersion
+            }
+        }
+
+    foreach ($preferredModuleName in $Name)
+    {
+        $preferredModules = $availableModules |
+            Where-Object -FilterScript { $_.PSModuleInfo.Name -eq $preferredModuleName }
+
+        if ($preferredModules)
+        {
+            if ($env:SMODefaultModuleVersion)
+            {
+                # Get the version specified in $env:SMODefaultModuleVersion if available
+                $availableModule = $preferredModules |
+                    Where-Object -FilterScript { $_.CalculatedVersion -eq $env:SMODefaultModuleVersion } |
+                    Select-Object -First 1
+            }
+            else
+            {
+                # Get the latest version if available
+                $availableModule = $preferredModules |
+                    Sort-Object -Property 'CalculatedVersion' -Descending |
+                    Select-Object -First 1
+            }
+
+            Write-Verbose -Message ($script:localizedData.PreferredModule_ModuleVersionFound -f $availableModule.PSModuleInfo.Name, $availableModule.CalculatedVersion)
+
+            break
+        }
+    }
+
+    if (-not $availableModule)
+    {
+        $errorMessage = $null
+
+        if ($env:SMODefaultModuleVersion)
+        {
+            $errorMessage = $script:localizedData.PreferredModule_ModuleVersionNotFound -f $env:SMODefaultModuleVersion
+        }
+        else
+        {
+            $errorMessage = $script:localizedData.PreferredModule_ModuleNotFound
+        }
+
+        # cSpell: disable-next
+        Write-Error -Message $errorMessage -Category 'ObjectNotFound' -ErrorId 'GSDPM0001' -TargetObject ($Name -join ', ')
+    }
+
+    return $availableModule.PSModuleInfo
+}
+#EndRegion '.\Public\Get-SqlDscPreferredModule.ps1' 150
+#Region '.\Public\Get-SqlDscServerPermission.ps1' 0
+<#
+    .SYNOPSIS
+        Returns the current permissions for the principal.
+
+    .DESCRIPTION
         Returns the current permissions for the principal.
 
     .PARAMETER ServerObject
@@ -4029,39 +7512,1722 @@ function Get-SqlDscServerPermission
         $Name
     )
 
-    $getSqlDscServerPermissionResult = $null
+    # cSpell: ignore GSDSP
+    process
+    {
+        $getSqlDscServerPermissionResult = $null
 
-    $testSqlDscIsLoginParameters = @{
-        ServerObject      = $ServerObject
-        Name              = $Name
+        $testSqlDscIsLoginParameters = @{
+            ServerObject = $ServerObject
+            Name         = $Name
+        }
+
+        $isLogin = Test-SqlDscIsLogin @testSqlDscIsLoginParameters
+
+        if ($isLogin)
+        {
+            $getSqlDscServerPermissionResult = $ServerObject.EnumServerPermissions($Name)
+        }
+        else
+        {
+            $missingPrincipalMessage = $script:localizedData.ServerPermission_MissingPrincipal -f $Name, $ServerObject.InstanceName
+
+            Write-Error -Message $missingPrincipalMessage -Category 'InvalidOperation' -ErrorId 'GSDSP0001' -TargetObject $Name
+        }
+
+        return , [Microsoft.SqlServer.Management.Smo.ServerPermissionInfo[]] $getSqlDscServerPermissionResult
+    }
+}
+#EndRegion '.\Public\Get-SqlDscServerPermission.ps1' 74
+#Region '.\Public\Get-SqlDscStartupParameter.ps1' 0
+<#
+    .SYNOPSIS
+        Get current startup parameters on a Database Engine instance.
+
+    .DESCRIPTION
+        Get current startup parameters on a Database Engine instance.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object to return the trace flags from.
+
+    .PARAMETER ServerName
+       Specifies the server name to return the trace flags from.
+
+    .PARAMETER InstanceName
+       Specifies the instance name to return the trace flags for.
+
+    .EXAMPLE
+        Get-SqlDscStartupParameter
+
+        Get the startup parameters from the Database Engine default instance on
+        the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Get-SqlDscStartupParameter -ServiceObject $serviceObject
+
+        Get the startup parameters from the Database Engine default instance on
+        the server where the command in run.
+
+    .EXAMPLE
+        Get-SqlDscStartupParameter -InstanceName 'SQL2022'
+
+        Get the startup parameters from the Database Engine instance 'SQL2022' on
+        the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine' -InstanceName 'SQL2022'
+        Get-SqlDscStartupParameter -ServiceObject $serviceObject
+
+        Get the startup parameters from the Database Engine instance 'SQL2022' on
+        the server where the command in run.
+
+    .OUTPUTS
+        `[StartupParameters]`
+#>
+function Get-SqlDscStartupParameter
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType([StartupParameters])]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER'
+    )
+
+    Assert-ElevatedUser -ErrorAction 'Stop'
+
+    if ($PSCmdlet.ParameterSetName -eq 'ByServiceObject')
+    {
+        $ServiceObject | Assert-ManagedServiceType -ServiceType 'DatabaseEngine'
     }
 
-    $isLogin = Test-SqlDscIsLogin @testSqlDscIsLoginParameters
-
-    if ($isLogin)
+    if ($PSCmdlet.ParameterSetName -eq 'ByServerName')
     {
-        $getSqlDscServerPermissionResult = $ServerObject.EnumServerPermissions($Name)
+        $getSqlDscManagedComputerServiceParameters = @{
+            ServerName   = $ServerName
+            InstanceName = $InstanceName
+            ServiceType  = 'DatabaseEngine'
+        }
+
+        $ServiceObject = Get-SqlDscManagedComputerService @getSqlDscManagedComputerServiceParameters
+
+        if (-not $ServiceObject)
+        {
+            $writeErrorParameters = @{
+                Message      = $script:localizedData.StartupParameter_Get_FailedToFindServiceObject
+                Category     = 'InvalidOperation'
+                ErrorId      = 'GSDSP0001' # CSpell: disable-line
+                TargetObject = $ServiceObject
+            }
+
+            Write-Error @writeErrorParameters
+        }
+    }
+
+    Write-Verbose -Message (
+        $script:localizedData.StartupParameter_Get_ReturnStartupParameters -f $InstanceName, $ServerName
+    )
+
+    $startupParameters = $null
+
+    if ($ServiceObject.StartupParameters)
+    {
+        $startupParameters = [StartupParameters]::Parse($ServiceObject.StartupParameters)
     }
     else
     {
-        $missingPrincipalMessage = $script:localizedData.ServerPermission_MissingPrincipal -f $Name, $ServerObject.InstanceName
-
-        Write-Error -Message $missingPrincipalMessage -Category 'InvalidOperation' -ErrorId 'GSDSP0001' -TargetObject $Name
+        Write-Debug -Message ($script:localizedData.StartupParameter_Get_FailedToFindStartupParameters -f $MyInvocation.MyCommand)
     }
 
-    return , [Microsoft.SqlServer.Management.Smo.ServerPermissionInfo[]] $getSqlDscServerPermissionResult
+    return $startupParameters
 }
-#EndRegion './Public/Get-SqlDscServerPermission.ps1' 67
-#Region './Public/Invoke-SqlDscQuery.ps1' 0
+#EndRegion '.\Public\Get-SqlDscStartupParameter.ps1' 115
+#Region '.\Public\Get-SqlDscTraceFlag.ps1' 0
 <#
     .SYNOPSIS
+        Get current trace flags on a Database Engine instance.
+
+    .DESCRIPTION
+        Get current trace flags on a Database Engine instance.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object to return the trace flags from.
+
+    .PARAMETER ServerName
+       Specifies the server name to return the trace flags from.
+
+    .PARAMETER InstanceName
+       Specifies the instance name to return the trace flags for.
+
+    .EXAMPLE
+        Get-SqlDscTraceFlag
+
+        Get all the trace flags from the Database Engine default instance on the
+        server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Get-SqlDscTraceFlag -ServiceObject $serviceObject
+
+        Get all the trace flags from the Database Engine default instance on the
+        server where the command in run.
+
+    .EXAMPLE
+        Get-SqlDscTraceFlag -InstanceName 'SQL2022'
+
+        Get all the trace flags from the Database Engine instance 'SQL2022' on the
+        server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine' -InstanceName 'SQL2022'
+        Get-SqlDscTraceFlag -ServiceObject $serviceObject
+
+        Get all the trace flags from the Database Engine instance 'SQL2022' on the
+        server where the command in run.
+
+    .OUTPUTS
+        `[System.UInt32[]]`
+#>
+function Get-SqlDscTraceFlag
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Because the rule does not understands that the command returns [System.UInt32[]] when using , (comma) in the return statement')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType([System.UInt32[]])]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER'
+    )
+
+    Write-Verbose -Message (
+        $script:localizedData.TraceFlag_Get_ReturnTraceFlags -f $InstanceName, $ServerName
+    )
+
+    $startupParameter = Get-SqlDscStartupParameter @PSBoundParameters
+
+    $traceFlags = [System.UInt32[]] @()
+
+    if ($startupParameter)
+    {
+        $traceFlags = $startupParameter.TraceFlag
+    }
+
+    Write-Debug -Message (
+        $script:localizedData.TraceFlag_Get_DebugReturningTraceFlags -f $MyInvocation.MyCommand, ($traceFlags -join ', ')
+    )
+
+    return , [System.UInt32[]] $traceFlags
+}
+#EndRegion '.\Public\Get-SqlDscTraceFlag.ps1' 88
+#Region '.\Public\Import-SqlDscPreferredModule.ps1' 0
+<#
+    .SYNOPSIS
+        Imports a (preferred) module in a standardized way.
+
+    .DESCRIPTION
+        Imports a (preferred) module in a standardized way. If the parameter `Name`
+        is not specified the command will imports the default module SqlServer
+        if it exist, otherwise SQLPS.
+
+        If the environment variable `SMODefaultModuleName` is set to a module name
+        that name will be used as the preferred module name instead of the default
+        module 'SqlServer'.
+
+        The module is always imported globally.
+
+    .PARAMETER Name
+        Specifies the name of a preferred module.
+
+    .PARAMETER Force
+        Forces the removal of the previous module, to load the same or newer version
+        fresh. This is meant to make sure the newest version is used, with the latest
+        assemblies.
+
+    .EXAMPLE
+        Import-SqlDscPreferredModule
+
+        Imports the default preferred module (SqlServer) if it exist, otherwise
+        it will try to import the module SQLPS.
+
+    .EXAMPLE
+        Import-SqlDscPreferredModule -Force
+
+        Will forcibly import the default preferred module if it exist, otherwise
+        it will try to import the module SQLPS. Prior to importing it will remove
+        an already loaded module.
+
+    .EXAMPLE
+        Import-SqlDscPreferredModule -Name 'OtherSqlModule'
+
+        Imports the specified preferred module OtherSqlModule if it exist, otherwise
+        it will try to import the module SQLPS.
+#>
+function Import-SqlDscPreferredModule
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter()]
+        [Alias('PreferredModule')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    $getSqlDscPreferredModuleParameters = @{
+        Refresh = $true
+    }
+
+    if ($PSBoundParameters.ContainsKey('Name'))
+    {
+        $getSqlDscPreferredModuleParameters.Name = @($Name, 'SQLPS')
+    }
+
+    if ($PSBoundParameters.ContainsKey('Force'))
+    {
+        $getSqlDscPreferredModuleParameters.Refresh = $true
+    }
+
+    $availableModule = $null
+
+    try
+    {
+        $availableModule = Get-SqlDscPreferredModule @getSqlDscPreferredModuleParameters -ErrorAction 'Stop'
+    }
+    catch
+    {
+        $PSCmdlet.ThrowTerminatingError(
+            [System.Management.Automation.ErrorRecord]::new(
+                ($script:localizedData.PreferredModule_FailedFinding),
+                'ISDPM0001', # cspell: disable-line
+                [System.Management.Automation.ErrorCategory]::ObjectNotFound,
+                'PreferredModule'
+            )
+        )
+    }
+
+    if ($Force.IsPresent)
+    {
+        Write-Verbose -Message $script:localizedData.PreferredModule_ForceRemoval
+
+        $removeModule = @()
+
+        if ($PSBoundParameters.ContainsKey('Name'))
+        {
+            $removeModule += Get-Module -Name $Name
+        }
+
+        # Available module could be
+        if ($availableModule)
+        {
+            $removeModule += $availableModule
+        }
+
+        if ($removeModule -contains 'SQLPS')
+        {
+            $removeModule += Get-Module -Name 'SQLASCmdlets' # cSpell: disable-line
+        }
+
+        Remove-Module -ModuleInfo $removeModule -Force -ErrorAction 'SilentlyContinue'
+    }
+    else
+    {
+        <#
+            Check if the preferred module is already loaded into the session.
+        #>
+        $loadedModule = Get-Module -Name $availableModule.Name | Select-Object -First 1
+
+        if ($loadedModule)
+        {
+            Write-Verbose -Message ($script:localizedData.PreferredModule_AlreadyImported -f $loadedModule.Name)
+
+            return
+        }
+    }
+
+    try
+    {
+        Write-Debug -Message ($script:localizedData.PreferredModule_PushingLocation)
+
+        Push-Location
+
+        <#
+            SQLPS has unapproved verbs, disable checking to ignore Warnings.
+            Suppressing verbose so all cmdlet is not listed.
+        #>
+        $importedModule = Import-Module -ModuleInfo $availableModule -DisableNameChecking -Verbose:$false -Force:$Force -Global -PassThru -ErrorAction 'Stop'
+
+        <#
+            SQLPS returns two entries, one with module type 'Script' and another with module type 'Manifest'.
+            Only return the object with module type 'Manifest'.
+            SqlServer only returns one object (of module type 'Script'), so no need to do anything for SqlServer module.
+        #>
+        if ($availableModule.Name -eq 'SQLPS')
+        {
+            $importedModule = $importedModule | Where-Object -Property 'ModuleType' -EQ -Value 'Manifest'
+        }
+
+        Write-Verbose -Message ($script:localizedData.PreferredModule_ImportedModule -f $importedModule.Name, $importedModule.Version, $importedModule.Path)
+    }
+    finally
+    {
+        Write-Debug -Message ($script:localizedData.PreferredModule_PoppingLocation)
+
+        Pop-Location
+    }
+}
+#EndRegion '.\Public\Import-SqlDscPreferredModule.ps1' 161
+#Region '.\Public\Initialize-SqlDscRebuildDatabase.ps1' 0
+<#
+    .SYNOPSIS
+        Rebuilds the system databases for an SQL Server instance.
+
+    .DESCRIPTION
+        Rebuilds the system databases for an SQL Server instance.
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER SAPwd
+        See the notes section for more information.
+
+    .PARAMETER SqlCollation
+        See the notes section for more information.
+
+    .PARAMETER SqlSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileCount
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileGrowth
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Initialize-SqlDscRebuildDatabase -InstanceName 'MyInstance' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\'
+
+        Rebuilds the database of the instance 'MyInstance'.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+
+        For RebuildDatabase the parameter SAPwd must be set if the instance was
+        installed with SecurityMode = 'SQL'.
+#>
+function Initialize-SqlDscRebuildDatabase
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $SAPwd,
+
+        [Parameter()]
+        [System.String]
+        $SqlCollation,
+
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $SqlSysAdminAccounts,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbDir,
+
+        [Parameter()]
+        [System.String]
+        $SqlTempDbLogDir,
+
+        [Parameter()]
+        [System.UInt16]
+        $SqlTempDbFileCount,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbFileGrowth,
+
+        [Parameter()]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbLogFileSize,
+
+        [Parameter()]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbLogFileGrowth,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction -RebuildDatabase @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Initialize-SqlDscRebuildDatabase.ps1' 146
+#Region '.\Public\Install-SqlDscServer.ps1' 0
+<#
+    .SYNOPSIS
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+    .DESCRIPTION
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER Install
+        Specifies the setup action Install.
+
+    .PARAMETER Uninstall
+        Specifies the setup action Uninstall.
+
+    .PARAMETER PrepareImage
+        Specifies the setup action PrepareImage.
+
+    .PARAMETER Upgrade
+        Specifies the setup action Upgrade.
+
+    .PARAMETER EditionUpgrade
+        Specifies the setup action EditionUpgrade.
+
+    .PARAMETER InstallFailoverCluster
+        Specifies the setup action InstallFailoverCluster.
+
+    .PARAMETER PrepareFailoverCluster
+        Specifies the setup action PrepareFailoverCluster.
+
+    .PARAMETER ConfigurationFile
+        Specifies an configuration file to use during SQL Server setup. This
+        parameter cannot be used together with any of the setup actions, but instead
+        it is expected that the configuration file specifies what setup action to
+        run.
+
+    .PARAMETER AcceptLicensingTerms
+        Required parameter to be able to run unattended install. By specifying this
+        parameter you acknowledge the acceptance all license terms and notices for
+        the specified features, the terms and notices that the Microsoft SQL Server
+        setup executable normally ask for.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER SuppressPrivacyStatementNotice
+        See the notes section for more information.
+
+    .PARAMETER IAcknowledgeEntCalLimits
+        See the notes section for more information.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER UpdateEnabled
+        See the notes section for more information.
+
+    .PARAMETER UpdateSource
+        See the notes section for more information.
+
+    .PARAMETER Features
+        See the notes section for more information.
+
+    .PARAMETER Role
+        See the notes section for more information.
+
+    .PARAMETER InstallSharedDir
+        See the notes section for more information.
+
+    .PARAMETER InstallSharedWowDir
+        See the notes section for more information.
+
+    .PARAMETER InstanceDir
+        See the notes section for more information.
+
+    .PARAMETER InstanceId
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBDMSSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBStartPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBEndPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBScaleOut
+        See the notes section for more information.
+
+    .PARAMETER ProductKey
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER AgtSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER ASBackupDir
+        See the notes section for more information.
+
+    .PARAMETER ASCollation
+        See the notes section for more information.
+
+    .PARAMETER ASConfigDir
+        See the notes section for more information.
+
+    .PARAMETER ASDataDir
+        See the notes section for more information.
+
+    .PARAMETER ASLogDir
+        See the notes section for more information.
+
+    .PARAMETER ASTempDir
+        See the notes section for more information.
+
+    .PARAMETER ASServerMode
+        See the notes section for more information.
+
+    .PARAMETER ASSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ASSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ASSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER ASSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER ASProviderMSOLAP
+        See the notes section for more information.
+
+    .PARAMETER FarmAccount
+        See the notes section for more information.
+
+    .PARAMETER FarmPassword
+        See the notes section for more information.
+
+    .PARAMETER Passphrase
+        See the notes section for more information.
+
+    .PARAMETER FarmAdminiPort
+        See the notes section for more information.
+
+    .PARAMETER BrowserSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER FTUpgradeOption
+        See the notes section for more information.
+
+    .PARAMETER EnableRanU
+        See the notes section for more information.
+
+    .PARAMETER InstallSqlDataDir
+        See the notes section for more information.
+
+    .PARAMETER SqlBackupDir
+        See the notes section for more information.
+
+    .PARAMETER SecurityMode
+        See the notes section for more information.
+
+    .PARAMETER SAPwd
+        See the notes section for more information.
+
+    .PARAMETER SqlCollation
+        See the notes section for more information.
+
+    .PARAMETER AddCurrentUserAsSqlAdmin
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER SqlSysAdminAccounts
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileCount
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileSize
+        See the notes section for more information.
+
+    .PARAMETER SqlTempDbLogFileGrowth
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbDir
+        See the notes section for more information.
+
+    .PARAMETER SqlSvcInstantFileInit
+        See the notes section for more information.
+
+    .PARAMETER SqlUserDbLogDir
+        See the notes section for more information.
+
+    .PARAMETER SqlMaxDop
+        See the notes section for more information.
+
+    .PARAMETER UseSqlRecommendedMemoryLimits
+        See the notes section for more information.
+
+    .PARAMETER SqlMinMemory
+        See the notes section for more information.
+
+    .PARAMETER SqlMaxMemory
+        See the notes section for more information.
+
+    .PARAMETER FileStreamLevel
+        See the notes section for more information.
+
+    .PARAMETER FileStreamShareName
+        See the notes section for more information.
+
+    .PARAMETER ISSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER ISSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER ISSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER AllowUpgradeForSSRSSharePointMode
+        See the notes section for more information.
+
+    .PARAMETER NpEnabled
+        See the notes section for more information.
+
+    .PARAMETER TcpEnabled
+        See the notes section for more information.
+
+    .PARAMETER RsInstallMode
+        See the notes section for more information.
+
+    .PARAMETER RSSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER RSSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER RSSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER MPYCacheDirectory
+        See the notes section for more information.
+
+    .PARAMETER MRCacheDirectory
+        See the notes section for more information.
+
+    .PARAMETER SqlInstJava
+        See the notes section for more information.
+
+    .PARAMETER SqlJavaDir
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterGroup
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterDisks
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterNetworkName
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterIPAddresses
+        See the notes section for more information.
+
+    .PARAMETER FailoverClusterRollOwnership
+        See the notes section for more information.
+
+    .PARAMETER AzureSubscriptionId
+        See the notes section for more information.
+
+    .PARAMETER AzureResourceGroup
+        See the notes section for more information.
+
+    .PARAMETER AzureRegion
+        See the notes section for more information.
+
+    .PARAMETER AzureTenantId
+        See the notes section for more information.
+
+    .PARAMETER AzureServicePrincipal
+        See the notes section for more information.
+
+    .PARAMETER AzureServicePrincipalSecret
+        See the notes section for more information.
+
+    .PARAMETER AzureArcProxy
+        See the notes section for more information.
+
+    .PARAMETER SkipRules
+        See the notes section for more information.
+
+    .PARAMETER ProductCoveredBySA
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Install-SqlDscServer -Install -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\'
+
+        Installs the database engine for the named instance MyInstance.
+
+    .EXAMPLE
+        Install-SqlDscServer -Install -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE','ARC' -SqlSysAdminAccounts @('MyAdminAccount') -MediaPath 'E:\' -AzureSubscriptionId 'MySubscriptionId' -AzureResourceGroup 'MyRG' -AzureRegion 'West-US' -AzureTenantId 'MyTenantId' -AzureServicePrincipal 'MyPrincipalName' -AzureServicePrincipalSecret ('MySecret' | ConvertTo-SecureString -AsPlainText -Force)
+
+        Installs the database engine for the named instance MyInstance and onboard the server to Azure Arc.
+
+    .EXAMPLE
+        Install-SqlDscServer -Install -AcceptLicensingTerms -MediaPath 'E:\' -AzureSubscriptionId 'MySubscriptionId' -AzureResourceGroup 'MyRG' -AzureRegion 'West-US' -AzureTenantId 'MyTenantId' -AzureServicePrincipal 'MyPrincipalName' -AzureServicePrincipalSecret ('MySecret' | ConvertTo-SecureString -AsPlainText -Force)
+
+        Installs the Azure Arc Agent on the server.
+
+    .EXAMPLE
+        Install-SqlDscServer -ConfigurationFile 'MySqlConfig.ini' -MediaPath 'E:\'
+
+        Installs SQL Server using the configuration file 'MySqlConfig.ini'.
+
+    .EXAMPLE
+        Install-SqlDscServer -PrepareImage -AcceptLicensingTerms -Features 'SQLENGINE' -InstanceId 'MyInstance' -MediaPath 'E:\'
+
+        Prepares the server for using the database engine for an instance named 'MyInstance'.
+
+    .EXAMPLE
+        Install-SqlDscServer -Upgrade -AcceptLicensingTerms -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Upgrades the instance 'MyInstance' with the SQL Server version that is provided by the media path.
+
+    .EXAMPLE
+        Install-SqlDscServer -EditionUpgrade -AcceptLicensingTerms -ProductKey 'NewEditionProductKey' -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Upgrades the instance 'MyInstance' with the SQL Server edition that is provided by the media path.
+
+    .EXAMPLE
+        Install-SqlDscServer -InstallFailoverCluster -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -InstallSqlDataDir 'D:\MSSQL\Data' -SqlSysAdminAccounts @('MyAdminAccount') -FailoverClusterNetworkName 'TestCluster01A' -FailoverClusterIPAddresses 'IPv4;192.168.0.46;ClusterNetwork1;255.255.255.0' -MediaPath 'E:\'
+
+        Installs the database engine in a failover cluster with the instance name 'MyInstance'.
+
+    .EXAMPLE
+        Install-SqlDscServer -PrepareFailoverCluster -AcceptLicensingTerms -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Prepares to installs the database engine in a failover cluster with the instance name 'MyInstance'.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+#>
+function Install-SqlDscServer
+{
+    # cSpell: ignore PBDMS Admini AZUREEXTENSION
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Install,
+
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $PrepareImage,
+
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $Upgrade,
+
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $EditionUpgrade,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $InstallFailoverCluster,
+
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $PrepareFailoverCluster,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile', Mandatory = $true)]
+        [System.String]
+        $ConfigurationFile,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [System.Management.Automation.SwitchParameter]
+        $AcceptLicensingTerms,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SuppressPrivacyStatementNotice,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $IAcknowledgeEntCalLimits,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Upgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $InstanceName,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $Enu,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $UpdateEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $UpdateSource,
+
+        [Parameter(ParameterSetName = 'Install', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateSet(
+            'SQL',
+            'SQLEngine', # Part of parent feature SQL
+            'Replication', # Part of parent feature SQL
+            'FullText', # Part of parent feature SQL
+            'DQ', # Part of parent feature SQL
+            'PolyBase', # Part of parent feature SQL
+            'PolyBaseCore', # Part of parent feature SQL
+            'PolyBaseJava', # Part of parent feature SQL
+            'AdvancedAnalytics', # Part of parent feature SQL
+            'SQL_INST_MR', # Part of parent feature SQL
+            'SQL_INST_MPY', # Part of parent feature SQL
+            'SQL_INST_JAVA', # Part of parent feature SQL
+            'AS',
+            'RS',
+            'RS_SHP',
+            'RS_SHPWFE', # cspell: disable-line
+            'DQC',
+            'IS',
+            'IS_Master', # Part of parent feature IS
+            'IS_Worker', # Part of parent feature IS
+            'MDS',
+            'SQL_SHARED_MPY',
+            'SQL_SHARED_MR',
+            'Tools',
+            'BC', # Part of parent feature Tools
+            'Conn', # Part of parent feature Tools
+            'DREPLAY_CTLR', # Part of parent feature Tools (cspell: disable-line)
+            'DREPLAY_CLT', # Part of parent feature Tools (cspell: disable-line)
+            'SNAC_SDK', # Part of parent feature Tools (cspell: disable-line)
+            'SDK', # Part of parent feature Tools
+            'LocalDB', # Part of parent feature Tools
+            'AZUREEXTENSION'
+        )]
+        [System.String[]]
+        $Features,
+
+        [Parameter(ParameterSetName = 'InstallRole', Mandatory = $true)]
+        [ValidateSet(
+            'ALLFeatures_WithDefaults',
+            'SPI_AS_NewFarm',
+            'SPI_AS_ExistingFarm'
+        )]
+        [System.String]
+        $Role,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstallSharedDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstallSharedWowDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstanceDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $InstanceId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $PBEngSvcAccount,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $PBEngSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBEngSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $PBDMSSvcAccount, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $PBDMSSvcPassword, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBDMSSvcStartupType, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.UInt16]
+        $PBStartPortRange,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.UInt16]
+        $PBEndPortRange,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'PrepareImage')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $PBScaleOut,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'EditionUpgrade', Mandatory = $true)]
+        [System.String]
+        $ProductKey, # This is argument PID but $PID is reserved variable.
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $AgtSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $AgtSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $AgtSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASBackupDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASCollation,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASConfigDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASDataDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $ASTempDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('Multidimensional', 'PowerPivot', 'Tabular')]
+        [System.String]
+        $ASServerMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $ASSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $ASSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $ASSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String[]]
+        $ASSysAdminAccounts,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.Management.Automation.SwitchParameter]
+        $ASProviderMSOLAP,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $FarmAccount,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $FarmPassword,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Security.SecureString]
+        $Passphrase,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 65536)]
+        [System.UInt16]
+        $FarmAdminiPort, # cspell: disable-line
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $BrowserSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateSet('Rebuild', 'Reset', 'Import')]
+        [System.String]
+        $FTUpgradeOption,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $EnableRanU,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [System.String]
+        $InstallSqlDataDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlBackupDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('SQL')]
+        [System.String]
+        $SecurityMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.Security.SecureString]
+        $SAPwd,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlCollation,
+
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $AddCurrentUserAsSqlAdmin,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $SqlSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $SqlSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $SqlSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String[]]
+        $SqlSysAdminAccounts,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlTempDbDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlTempDbLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.UInt16]
+        $SqlTempDbFileCount,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbFileSize,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbFileGrowth,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateRange(4, 262144)]
+        [System.UInt16]
+        $SqlTempDbLogFileSize,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [ValidateRange(0, 1024)]
+        [System.UInt16]
+        $SqlTempDbLogFileGrowth,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlUserDbDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SqlSvcInstantFileInit,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $SqlUserDbLogDir,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 32767)]
+        [System.UInt16]
+        $SqlMaxDop,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $UseSqlRecommendedMemoryLimits,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 2147483647)]
+        [System.UInt32]
+        $SqlMinMemory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [ValidateRange(0, 2147483647)]
+        [System.UInt32]
+        $SqlMaxMemory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateRange(0, 3)]
+        [System.UInt16]
+        $FileStreamLevel,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $FileStreamShareName,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $ISSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $ISSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $ISSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [System.Management.Automation.SwitchParameter]
+        $AllowUpgradeForSSRSSharePointMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $NpEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $TcpEnabled,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode')]
+        [System.String]
+        $RsInstallMode,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.String]
+        $RSSvcAccount,
+
+        [Parameter(ParameterSetName = 'UsingConfigurationFile')]
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [System.Security.SecureString]
+        $RSSvcPassword,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $RSSvcStartupType,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $MPYCacheDirectory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $MRCacheDirectory,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.Management.Automation.SwitchParameter]
+        $SqlInstJava,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [System.String]
+        $SqlJavaDir,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String]
+        $FailoverClusterGroup,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [System.String[]]
+        $FailoverClusterDisks,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [System.String]
+        $FailoverClusterNetworkName,
+
+        [Parameter(ParameterSetName = 'InstallFailoverCluster', Mandatory = $true)]
+        [System.String[]]
+        $FailoverClusterIPAddresses,
+
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [ValidateRange(0, 2)]
+        [System.UInt16]
+        $FailoverClusterRollOwnership,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureSubscriptionId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureResourceGroup,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureRegion,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureTenantId,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.String]
+        $AzureServicePrincipal,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent', Mandatory = $true)]
+        [System.Security.SecureString]
+        $AzureServicePrincipalSecret,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallAzureArcAgent')]
+        [System.String]
+        $AzureArcProxy,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'EditionUpgrade')]
+        [System.String[]]
+        $SkipRules,
+
+        [Parameter(ParameterSetName = 'Install')]
+        [Parameter(ParameterSetName = 'InstallRole')]
+        [Parameter(ParameterSetName = 'Upgrade')]
+        [Parameter(ParameterSetName = 'InstallFailoverCluster')]
+        [Parameter(ParameterSetName = 'PrepareFailoverCluster')]
+        [Parameter(ParameterSetName = 'EditionUpgrade')]
+        [System.Management.Automation.SwitchParameter]
+        $ProductCoveredBySA,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Install-SqlDscServer.ps1' 1144
+#Region '.\Public\Invoke-SqlDscQuery.ps1' 0
+<#
+    .SYNOPSIS
+        Executes a query on the specified database.
+
+    .DESCRIPTION
         Executes a query on the specified database.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
 
+    .PARAMETER ServerName
+        Specifies the server name where the instance exist.
+
+    .PARAMETER InstanceName
+       Specifies the instance name on which to execute the T-SQL query.
+
+    .PARAMETER Credential
+        Specifies the credentials to use to impersonate a user when connecting.
+        If this is not provided then the current user will be used to connect
+        to the SQL Server Database Engine instance.
+
+    .PARAMETER LoginType
+        Specifies which type of credentials are specified. The valid types are
+        Integrated, WindowsUser, and SqlLogin. If WindowsUser or SqlLogin are
+        specified then the Credential needs to be specified as well. Defaults
+        to `Integrated`.
+
     .PARAMETER DatabaseName
-        Specify the name of the database to execute the query on.
+        Specifies the name of the database to execute the T-SQL query in.
 
     .PARAMETER Query
         The query string to execute.
@@ -4073,52 +9239,90 @@ function Get-SqlDscServerPermission
         Set the query StatementTimeout in seconds. Default 600 seconds (10 minutes).
 
     .PARAMETER RedactText
-        One or more strings to redact from the query when verbose messages are
-        written to the console. Strings here will be escaped so they will not
+        One or more text strings to redact from the query when verbose messages
+        are written to the console. Strings will be escaped so they will not
         be interpreted as regular expressions (RegEx).
+
+    .PARAMETER Encrypt
+        Specifies if encryption should be used.
+
+    .PARAMETER Force
+        Specifies that the query should be executed without any confirmation.
 
     .OUTPUTS
         `[System.Data.DataSet]` when passing parameter **PassThru**, otherwise
         outputs none.
 
     .EXAMPLE
-        $serverInstance = Connect-SqlDscDatabaseEngine
-        Invoke-SqlDscQuery -ServerObject $serverInstance -Database master `
+        $serverObject = Connect-SqlDscDatabaseEngine
+        Invoke-SqlDscQuery -ServerObject $serverObject -DatabaseName 'master' `
             -Query 'SELECT name FROM sys.databases' -PassThru
 
-        Runs the query and returns all the database names in the instance.
+        Connects to the default instance and then runs a query to return all the
+        database names in the instance.
 
     .EXAMPLE
-        $serverInstance = Connect-SqlDscDatabaseEngine
-        Invoke-SqlDscQuery -ServerObject $serverInstance -Database master `
+        $serverObject = Connect-SqlDscDatabaseEngine
+        $serverObject | Invoke-SqlDscQuery -DatabaseName 'master' `
             -Query 'RESTORE DATABASE [NorthWinds] WITH RECOVERY'
 
-        Runs the query to restores the database NorthWinds.
+        Connects to the default instance and then runs the query to restore the
+        database NorthWinds.
 
     .EXAMPLE
-        $serverInstance = Connect-SqlDscDatabaseEngine
-        Invoke-SqlDscQuery -ServerObject $serverInstance -Database master `
+        $serverObject = Connect-SqlDscDatabaseEngine
+        Invoke-SqlDscQuery -ServerObject $serverObject -DatabaseName 'master' `
             -Query "select * from MyTable where password = 'PlaceholderPa\ssw0rd1' and password = 'placeholder secret passphrase'" `
-            -PassThru -RedactText @('PlaceholderPa\sSw0rd1','Placeholder Secret PassPhrase') `
-            -Verbose
+            -RedactText @('PlaceholderPa\sSw0rd1','Placeholder Secret PassPhrase') `
+            -PassThru -Verbose
 
         Shows how to redact sensitive information in the query when the query string
-        is output as verbose information when the parameter Verbose is used.
+        is output as verbose information when the parameter Verbose is used. For it
+        to work the sensitiv information must be known and passed into the parameter
+        RedactText. If any single character is wrong the sensitiv information will
+        not be redacted. The redaction is case-insensitive.
 
-    .NOTES
-        This is a wrapper for private function Invoke-Query, until it move into
-        this public function.
+    .EXAMPLE
+        Invoke-SqlDscQuery -ServerName Server1 -InstanceName MSSQLSERVER -DatabaseName 'master' `
+            -Query 'SELECT name FROM sys.databases' -PassThru
+
+        Connects to the default instance and then runs a query to return all the
+        database names in the instance.
 #>
 function Invoke-SqlDscQuery
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
     [OutputType([System.Data.DataSet])]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     param
     (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(ParameterSetName = 'ByServerObject', Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SqlServer.Management.Smo.Server]
         $ServerObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER',
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [Alias('SetupCredential')]
+        [Alias('DatabaseCredential')]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateSet('Integrated', 'WindowsUser', 'SqlLogin')]
+        [System.String]
+        $LoginType = 'Integrated',
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [System.Management.Automation.SwitchParameter]
+        $Encrypt,
 
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -4129,6 +9333,7 @@ function Invoke-SqlDscQuery
         $Query,
 
         [Parameter()]
+        [Alias('WithResults')]
         [Switch]
         $PassThru,
 
@@ -4138,38 +9343,144 @@ function Invoke-SqlDscQuery
         $StatementTimeout = 600,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String[]]
-        $RedactText
+        $RedactText,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
     )
 
-    $invokeQueryParameters = @{
-        SqlServerObject  = $ServerObject
-        Database         = $DatabaseName
-        Query            = $Query
-    }
-
-    if ($PSBoundParameters.ContainsKey('PassThru'))
+    begin
     {
-        $invokeQueryParameters.WithResults = $PassThru
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+
+        if ($PSCmdlet.ParameterSetName -eq 'ByServerName')
+        {
+            $connectSqlDscDatabaseEngineParameters = @{
+                ServerName       = $ServerName
+                InstanceName     = $InstanceName
+                StatementTimeout = $StatementTimeout
+                ErrorAction      = 'Stop'
+                Verbose          = $VerbosePreference
+            }
+
+            if ($Encrypt.IsPresent)
+            {
+                $connectSqlDscDatabaseEngineParameters.Encrypt = $true
+            }
+
+            if ($LoginType -ne 'Integrated')
+            {
+                $connectSqlDscDatabaseEngineParameters['LoginType'] = $LoginType
+            }
+
+            if ($PSBoundParameters.ContainsKey('Credential'))
+            {
+                $connectSqlDscDatabaseEngineParameters.Credential = $Credential
+            }
+
+            $ServerObject = Connect-SqlDscDatabaseEngine @connectSqlDscDatabaseEngineParameters
+        }
+
+        if ($PSCmdlet.ParameterSetName -eq 'ByServerObject')
+        {
+            $InstanceName = $ServerObject.InstanceName
+        }
+
+        $redactedQuery = $Query
+
+        if ($PSBoundParameters.ContainsKey('RedactText'))
+        {
+            $redactedQuery = ConvertTo-RedactedText -Text $Query -RedactPhrase $RedactText
+        }
     }
 
-    if ($PSBoundParameters.ContainsKey('StatementTimeout'))
+    process
     {
-        $invokeQueryParameters.StatementTimeout = $StatementTimeout
+        $result = $null
+
+        $verboseDescriptionMessage = $script:localizedData.Query_Invoke_ShouldProcessVerboseDescription -f $InstanceName
+        $verboseWarningMessage = $script:localizedData.Query_Invoke_ShouldProcessVerboseWarning -f $InstanceName
+        $captionMessage = $script:localizedData.Query_Invoke_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            $previousStatementTimeout = $null
+
+            if ($PSCmdlet.ParameterSetName -eq 'ByServerObject')
+            {
+                if ($PSBoundParameters.ContainsKey('StatementTimeout'))
+                {
+                    # Make sure we can return the StatementTimeout before exiting.
+                    $previousStatementTimeout = $ServerObject.ConnectionContext.StatementTimeout
+
+                    $ServerObject.ConnectionContext.StatementTimeout = $StatementTimeout
+                }
+            }
+
+            try
+            {
+                if ($PassThru)
+                {
+                    Write-Verbose -Message (
+                        $script:localizedData.Query_Invoke_ExecuteQueryWithResults -f $redactedQuery
+                    )
+
+                    $result = $ServerObject.Databases[$DatabaseName].ExecuteWithResults($Query)
+
+                    return $result
+                }
+                else
+                {
+                    Write-Verbose -Message (
+                        $script:localizedData.Query_Invoke_ExecuteNonQuery -f $redactedQuery
+                    )
+
+                    $null = $ServerObject.Databases[$DatabaseName].ExecuteNonQuery($Query)
+                }
+            }
+            catch
+            {
+                $writeErrorParameters = @{
+                    Message      = $_.Exception.ToString()
+                    Category     = 'InvalidOperation'
+                    ErrorId      = 'ISDQ0001' # cSpell: disable-line
+                    TargetObject = $DatabaseName
+                }
+
+                Write-Error @writeErrorParameters
+            }
+            finally
+            {
+                if ($previousStatementTimeout)
+                {
+                    $ServerObject.ConnectionContext.StatementTimeout = $previousStatementTimeout
+                }
+            }
+        }
     }
 
-    if ($PSBoundParameters.ContainsKey('RedactText'))
+    end
     {
-        $invokeQueryParameters.RedactText = $RedactText
+        if ($PSCmdlet.ParameterSetName -eq 'ByServerName')
+        {
+            $ServerObject | Disconnect-SqlDscDatabaseEngine -Force -Verbose:$VerbosePreference
+        }
     }
-
-    return (Invoke-Query @invokeQueryParameters)
 }
-#EndRegion './Public/Invoke-SqlDscQuery.ps1' 113
-#Region './Public/New-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\Invoke-SqlDscQuery.ps1' 275
+#Region '.\Public\New-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Creates a server audit.
+
+    .DESCRIPTION
+        This command creates a server audit on a SQL Server Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -4177,7 +9488,7 @@ function Invoke-SqlDscQuery
     .PARAMETER Name
         Specifies the name of the server audit to be added.
 
-    .PARAMETER Filter
+    .PARAMETER AuditFilter
         Specifies the filter that should be used on the audit. See [predicate expression](https://docs.microsoft.com/en-us/sql/t-sql/statements/create-server-audit-transact-sql)
         how to write the syntax for the filter.
 
@@ -4195,7 +9506,7 @@ function Invoke-SqlDscQuery
         as database mirroring an audit needs a specific GUID.
 
     .PARAMETER Force
-        Specifies that the audit should be created with out any confirmation.
+        Specifies that the audit should be created without any confirmation.
 
     .PARAMETER Refresh
         Specifies that the **ServerObject**'s audits should be refreshed before
@@ -4208,7 +9519,7 @@ function Invoke-SqlDscQuery
         Specifies the log location where the audit should write to.
         This can be SecurityLog or ApplicationLog.
 
-    .PARAMETER FilePath
+    .PARAMETER Path
         Specifies the location where te log files wil be placed.
 
     .PARAMETER ReserveDiskSpace
@@ -4228,6 +9539,9 @@ function Invoke-SqlDscQuery
     .PARAMETER MaximumRolloverFiles
         Specifies the amount of files on disk before SQL Server starts reusing
         the files. If not specified then it is set to unlimited.
+
+    .PARAMETER PassThru
+        If specified the created audit object will be returned.
 
     .OUTPUTS
         `[Microsoft.SqlServer.Management.Smo.Audit]` is passing parameter **PassThru**,
@@ -4363,124 +9677,130 @@ function New-SqlDscAudit
         $MaximumRolloverFiles
     )
 
-    if ($Force.IsPresent)
+    process
     {
-        $ConfirmPreference = 'None'
-    }
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
 
-    $getSqlDscAuditParameters = @{
-        ServerObject = $ServerObject
-        Name = $Name
-        Refresh = $Refresh
-        ErrorAction = 'SilentlyContinue'
-    }
+        $getSqlDscAuditParameters = @{
+            ServerObject = $ServerObject
+            Name         = $Name
+            Refresh      = $Refresh
+            ErrorAction  = 'SilentlyContinue'
+        }
 
-    $auditObject = Get-SqlDscAudit @getSqlDscAuditParameters
+        $auditObject = Get-SqlDscAudit @getSqlDscAuditParameters
 
-    if ($auditObject)
-    {
-        $auditAlreadyPresentMessage = $script:localizedData.Audit_AlreadyPresent -f $Name
+        if ($auditObject.Count -gt 0)
+        {
+            $auditAlreadyPresentMessage = $script:localizedData.Audit_AlreadyPresent -f $Name
 
-        $PSCmdlet.ThrowTerminatingError(
-            [System.Management.Automation.ErrorRecord]::new(
-                $auditAlreadyPresentMessage,
-                'NSDA0001', # cspell: disable-line
-                [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                $DatabaseName
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    $auditAlreadyPresentMessage,
+                    'NSDA0001', # cspell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $DatabaseName
+                )
             )
-        )
-    }
-
-    $auditObject = New-Object -TypeName 'Microsoft.SqlServer.Management.Smo.Audit' -ArgumentList @($ServerObject, $Name)
-
-    $queryType = switch ($PSCmdlet.ParameterSetName)
-    {
-        'Log'
-        {
-            $LogType
         }
 
-        default
+        $auditObject = New-Object -TypeName 'Microsoft.SqlServer.Management.Smo.Audit' -ArgumentList @($ServerObject, $Name)
+
+        $queryType = switch ($PSCmdlet.ParameterSetName)
         {
-            'File'
-        }
-    }
-
-    $auditObject.DestinationType = $queryType
-
-    if ($PSCmdlet.ParameterSetName -match 'File')
-    {
-        $auditObject.FilePath = $Path
-
-        if ($PSCmdlet.ParameterSetName -match 'FileWithSize')
-        {
-            $convertedMaximumFileSizeUnit = (
-                @{
-                    Megabyte = 'MB'
-                    Gigabyte = 'GB'
-                    Terabyte = 'TB'
-                }
-            ).$MaximumFileSizeUnit
-
-            $auditObject.MaximumFileSize = $MaximumFileSize
-            $auditObject.MaximumFileSizeUnit = $convertedMaximumFileSizeUnit
-        }
-
-        if ($PSCmdlet.ParameterSetName -in @('FileWithMaxFiles', 'FileWithSizeAndMaxFiles'))
-        {
-            $auditObject.MaximumFiles = $MaximumFiles
-
-            if ($PSBoundParameters.ContainsKey('ReserveDiskSpace'))
+            'Log'
             {
-                $auditObject.ReserveDiskSpace = $ReserveDiskSpace.IsPresent
+                $LogType
+            }
+
+            default
+            {
+                'File'
             }
         }
 
-        if ($PSCmdlet.ParameterSetName -in @('FileWithMaxRolloverFiles', 'FileWithSizeAndMaxRolloverFiles'))
+        $auditObject.DestinationType = $queryType
+
+        if ($PSCmdlet.ParameterSetName -match 'File')
         {
-            $auditObject.MaximumRolloverFiles = $MaximumRolloverFiles
+            $auditObject.FilePath = $Path
+
+            if ($PSCmdlet.ParameterSetName -match 'FileWithSize')
+            {
+                $convertedMaximumFileSizeUnit = (
+                    @{
+                        Megabyte = 'MB'
+                        Gigabyte = 'GB'
+                        Terabyte = 'TB'
+                    }
+                ).$MaximumFileSizeUnit
+
+                $auditObject.MaximumFileSize = $MaximumFileSize
+                $auditObject.MaximumFileSizeUnit = $convertedMaximumFileSizeUnit
+            }
+
+            if ($PSCmdlet.ParameterSetName -in @('FileWithMaxFiles', 'FileWithSizeAndMaxFiles'))
+            {
+                $auditObject.MaximumFiles = $MaximumFiles
+
+                if ($PSBoundParameters.ContainsKey('ReserveDiskSpace'))
+                {
+                    $auditObject.ReserveDiskSpace = $ReserveDiskSpace.IsPresent
+                }
+            }
+
+            if ($PSCmdlet.ParameterSetName -in @('FileWithMaxRolloverFiles', 'FileWithSizeAndMaxRolloverFiles'))
+            {
+                $auditObject.MaximumRolloverFiles = $MaximumRolloverFiles
+            }
         }
-    }
 
-    if ($PSBoundParameters.ContainsKey('OnFailure'))
-    {
-        $auditObject.OnFailure = $OnFailure
-    }
-
-    if ($PSBoundParameters.ContainsKey('QueueDelay'))
-    {
-        $auditObject.QueueDelay = $QueueDelay
-    }
-
-    if ($PSBoundParameters.ContainsKey('AuditGuid'))
-    {
-        $auditObject.Guid = $AuditGuid
-    }
-
-    if ($PSBoundParameters.ContainsKey('AuditFilter'))
-    {
-        $auditObject.Filter = $AuditFilter
-    }
-
-    $verboseDescriptionMessage = $script:localizedData.Audit_Add_ShouldProcessVerboseDescription -f $Name, $ServerObject.InstanceName
-    $verboseWarningMessage = $script:localizedData.Audit_Add_ShouldProcessVerboseWarning -f $Name
-    $captionMessage = $script:localizedData.Audit_Add_ShouldProcessCaption
-
-    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-    {
-        $auditObject.Create()
-
-        if ($PassThru.IsPresent)
+        if ($PSBoundParameters.ContainsKey('OnFailure'))
         {
-            return $auditObject
+            $auditObject.OnFailure = $OnFailure
+        }
+
+        if ($PSBoundParameters.ContainsKey('QueueDelay'))
+        {
+            $auditObject.QueueDelay = $QueueDelay
+        }
+
+        if ($PSBoundParameters.ContainsKey('AuditGuid'))
+        {
+            $auditObject.Guid = $AuditGuid
+        }
+
+        if ($PSBoundParameters.ContainsKey('AuditFilter'))
+        {
+            $auditObject.Filter = $AuditFilter
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.Audit_Add_ShouldProcessVerboseDescription -f $Name, $ServerObject.InstanceName
+        $verboseWarningMessage = $script:localizedData.Audit_Add_ShouldProcessVerboseWarning -f $Name
+        $captionMessage = $script:localizedData.Audit_Add_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            $auditObject.Create()
+
+            if ($PassThru.IsPresent)
+            {
+                return $auditObject
+            }
         }
     }
 }
-#EndRegion './Public/New-SqlDscAudit.ps1' 310
-#Region './Public/Remove-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\New-SqlDscAudit.ps1' 319
+#Region '.\Public\Remove-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Removes a server audit.
+
+    .DESCRIPTION
+        This command removes a server audit from a SQL Server Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -4492,7 +9812,7 @@ function New-SqlDscAudit
         Specifies the name of the server audit to be removed.
 
     .PARAMETER Force
-        Specifies that the audit should be removed with out any confirmation.
+        Specifies that the audit should be removed without any confirmation.
 
     .PARAMETER Refresh
         Specifies that the **ServerObject**'s audits should be refreshed before
@@ -4545,42 +9865,439 @@ function Remove-SqlDscAudit
         $Refresh
     )
 
-    if ($Force.IsPresent)
+    process
     {
-        $ConfirmPreference = 'None'
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
-    {
-        $getSqlDscAuditParameters = @{
-            ServerObject = $ServerObject
-            Name = $Name
-            Refresh = $Refresh
-            ErrorAction = 'Stop'
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
         }
 
-        # If this command does not find the audit it will throw an exception.
-        $AuditObject = Get-SqlDscAudit @getSqlDscAuditParameters
-    }
+        if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
+        {
+            $getSqlDscAuditParameters = @{
+                ServerObject = $ServerObject
+                Name         = $Name
+                Refresh      = $Refresh
+                ErrorAction  = 'Stop'
+            }
 
-    $verboseDescriptionMessage = $script:localizedData.Audit_Remove_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
-    $verboseWarningMessage = $script:localizedData.Audit_Remove_ShouldProcessVerboseWarning -f $AuditObject.Name
-    $captionMessage = $script:localizedData.Audit_Remove_ShouldProcessCaption
+            # If this command does not find the audit it will throw an exception.
+            $auditObjectArray = Get-SqlDscAudit @getSqlDscAuditParameters
 
-    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-    {
-        <#
-            If the passed audit object has already been dropped, then we silently
-            do nothing, using the method DropIfExist(), since the job is done.
-        #>
-        $AuditObject.DropIfExists()
+            # Pick the only object in the array.
+            $AuditObject = $auditObjectArray | Select-Object -First 1
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.Audit_Remove_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
+        $verboseWarningMessage = $script:localizedData.Audit_Remove_ShouldProcessVerboseWarning -f $AuditObject.Name
+        $captionMessage = $script:localizedData.Audit_Remove_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            <#
+                If the passed audit object has already been dropped, then we silently
+                do nothing, using the method DropIfExist(), since the job is done.
+            #>
+            $AuditObject.DropIfExists()
+        }
     }
 }
-#EndRegion './Public/Remove-SqlDscAudit.ps1' 99
-#Region './Public/Set-SqlDscAudit.ps1' 0
+#EndRegion '.\Public\Remove-SqlDscAudit.ps1' 108
+#Region '.\Public\Remove-SqlDscNode.ps1' 0
+<#
+    .SYNOPSIS
+        Removes a SQL Server node from an Failover Cluster instance (FCI).
+
+    .DESCRIPTION
+        Removes a SQL Server node from an Failover Cluster instance (FCI).
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER ConfirmIPDependencyChange
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Remove-SqlDscNode -InstanceName 'MyInstance' -MediaPath 'E:\'
+
+        Removes the current node's SQL Server instance 'MyInstance' from the
+        Failover Cluster instance.
+
+    .NOTES
+        All parameters has intentionally not been added to this comment-based help
+        since it would take a lot of effort to keep them up to date. Instead there is
+        a link in the comment-based help that points to the SQL Server command line
+        setup documentation which will stay relevant.
+#>
+function Remove-SqlDscNode
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $ConfirmIPDependencyChange,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction -RemoveNode @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Remove-SqlDscNode.ps1' 78
+#Region '.\Public\Remove-SqlDscTraceFlag.ps1' 0
+<#
+    .SYNOPSIS
+        Removes trace flags from a Database Engine instance.
+
+    .DESCRIPTION
+        Removes trace flags from a Database Engine instance, keeping any other
+        trace flags currently set.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object on which to remove the trace flags.
+
+    .PARAMETER ServerName
+        Specifies the server name where the instance exist.
+
+    .PARAMETER InstanceName
+       Specifies the instance name on which to remove the trace flags.
+
+    .PARAMETER TraceFlag
+        Specifies the trace flags to remove.
+
+    .PARAMETER Force
+        Specifies that the trace flag should be removed without any confirmation.
+
+    .EXAMPLE
+        Remove-SqlDscTraceFlag -TraceFlag 4199
+
+        Removes the trace flag 4199 from the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Remove-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199
+
+        Removes the trace flag 4199 from the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        Remove-SqlDscTraceFlag -InstanceName 'SQL2022' -TraceFlag 4199,3226
+
+        Removes the trace flags 4199 and 3226 from the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine' -InstanceName 'SQL2022'
+        Remove-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199,3226
+
+        Removes the trace flags 4199 and 3226 from the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .OUTPUTS
+        None.
+#>
+function Remove-SqlDscTraceFlag
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType()]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER',
+
+        [Parameter(Mandatory = $true)]
+        [System.UInt32[]]
+        $TraceFlag,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    begin
+    {
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+    }
+
+    process
+    {
+        if ($PSCmdlet.ParameterSetName -eq 'ByServiceObject')
+        {
+            $InstanceName = $ServiceObject.Name -replace '^MSSQL\$'
+        }
+
+        # Copy $PSBoundParameters to keep it intact.
+        $getSqlDscTraceFlagParameters = @{} + $PSBoundParameters
+
+        $commonParameters = [System.Management.Automation.PSCmdlet]::OptionalCommonParameters
+
+        # Remove parameters that Get-SqlDscTraceFLag does not have/support.
+        $commonParameters + @('Force', 'TraceFlag') |
+            ForEach-Object -Process {
+                $getSqlDscTraceFlagParameters.Remove($_)
+            }
+
+        $currentTraceFlags = Get-SqlDscTraceFlag @getSqlDscTraceFlagParameters -ErrorAction 'Stop'
+
+        if ($currentTraceFlags)
+        {
+            # Must always return an array. An empty array when removing the last value.
+            $desiredTraceFlags = [System.UInt32[]] @(
+                $currentTraceFlags |
+                    ForEach-Object -Process {
+                        # Keep values that should not be removed.
+                        if ($_ -notin $TraceFlag)
+                        {
+                            $_
+                        }
+                    }
+            )
+
+            $verboseDescriptionMessage = $script:localizedData.TraceFlag_Remove_ShouldProcessVerboseDescription -f $InstanceName, ($TraceFlag -join ', ')
+            $verboseWarningMessage = $script:localizedData.TraceFlag_Remove_ShouldProcessVerboseWarning -f $InstanceName
+            $captionMessage = $script:localizedData.TraceFlag_Remove_ShouldProcessCaption
+
+            if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+            {
+                # Copy $PSBoundParameters to keep it intact.
+                $setSqlDscTraceFlagParameters = @{} + $PSBoundParameters
+
+                $setSqlDscTraceFlagParameters.TraceFLag = $desiredTraceFlags
+
+                Set-SqlDscTraceFlag @setSqlDscTraceFlagParameters -ErrorAction 'Stop'
+            }
+        }
+        else
+        {
+            Write-Debug -Message $script:localizedData.TraceFlag_Remove_NoCurrentTraceFlags
+        }
+    }
+}
+#EndRegion '.\Public\Remove-SqlDscTraceFlag.ps1' 145
+#Region '.\Public\Repair-SqlDscServer.ps1' 0
+<#
+    .SYNOPSIS
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+    .DESCRIPTION
+        Executes an setup action using Microsoft SQL Server setup executable.
+
+        See the link in the commands help for information on each parameter. The
+        link points to SQL Server command line setup documentation.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Enu
+        See the notes section for more information.
+
+    .PARAMETER Features
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcAccount
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcPassword
+        See the notes section for more information.
+
+    .PARAMETER PBEngSvcStartupType
+        See the notes section for more information.
+
+    .PARAMETER PBStartPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBEndPortRange
+        See the notes section for more information.
+
+    .PARAMETER PBScaleOut
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Repair-SqlDscServer -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Repairs the database engine of the instance 'MyInstance'.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+#>
+function Repair-SqlDscServer
+{
+    # cSpell: ignore AZUREEXTENSION
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Enu,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet(
+            'SQL',
+            'SQLEngine', # Part of parent feature SQL
+            'Replication', # Part of parent feature SQL
+            'FullText', # Part of parent feature SQL
+            'DQ', # Part of parent feature SQL
+            'PolyBase', # Part of parent feature SQL
+            'PolyBaseCore', # Part of parent feature SQL
+            'PolyBaseJava', # Part of parent feature SQL
+            'AdvancedAnalytics', # Part of parent feature SQL
+            'SQL_INST_MR', # Part of parent feature SQL
+            'SQL_INST_MPY', # Part of parent feature SQL
+            'SQL_INST_JAVA', # Part of parent feature SQL
+            'AS',
+            'RS',
+            'RS_SHP',
+            'RS_SHPWFE', # cspell: disable-line
+            'DQC',
+            'IS',
+            'IS_Master', # Part of parent feature IS
+            'IS_Worker', # Part of parent feature IS
+            'MDS',
+            'SQL_SHARED_MPY',
+            'SQL_SHARED_MR',
+            'Tools',
+            'BC', # Part of parent feature Tools
+            'Conn', # Part of parent feature Tools
+            'DREPLAY_CTLR', # Part of parent feature Tools (cspell: disable-line)
+            'DREPLAY_CLT', # Part of parent feature Tools (cspell: disable-line)
+            'SNAC_SDK', # Part of parent feature Tools (cspell: disable-line)
+            'SDK', # Part of parent feature Tools
+            'LocalDB', # Part of parent feature Tools
+            'AZUREEXTENSION'
+        )]
+        [System.String[]]
+        $Features,
+
+        [Parameter()]
+        [System.String]
+        $PBEngSvcAccount,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $PBEngSvcPassword,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Disabled', 'Manual')]
+        [System.String]
+        $PBEngSvcStartupType,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBStartPortRange,
+
+        [Parameter()]
+        [System.UInt16]
+        $PBEndPortRange,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $PBScaleOut,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    Invoke-SetupAction -Repair @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Repair-SqlDscServer.ps1' 161
+#Region '.\Public\Set-SqlDscAudit.ps1' 0
 <#
     .SYNOPSIS
         Updates a server audit.
+
+    .DESCRIPTION
+        This command updates and existing server audit on a SQL Server Database Engine
+        instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -4591,7 +10308,7 @@ function Remove-SqlDscAudit
     .PARAMETER Name
         Specifies the name of the server audit to be updated.
 
-    .PARAMETER Filter
+    .PARAMETER AuditFilter
         Specifies the filter that should be used on the audit. See [predicate expression](https://docs.microsoft.com/en-us/sql/t-sql/statements/create-server-audit-transact-sql)
         how to write the syntax for the filter.
 
@@ -4609,7 +10326,7 @@ function Remove-SqlDscAudit
         as database mirroring an audit needs a specific GUID.
 
     .PARAMETER Force
-        Specifies that the audit should be updated with out any confirmation.
+        Specifies that the audit should be updated without any confirmation.
 
     .PARAMETER Refresh
         Specifies that the audit object should be refreshed before updating. This
@@ -4617,7 +10334,7 @@ function Remove-SqlDscAudit
         for example through T-SQL. But on instances with a large amount of audits
         it might be better to make sure the ServerObject is recent enough.
 
-    .PARAMETER FilePath
+    .PARAMETER Path
         Specifies the location where te log files wil be placed.
 
     .PARAMETER ReserveDiskSpace
@@ -4638,6 +10355,9 @@ function Remove-SqlDscAudit
     .PARAMETER MaximumRolloverFiles
         Specifies the amount of files on disk before SQL Server starts reusing
         the files. If not specified then it is set to unlimited.
+
+    .PARAMETER PassThru
+        If specified the changed audit object will be returned.
 
     .OUTPUTS
         `[Microsoft.SqlServer.Management.Smo.Audit]` is passing parameter **PassThru**,
@@ -4716,13 +10436,13 @@ function Set-SqlDscAudit
 
         [Parameter()]
         [ValidateScript({
-            if ($_ -in 1..999 -or $_ -gt 2147483647)
-            {
-                throw ($script:localizedData.Audit_QueueDelayParameterValueInvalid -f $_)
-            }
+                if ($_ -in 1..999 -or $_ -gt 2147483647)
+                {
+                    throw ($script:localizedData.Audit_QueueDelayParameterValueInvalid -f $_)
+                }
 
-            return $true
-        })]
+                return $true
+            })]
         [System.UInt32]
         $QueueDelay,
 
@@ -4773,13 +10493,13 @@ function Set-SqlDscAudit
         [Parameter(ParameterSetName = 'AuditObjectWithSizeAndMaxFiles', Mandatory = $true)]
         [Parameter(ParameterSetName = 'AuditObjectWithSizeAndMaxRolloverFiles', Mandatory = $true)]
         [ValidateScript({
-            if ($_ -eq 1 -or $_ -gt 2147483647)
-            {
-                throw ($script:localizedData.Audit_MaximumFileSizeParameterValueInvalid -f $_)
-            }
+                if ($_ -eq 1 -or $_ -gt 2147483647)
+                {
+                    throw ($script:localizedData.Audit_MaximumFileSizeParameterValueInvalid -f $_)
+                }
 
-            return $true
-        })]
+                return $true
+            })]
         [System.UInt32]
         $MaximumFileSize,
 
@@ -4816,118 +10536,128 @@ function Set-SqlDscAudit
         $MaximumRolloverFiles
     )
 
-    if ($Force.IsPresent)
+    process
     {
-        $ConfirmPreference = 'None'
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
-    {
-        $getSqlDscAuditParameters = @{
-            ServerObject = $ServerObject
-            Name = $Name
-            Refresh = $Refresh
-            ErrorAction = 'Stop'
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
         }
 
-        $AuditObject = Get-SqlDscAudit @getSqlDscAuditParameters
-    }
-
-    if ($Refresh.IsPresent)
-    {
-        $AuditObject.Refresh()
-    }
-
-    $verboseDescriptionMessage = $script:localizedData.Audit_Update_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
-    $verboseWarningMessage = $script:localizedData.Audit_Update_ShouldProcessVerboseWarning -f $AuditObject.Name
-    $captionMessage = $script:localizedData.Audit_Update_ShouldProcessCaption
-
-    if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-    {
-        if ($PSBoundParameters.ContainsKey('Path'))
+        if ($PSCmdlet.ParameterSetName -eq 'ServerObject')
         {
-            $AuditObject.FilePath = $Path
+            $getSqlDscAuditParameters = @{
+                ServerObject = $ServerObject
+                Name         = $Name
+                Refresh      = $Refresh
+                ErrorAction  = 'Stop'
+            }
+
+            # If this command does not find the audit it will throw an exception.
+            $auditObjectArray = Get-SqlDscAudit @getSqlDscAuditParameters
+
+            # Pick the only object in the array.
+            $AuditObject = $auditObjectArray | Select-Object -First 1
         }
 
-        if ($PSCmdlet.ParameterSetName -match 'WithSize')
+        if ($Refresh.IsPresent)
         {
-            $queryMaximumFileSizeUnit = (
-                @{
-                    Megabyte = 'MB'
-                    Gigabyte = 'GB'
-                    Terabyte = 'TB'
+            $AuditObject.Refresh()
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.Audit_Update_ShouldProcessVerboseDescription -f $AuditObject.Name, $AuditObject.Parent.InstanceName
+        $verboseWarningMessage = $script:localizedData.Audit_Update_ShouldProcessVerboseWarning -f $AuditObject.Name
+        $captionMessage = $script:localizedData.Audit_Update_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            if ($PSBoundParameters.ContainsKey('Path'))
+            {
+                $AuditObject.FilePath = $Path
+            }
+
+            if ($PSCmdlet.ParameterSetName -match 'WithSize')
+            {
+                $queryMaximumFileSizeUnit = (
+                    @{
+                        Megabyte = 'MB'
+                        Gigabyte = 'GB'
+                        Terabyte = 'TB'
+                    }
+                ).$MaximumFileSizeUnit
+
+                $AuditObject.MaximumFileSize = $MaximumFileSize
+                $AuditObject.MaximumFileSizeUnit = $queryMaximumFileSizeUnit
+            }
+
+            if ($PSCmdlet.ParameterSetName -match 'MaxFiles')
+            {
+                if ($AuditObject.MaximumRolloverFiles)
+                {
+                    # Switching to MaximumFiles instead of MaximumRolloverFiles.
+                    $AuditObject.MaximumRolloverFiles = 0
+
+                    # Must run method Alter() before setting MaximumFiles.
+                    $AuditObject.Alter()
                 }
-            ).$MaximumFileSizeUnit
 
-            $AuditObject.MaximumFileSize = $MaximumFileSize
-            $AuditObject.MaximumFileSizeUnit = $queryMaximumFileSizeUnit
-        }
+                $AuditObject.MaximumFiles = $MaximumFiles
 
-        if ($PSCmdlet.ParameterSetName -match 'MaxFiles')
-        {
-            if ($AuditObject.MaximumRolloverFiles)
-            {
-                # Switching to MaximumFiles instead of MaximumRolloverFiles.
-                $AuditObject.MaximumRolloverFiles = 0
-
-                # Must run method Alter() before setting MaximumFiles.
-                $AuditObject.Alter()
+                if ($PSBoundParameters.ContainsKey('ReserveDiskSpace'))
+                {
+                    $AuditObject.ReserveDiskSpace = $ReserveDiskSpace.IsPresent
+                }
             }
 
-            $AuditObject.MaximumFiles = $MaximumFiles
-
-            if ($PSBoundParameters.ContainsKey('ReserveDiskSpace'))
+            if ($PSCmdlet.ParameterSetName -match 'MaxRolloverFiles')
             {
-                $AuditObject.ReserveDiskSpace = $ReserveDiskSpace.IsPresent
-            }
-        }
+                if ($AuditObject.MaximumFiles)
+                {
+                    # Switching to MaximumRolloverFiles instead of MaximumFiles.
+                    $AuditObject.MaximumFiles = 0
 
-        if ($PSCmdlet.ParameterSetName -match 'MaxRolloverFiles')
-        {
-            if ($AuditObject.MaximumFiles)
-            {
-                # Switching to MaximumRolloverFiles instead of MaximumFiles.
-                $AuditObject.MaximumFiles = 0
+                    # Must run method Alter() before setting MaximumRolloverFiles.
+                    $AuditObject.Alter()
+                }
 
-                # Must run method Alter() before setting MaximumRolloverFiles.
-                $AuditObject.Alter()
+                $AuditObject.MaximumRolloverFiles = $MaximumRolloverFiles
             }
 
-            $AuditObject.MaximumRolloverFiles = $MaximumRolloverFiles
-        }
+            if ($PSBoundParameters.ContainsKey('OnFailure'))
+            {
+                $AuditObject.OnFailure = $OnFailure
+            }
 
-        if ($PSBoundParameters.ContainsKey('OnFailure'))
-        {
-            $AuditObject.OnFailure = $OnFailure
-        }
+            if ($PSBoundParameters.ContainsKey('QueueDelay'))
+            {
+                $AuditObject.QueueDelay = $QueueDelay
+            }
 
-        if ($PSBoundParameters.ContainsKey('QueueDelay'))
-        {
-            $AuditObject.QueueDelay = $QueueDelay
-        }
+            if ($PSBoundParameters.ContainsKey('AuditGuid'))
+            {
+                $AuditObject.Guid = $AuditGuid
+            }
 
-        if ($PSBoundParameters.ContainsKey('AuditGuid'))
-        {
-            $AuditObject.Guid = $AuditGuid
-        }
+            if ($PSBoundParameters.ContainsKey('AuditFilter'))
+            {
+                $AuditObject.Filter = $AuditFilter
+            }
 
-        if ($PSBoundParameters.ContainsKey('AuditFilter'))
-        {
-            $AuditObject.Filter = $AuditFilter
-        }
+            $AuditObject.Alter()
 
-        $AuditObject.Alter()
-
-        if ($PassThru.IsPresent)
-        {
-            return $AuditObject
+            if ($PassThru.IsPresent)
+            {
+                return $AuditObject
+            }
         }
     }
 }
-#EndRegion './Public/Set-SqlDscAudit.ps1' 347
-#Region './Public/Set-SqlDscDatabasePermission.ps1' 0
+#EndRegion '.\Public\Set-SqlDscAudit.ps1' 361
+#Region '.\Public\Set-SqlDscDatabasePermission.ps1' 0
 <#
     .SYNOPSIS
+        Set permission for a database principal.
+
+    .DESCRIPTION
         Set permission for a database principal.
 
     .PARAMETER ServerObject
@@ -4954,7 +10684,7 @@ function Set-SqlDscAudit
         and the revocation will cascade.
 
     .PARAMETER Force
-        Specifies that the permissions should be set with out any confirmation.
+        Specifies that the permissions should be set without any confirmation.
 
     .OUTPUTS
         None.
@@ -5018,131 +10748,138 @@ function Set-SqlDscDatabasePermission
         $Force
     )
 
-    if ($State -eq 'Deny' -and $WithGrant.IsPresent)
+    process
     {
-        Write-Warning -Message $script:localizedData.DatabasePermission_IgnoreWithGrantForStateDeny
-    }
-
-    if ($Force.IsPresent)
-    {
-        $ConfirmPreference = 'None'
-    }
-
-    $sqlDatabaseObject = $null
-
-    if ($ServerObject.Databases)
-    {
-        $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
-    }
-
-    if ($sqlDatabaseObject)
-    {
-        $testSqlDscIsDatabasePrincipalParameters = @{
-            ServerObject      = $ServerObject
-            DatabaseName      = $DatabaseName
-            Name              = $Name
-            ExcludeFixedRoles = $true
+        if ($State -eq 'Deny' -and $WithGrant.IsPresent)
+        {
+            Write-Warning -Message $script:localizedData.DatabasePermission_IgnoreWithGrantForStateDeny
         }
 
-        $isDatabasePrincipal = Test-SqlDscIsDatabasePrincipal @testSqlDscIsDatabasePrincipalParameters
-
-        if ($isDatabasePrincipal)
+        if ($Force.IsPresent)
         {
-            # Get the permissions names that are set to $true in the DatabasePermissionSet.
-            $permissionName = $Permission |
-                Get-Member -MemberType 'Property' |
-                Select-Object -ExpandProperty 'Name' |
-                Where-Object -FilterScript {
-                    $Permission.$_
-                }
+            $ConfirmPreference = 'None'
+        }
 
-            $verboseDescriptionMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessVerboseDescription -f $Name, $DatabaseName, $ServerObject.InstanceName
-            $verboseWarningMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessVerboseWarning -f $Name
-            $captionMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessCaption
+        $sqlDatabaseObject = $null
 
-            if (-not $PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
-            {
-                # Return without doing anything if the user did not want to continue processing.
-                return
+        if ($ServerObject.Databases)
+        {
+            $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
+        }
+
+        if ($sqlDatabaseObject)
+        {
+            $testSqlDscIsDatabasePrincipalParameters = @{
+                ServerObject      = $ServerObject
+                DatabaseName      = $DatabaseName
+                Name              = $Name
+                ExcludeFixedRoles = $true
             }
 
-            switch ($State)
+            $isDatabasePrincipal = Test-SqlDscIsDatabasePrincipal @testSqlDscIsDatabasePrincipalParameters
+
+            if ($isDatabasePrincipal)
             {
-                'Grant'
-                {
-                    Write-Verbose -Message (
-                        $script:localizedData.DatabasePermission_GrantPermission -f ($permissionName -join ','), $Name
-                    )
+                # Get the permissions names that are set to $true in the DatabasePermissionSet.
+                $permissionName = $Permission |
+                    Get-Member -MemberType 'Property' |
+                    Select-Object -ExpandProperty 'Name' |
+                    Where-Object -FilterScript {
+                        $Permission.$_
+                    }
 
-                    if ($WithGrant.IsPresent)
-                    {
-                        $sqlDatabaseObject.Grant($Permission, $Name, $true)
-                    }
-                    else
-                    {
-                        $sqlDatabaseObject.Grant($Permission, $Name)
-                    }
+                $verboseDescriptionMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessVerboseDescription -f $Name, $DatabaseName, $ServerObject.InstanceName
+                $verboseWarningMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessVerboseWarning -f $Name
+                $captionMessage = $script:localizedData.DatabasePermission_ChangePermissionShouldProcessCaption
+
+                if (-not $PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+                {
+                    # Return without doing anything if the user did not want to continue processing.
+                    return
                 }
 
-                'Deny'
+                switch ($State)
                 {
-                    Write-Verbose -Message (
-                        $script:localizedData.DatabasePermission_DenyPermission -f ($permissionName -join ','), $Name
-                    )
-
-                    $sqlDatabaseObject.Deny($Permission, $Name)
-                }
-
-                'Revoke'
-                {
-                    Write-Verbose -Message (
-                        $script:localizedData.DatabasePermission_RevokePermission -f ($permissionName -join ','), $Name
-                    )
-
-                    if ($WithGrant.IsPresent)
+                    'Grant'
                     {
-                        $sqlDatabaseObject.Revoke($Permission, $Name, $false, $true)
+                        Write-Verbose -Message (
+                            $script:localizedData.DatabasePermission_GrantPermission -f ($permissionName -join ','), $Name
+                        )
+
+                        if ($WithGrant.IsPresent)
+                        {
+                            $sqlDatabaseObject.Grant($Permission, $Name, $true)
+                        }
+                        else
+                        {
+                            $sqlDatabaseObject.Grant($Permission, $Name)
+                        }
                     }
-                    else
+
+                    'Deny'
                     {
-                        $sqlDatabaseObject.Revoke($Permission, $Name)
+                        Write-Verbose -Message (
+                            $script:localizedData.DatabasePermission_DenyPermission -f ($permissionName -join ','), $Name
+                        )
+
+                        $sqlDatabaseObject.Deny($Permission, $Name)
+                    }
+
+                    'Revoke'
+                    {
+                        Write-Verbose -Message (
+                            $script:localizedData.DatabasePermission_RevokePermission -f ($permissionName -join ','), $Name
+                        )
+
+                        if ($WithGrant.IsPresent)
+                        {
+                            $sqlDatabaseObject.Revoke($Permission, $Name, $false, $true)
+                        }
+                        else
+                        {
+                            $sqlDatabaseObject.Revoke($Permission, $Name)
+                        }
                     }
                 }
+            }
+            else
+            {
+                $missingPrincipalMessage = $script:localizedData.DatabasePermission_MissingPrincipal -f $Name, $DatabaseName
+
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        $missingPrincipalMessage,
+                        'GSDDP0001', # cSpell: disable-line
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $Name
+                    )
+                )
             }
         }
         else
         {
-            $missingPrincipalMessage = $script:localizedData.DatabasePermission_MissingPrincipal -f $Name, $DatabaseName
+            $missingDatabaseMessage = $script:localizedData.DatabasePermission_MissingDatabase -f $DatabaseName
 
             $PSCmdlet.ThrowTerminatingError(
                 [System.Management.Automation.ErrorRecord]::new(
-                    $missingPrincipalMessage,
-                    'GSDDP0001',
+                    $missingDatabaseMessage,
+                    'GSDDP0002', # cSpell: disable-line
                     [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $Name
+                    $DatabaseName
                 )
             )
         }
     }
-    else
-    {
-        $missingDatabaseMessage = $script:localizedData.DatabasePermission_MissingDatabase -f $DatabaseName
-
-        $PSCmdlet.ThrowTerminatingError(
-            [System.Management.Automation.ErrorRecord]::new(
-                $missingDatabaseMessage,
-                'GSDDP0002',
-                [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                $DatabaseName
-            )
-        )
-    }
 }
-#EndRegion './Public/Set-SqlDscDatabasePermission.ps1' 213
-#Region './Public/Set-SqlDscServerPermission.ps1' 0
+#EndRegion '.\Public\Set-SqlDscDatabasePermission.ps1' 219
+#Region '.\Public\Set-SqlDscServerPermission.ps1' 0
 <#
     .SYNOPSIS
         Set permission for a login.
+
+    .DESCRIPTION
+        This command sets the permissions for a existing login on a SQL Server
+        Database Engine instance.
 
     .PARAMETER ServerObject
         Specifies current server connection object.
@@ -5164,7 +10901,7 @@ function Set-SqlDscDatabasePermission
         and the revocation will cascade.
 
     .PARAMETER Force
-        Specifies that the permissions should be set with out any confirmation.
+        Specifies that the permissions should be set without any confirmation.
 
     .OUTPUTS
         None.
@@ -5220,105 +10957,389 @@ function Set-SqlDscServerPermission
         $Force
     )
 
-    if ($State -eq 'Deny' -and $WithGrant.IsPresent)
+    process
     {
-        Write-Warning -Message $script:localizedData.ServerPermission_IgnoreWithGrantForStateDeny
-    }
-
-    if ($Force.IsPresent)
-    {
-        $ConfirmPreference = 'None'
-    }
-
-    $testSqlDscIsLoginParameters = @{
-        ServerObject      = $ServerObject
-        Name              = $Name
-    }
-
-    $isLogin = Test-SqlDscIsLogin @testSqlDscIsLoginParameters
-
-    if ($isLogin)
-    {
-        # Get the permissions names that are set to $true in the ServerPermissionSet.
-        $permissionName = $Permission |
-            Get-Member -MemberType 'Property' |
-            Select-Object -ExpandProperty 'Name' |
-            Where-Object -FilterScript {
-                $Permission.$_
-            }
-
-        $verboseDescriptionMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessVerboseDescription -f $Name, $ServerObject.InstanceName
-        $verboseWarningMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessVerboseWarning -f $Name
-        $captionMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessCaption
-
-        if (-not $PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        if ($State -eq 'Deny' -and $WithGrant.IsPresent)
         {
-            # Return without doing anything if the user did not want to continue processing.
-            return
+            Write-Warning -Message $script:localizedData.ServerPermission_IgnoreWithGrantForStateDeny
         }
 
-        switch ($State)
+        if ($Force.IsPresent)
         {
-            'Grant'
-            {
-                Write-Verbose -Message (
-                    $script:localizedData.ServerPermission_GrantPermission -f ($permissionName -join ','), $Name
-                )
+            $ConfirmPreference = 'None'
+        }
 
-                if ($WithGrant.IsPresent)
-                {
-                    $ServerObject.Grant($Permission, $Name, $true)
+        $testSqlDscIsLoginParameters = @{
+            ServerObject = $ServerObject
+            Name         = $Name
+        }
+
+        $isLogin = Test-SqlDscIsLogin @testSqlDscIsLoginParameters
+
+        if ($isLogin)
+        {
+            # Get the permissions names that are set to $true in the ServerPermissionSet.
+            $permissionName = $Permission |
+                Get-Member -MemberType 'Property' |
+                Select-Object -ExpandProperty 'Name' |
+                Where-Object -FilterScript {
+                    $Permission.$_
                 }
-                else
-                {
-                    $ServerObject.Grant($Permission, $Name)
-                }
+
+            $verboseDescriptionMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessVerboseDescription -f $Name, $ServerObject.InstanceName
+            $verboseWarningMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessVerboseWarning -f $Name
+            $captionMessage = $script:localizedData.ServerPermission_ChangePermissionShouldProcessCaption
+
+            if (-not $PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+            {
+                # Return without doing anything if the user did not want to continue processing.
+                return
             }
 
-            'Deny'
+            switch ($State)
             {
-                Write-Verbose -Message (
-                    $script:localizedData.ServerPermission_DenyPermission -f ($permissionName -join ','), $Name
-                )
-
-                $ServerObject.Deny($Permission, $Name)
-            }
-
-            'Revoke'
-            {
-                Write-Verbose -Message (
-                    $script:localizedData.ServerPermission_RevokePermission -f ($permissionName -join ','), $Name
-                )
-
-                if ($WithGrant.IsPresent)
+                'Grant'
                 {
-                    $ServerObject.Revoke($Permission, $Name, $false, $true)
+                    Write-Verbose -Message (
+                        $script:localizedData.ServerPermission_GrantPermission -f ($permissionName -join ','), $Name
+                    )
+
+                    if ($WithGrant.IsPresent)
+                    {
+                        $ServerObject.Grant($Permission, $Name, $true)
+                    }
+                    else
+                    {
+                        $ServerObject.Grant($Permission, $Name)
+                    }
                 }
-                else
+
+                'Deny'
                 {
-                    $ServerObject.Revoke($Permission, $Name)
+                    Write-Verbose -Message (
+                        $script:localizedData.ServerPermission_DenyPermission -f ($permissionName -join ','), $Name
+                    )
+
+                    $ServerObject.Deny($Permission, $Name)
+                }
+
+                'Revoke'
+                {
+                    Write-Verbose -Message (
+                        $script:localizedData.ServerPermission_RevokePermission -f ($permissionName -join ','), $Name
+                    )
+
+                    if ($WithGrant.IsPresent)
+                    {
+                        $ServerObject.Revoke($Permission, $Name, $false, $true)
+                    }
+                    else
+                    {
+                        $ServerObject.Revoke($Permission, $Name)
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        $missingPrincipalMessage = $script:localizedData.ServerPermission_MissingPrincipal -f $Name, $ServerObject.InstanceName
+        else
+        {
+            $missingPrincipalMessage = $script:localizedData.ServerPermission_MissingPrincipal -f $Name, $ServerObject.InstanceName
 
-        $PSCmdlet.ThrowTerminatingError(
-            [System.Management.Automation.ErrorRecord]::new(
-                $missingPrincipalMessage,
-                'GSDDP0001',
-                [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                $Name
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    $missingPrincipalMessage,
+                    'GSDDP0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $Name
+                )
             )
-        )
+        }
     }
 }
-#EndRegion './Public/Set-SqlDscServerPermission.ps1' 176
-#Region './Public/Test-SqlDscIsDatabasePrincipal.ps1' 0
+#EndRegion '.\Public\Set-SqlDscServerPermission.ps1' 183
+#Region '.\Public\Set-SqlDscStartupParameter.ps1' 0
 <#
     .SYNOPSIS
+        Sets startup parameters on a Database Engine instance.
+
+    .DESCRIPTION
+        Sets startup parameters on a Database Engine instance.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object on which to set the startup parameters.
+
+    .PARAMETER ServerName
+        Specifies the server name where the instance exist.
+
+    .PARAMETER InstanceName
+       Specifies the instance name on which to set the startup parameters.
+
+    .PARAMETER TraceFlag
+        Specifies the trace flags to set.
+
+    .PARAMETER InternalTraceFlag
+        Specifies the internal trace flags to set.
+
+        From the [Database Engine Service Startup Options](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/database-engine-service-startup-options)
+        documentation: "...this sets other internal trace flags that are required
+        only by SQL Server support engineers."
+
+    .PARAMETER Force
+        Specifies that the startup parameters should be set without any confirmation.
+
+    .EXAMPLE
+        Set-SqlDscStartupParameters -TraceFlag 4199
+
+        Replaces the trace flags with 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Set-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199
+
+        Replaces the trace flags with 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        Set-SqlDscTraceFlag -InstanceName 'SQL2022' -TraceFlag @()
+
+        Removes all the trace flags from the Database Engine instance 'SQL2022'
+        on the server where the command in run.
+
+    .OUTPUTS
+        None.
+
+    .NOTES
+        This command should support setting the values according to this documentation:
+        https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/database-engine-service-startup-options
+#>
+function Set-SqlDscStartupParameter
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType()]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER',
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.UInt32[]]
+        $TraceFlag,
+
+        [Parameter()]
+        [AllowEmptyCollection()]
+        [System.UInt32[]]
+        $InternalTraceFlag,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    begin
+    {
+        Assert-ElevatedUser -ErrorAction 'Stop'
+
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+    }
+
+    process
+    {
+        if ($PSCmdlet.ParameterSetName -eq 'ByServiceObject')
+        {
+            $ServiceObject | Assert-ManagedServiceType -ServiceType 'DatabaseEngine'
+
+            $InstanceName = $ServiceObject.Name -replace '^MSSQL\$'
+        }
+
+        if ($PSCmdlet.ParameterSetName -eq 'ByServerName')
+        {
+            $getSqlDscManagedComputerServiceParameters = @{
+                ServerName   = $ServerName
+                InstanceName = $InstanceName
+                ServiceType  = 'DatabaseEngine'
+                ErrorAction  = 'Stop'
+            }
+
+            $ServiceObject = Get-SqlDscManagedComputerService @getSqlDscManagedComputerServiceParameters
+
+            if (-not $ServiceObject)
+            {
+                $writeErrorParameters = @{
+                    Message      = $script:localizedData.StartupParameter_Set_FailedToFindServiceObject
+                    Category     = 'InvalidOperation'
+                    ErrorId      = 'SSDSP0002' # CSpell: disable-line
+                    TargetObject = $ServiceObject
+                }
+
+                Write-Error @writeErrorParameters
+            }
+        }
+
+        if ($ServiceObject)
+        {
+            $verboseDescriptionMessage = $script:localizedData.StartupParameter_Set_ShouldProcessVerboseDescription -f $InstanceName
+            $verboseWarningMessage = $script:localizedData.StartupParameter_Set_ShouldProcessVerboseWarning -f $InstanceName
+            $captionMessage = $script:localizedData.StartupParameter_Set_ShouldProcessCaption
+
+            if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+            {
+                $startupParameters = [StartupParameters]::Parse($ServiceObject.StartupParameters)
+
+                if ($PSBoundParameters.ContainsKey('TraceFlag'))
+                {
+                    $startupParameters.TraceFlag = $TraceFlag
+                }
+
+                if ($PSBoundParameters.ContainsKey('InternalTraceFlag'))
+                {
+                    $startupParameters.InternalTraceFlag = $InternalTraceFlag
+                }
+
+                $ServiceObject.StartupParameters = $startupParameters.ToString()
+                $ServiceObject.Alter()
+            }
+        }
+    }
+}
+#EndRegion '.\Public\Set-SqlDscStartupParameter.ps1' 161
+#Region '.\Public\Set-SqlDscTraceFlag.ps1' 0
+<#
+    .SYNOPSIS
+        Sets trace flags on a Database Engine instance.
+
+    .DESCRIPTION
+        Sets trace flags on a Database Engine instance, replacing any trace flags
+        currently set.
+
+    .PARAMETER ServiceObject
+        Specifies the Service object on which to set the trace flags.
+
+    .PARAMETER ServerName
+        Specifies the server name where the instance exist.
+
+    .PARAMETER InstanceName
+       Specifies the instance name on which to set the trace flags.
+
+    .PARAMETER TraceFlag
+        Specifies the trace flags to set.
+
+    .PARAMETER Force
+        Specifies that the trace flag should be set without any confirmation.
+
+    .EXAMPLE
+        Set-SqlDscTraceFlag -TraceFlag 4199
+
+        Replaces the trace flags with 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine'
+        Set-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199
+
+        Replaces the trace flags with 4199 on the Database Engine default instance
+        on the server where the command in run.
+
+    .EXAMPLE
+        Set-SqlDscTraceFlag -InstanceName 'SQL2022' -TraceFlag 4199,3226
+
+        Replaces the trace flags with 4199 and 3226 on the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .EXAMPLE
+        $serviceObject = Get-SqlDscManagedComputerService -ServiceType 'DatabaseEngine' -InstanceName 'SQL2022'
+        Set-SqlDscTraceFlag -ServiceObject $serviceObject -TraceFlag 4199,3226
+
+        Replaces the trace flags with 4199 and 3226 on the Database Engine instance
+        'SQL2022' on the server where the command in run.
+
+    .EXAMPLE
+        Set-SqlDscTraceFlag -InstanceName 'SQL2022' -TraceFlag @()
+
+        Removes all the trace flags from the Database Engine instance 'SQL2022'
+        on the server where the command in run.
+
+    .OUTPUTS
+        None.
+#>
+function Set-SqlDscTraceFlag
+{
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('UseSyntacticallyCorrectExamples', '', Justification = 'Because the rule does not yet support parsing the code when a parameter type is not available. The ScriptAnalyzer rule UseSyntacticallyCorrectExamples will always error in the editor due to https://github.com/indented-automation/Indented.ScriptAnalyzerRules/issues/8.')]
+    [OutputType()]
+    [CmdletBinding(DefaultParameterSetName = 'ByServerName', SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    param
+    (
+        [Parameter(ParameterSetName = 'ByServiceObject', Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SqlServer.Management.Smo.Wmi.Service]
+        $ServiceObject,
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $ServerName = (Get-ComputerName),
+
+        [Parameter(ParameterSetName = 'ByServerName')]
+        [ValidateNotNullOrEmpty()]
+        [System.String]
+        $InstanceName = 'MSSQLSERVER',
+
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [System.UInt32[]]
+        $TraceFlag,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force
+    )
+
+    begin
+    {
+        if ($Force.IsPresent)
+        {
+            $ConfirmPreference = 'None'
+        }
+    }
+
+    process
+    {
+        if ($PSCmdlet.ParameterSetName -eq 'ByServiceObject')
+        {
+            $InstanceName = $ServiceObject.Name -replace '^MSSQL\$'
+        }
+
+        $verboseDescriptionMessage = $script:localizedData.TraceFlag_Set_ShouldProcessVerboseDescription -f $InstanceName, ($TraceFlag -join ', ')
+        $verboseWarningMessage = $script:localizedData.TraceFlag_Set_ShouldProcessVerboseWarning -f $InstanceName
+        $captionMessage = $script:localizedData.TraceFlag_Set_ShouldProcessCaption
+
+        if ($PSCmdlet.ShouldProcess($verboseDescriptionMessage, $verboseWarningMessage, $captionMessage))
+        {
+            Set-SqlDscStartupParameter @PSBoundParameters
+        }
+    }
+}
+#EndRegion '.\Public\Set-SqlDscTraceFlag.ps1' 115
+#Region '.\Public\Test-SqlDscIsDatabasePrincipal.ps1' 0
+<#
+    .SYNOPSIS
+        Returns whether the database principal exist.
+
+    .DESCRIPTION
         Returns whether the database principal exist.
 
     .PARAMETER ServerObject
@@ -5413,58 +11434,64 @@ function Test-SqlDscIsDatabasePrincipal
         $ExcludeApplicationRoles
     )
 
-    $principalExist = $false
-
-    $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
-
-    if (-not $sqlDatabaseObject)
+    process
     {
-        $PSCmdlet.ThrowTerminatingError(
-            [System.Management.Automation.ErrorRecord]::new(
-                ($script:localizedData.IsDatabasePrincipal_DatabaseMissing -f $DatabaseName),
-                'TSDISO0001',
-                [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                $DatabaseName
+        $principalExist = $false
+
+        $sqlDatabaseObject = $ServerObject.Databases[$DatabaseName]
+
+        if (-not $sqlDatabaseObject)
+        {
+            $PSCmdlet.ThrowTerminatingError(
+                [System.Management.Automation.ErrorRecord]::new(
+                    ($script:localizedData.IsDatabasePrincipal_DatabaseMissing -f $DatabaseName),
+                    'TSDISO0001', # cSpell: disable-line
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $DatabaseName
+                )
             )
-        )
-    }
-
-    if (-not $ExcludeUsers.IsPresent -and $sqlDatabaseObject.Users[$Name])
-    {
-        $principalExist = $true
-    }
-
-    if (-not $ExcludeRoles.IsPresent)
-    {
-        $userDefinedRole = if ($ExcludeFixedRoles.IsPresent)
-        {
-            # Skip fixed roles like db_datareader.
-            $sqlDatabaseObject.Roles | Where-Object -FilterScript {
-                -not $_.IsFixedRole -and $_.Name -eq $Name
-            }
-        }
-        else
-        {
-            $sqlDatabaseObject.Roles[$Name]
         }
 
-        if ($userDefinedRole)
+        if (-not $ExcludeUsers.IsPresent -and $sqlDatabaseObject.Users[$Name])
         {
             $principalExist = $true
         }
-    }
 
-    if (-not $ExcludeApplicationRoles.IsPresent -and $sqlDatabaseObject.ApplicationRoles[$Name])
-    {
-        $principalExist = $true
-    }
+        if (-not $ExcludeRoles.IsPresent)
+        {
+            $userDefinedRole = if ($ExcludeFixedRoles.IsPresent)
+            {
+                # Skip fixed roles like db_datareader.
+                $sqlDatabaseObject.Roles | Where-Object -FilterScript {
+                    -not $_.IsFixedRole -and $_.Name -eq $Name
+                }
+            }
+            else
+            {
+                $sqlDatabaseObject.Roles[$Name]
+            }
 
-    return $principalExist
+            if ($userDefinedRole)
+            {
+                $principalExist = $true
+            }
+        }
+
+        if (-not $ExcludeApplicationRoles.IsPresent -and $sqlDatabaseObject.ApplicationRoles[$Name])
+        {
+            $principalExist = $true
+        }
+
+        return $principalExist
+    }
 }
-#EndRegion './Public/Test-SqlDscIsDatabasePrincipal.ps1' 145
-#Region './Public/Test-SqlDscIsLogin.ps1' 0
+#EndRegion '.\Public\Test-SqlDscIsDatabasePrincipal.ps1' 151
+#Region '.\Public\Test-SqlDscIsLogin.ps1' 0
 <#
     .SYNOPSIS
+        Returns whether the database principal exist.
+
+    .DESCRIPTION
         Returns whether the database principal exist.
 
     .PARAMETER ServerObject
@@ -5498,13 +11525,265 @@ function Test-SqlDscIsLogin
         $Name
     )
 
-    $loginExist = $false
-
-    if ($ServerObject.Logins[$Name])
+    process
     {
-        $loginExist = $true
+        $loginExist = $false
+
+        if ($ServerObject.Logins[$Name])
+        {
+            $loginExist = $true
+        }
+
+        return $loginExist
+    }
+}
+#EndRegion '.\Public\Test-SqlDscIsLogin.ps1' 51
+#Region '.\Public\Test-SqlDscIsSupportedFeature.ps1' 0
+<#
+    .SYNOPSIS
+        Tests that a feature is supported by a Microsoft SQL Server major version.
+
+    .DESCRIPTION
+        Tests that a feature is supported by a Microsoft SQL Server major version.
+
+    .PARAMETER Feature
+       Specifies the feature to evaluate.
+
+    .PARAMETER ProductVersion
+       Specifies the product version of the Microsoft SQL Server. At minimum the
+       major version must be provided.
+
+    .EXAMPLE
+        Test-SqlDscIsSupportedFeature -Feature 'RS' -ProductVersion '13'
+
+        Returns $true if the feature is supported.
+
+    .OUTPUTS
+        [System.Boolean]
+#>
+function Test-SqlDscIsSupportedFeature
+{
+    [OutputType([System.Boolean])]
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [System.String]
+        $Feature,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $ProductVersion
+    )
+
+    begin
+    {
+        $targetMajorVersion = ($ProductVersion -split '\.')[0]
+
+        <#
+            List of features that was removed from a specific major version (and later).
+            Feature list: https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt#Feature
+        #>
+        $removedFeaturesPerMajorVersion = @{
+            13 = @('ADV_SSMS', 'SSMS') # cSpell: disable-line
+            14 = @('RS', 'RS_SHP', 'RS_SHPWFE') # cSpell: disable-line
+            16 = @('Tools', 'BC', 'CONN', 'BC', 'DREPLAY_CTLR', 'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'PolyBaseJava', 'SQL_INST_MR', 'SQL_INST_MPY', 'SQL_SHARED_MPY', 'SQL_SHARED_MR') # cSpell: disable-line
+        }
+
+        <#
+            List of features that was added to a specific major version.
+            Feature list: https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt#Feature
+        #>
+        $addedFeaturesPerMajorVersion = @{
+            13 = @('SQL_INST_MR', 'SQL_INST_MPY', 'SQL_INST_JAVA')
+            15 = @('PolyBaseCore', 'PolyBaseJava', 'SQL_INST_JAVA') # cSpell: disable-line
+        }
+
+        # Evaluate features that was removed and are unsupported for the target's major version.
+        $targetUnsupportedFeatures = $removedFeaturesPerMajorVersion.Keys |
+            Where-Object -FilterScript {
+                $_ -le $targetMajorVersion
+            } |
+            ForEach-Object -Process {
+                $removedFeaturesPerMajorVersion.$_
+            }
+
+        <#
+            Evaluate features that was added to higher major versions than the
+            target's major version which will be unsupported for the target's
+            major version.
+        #>
+        $targetUnsupportedFeatures += $addedFeaturesPerMajorVersion.Keys |
+            Where-Object -FilterScript {
+                $_ -gt $targetMajorVersion
+            } |
+            ForEach-Object -Process {
+                $addedFeaturesPerMajorVersion.$_
+            }
+
+        $supported = $true
     }
 
-    return $loginExist
+    process
+    {
+        # This does case-insensitive match against the list of unsupported features.
+        if ($targetUnsupportedFeatures -and $Feature -in $targetUnsupportedFeatures)
+        {
+            $supported = $false
+        }
+    }
+
+    end
+    {
+        return $supported
+    }
 }
-#EndRegion './Public/Test-SqlDscIsLogin.ps1' 45
+#EndRegion '.\Public\Test-SqlDscIsSupportedFeature.ps1' 100
+#Region '.\Public\Uninstall-SqlDscServer.ps1' 0
+<#
+    .SYNOPSIS
+        Uninstall features from a Microsoft SQL Server instance.
+
+    .DESCRIPTION
+        Uninstall features from a Microsoft SQL Server instance.
+
+        See the link in the commands help for information on each parameter for
+        the setup action Uninstall. The link points to SQL Server command line
+        setup documentation.
+
+    .PARAMETER MediaPath
+        Specifies the path where to find the SQL Server installation media. On this
+        path the SQL Server setup executable must be found.
+
+    .PARAMETER Timeout
+        Specifies how long to wait for the setup process to finish. Default value
+        is `7200` seconds (2 hours). If the setup process does not finish before
+        this time, an exception will be thrown.
+
+    .PARAMETER Force
+        If specified the command will not ask for confirmation. Same as if Confirm:$false
+        is used.
+
+    .PARAMETER InstanceName
+        See the notes section for more information.
+
+    .PARAMETER Features
+        See the notes section for more information.
+
+    .PARAMETER SuppressPrivacyStatementNotice
+        See the notes section for more information.
+
+    .LINK
+        https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-from-the-command-prompt
+
+    .OUTPUTS
+        None.
+
+    .EXAMPLE
+        Uninstall-SqlDscServer -InstanceName 'MyInstance' -Features 'SQLENGINE' -MediaPath 'E:\'
+
+        Uninstalls the database engine from the named instance MyInstance.
+
+    .NOTES
+        The parameters are intentionally not described since it would take a lot
+        of effort to keep them up to date. Instead there is a link that points to
+        the SQL Server command line setup documentation which will stay relevant.
+#>
+function Uninstall-SqlDscServer
+{
+    # cSpell: ignore AZUREEXTENSION
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Because ShouldProcess is used in Invoke-SetupAction')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [OutputType()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $MediaPath,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $InstanceName,
+
+        [Parameter()]
+        [ValidateSet(
+            'SQL',
+            'SQLEngine', # Part of parent feature SQL
+            'Replication', # Part of parent feature SQL
+            'FullText', # Part of parent feature SQL
+            'DQ', # Part of parent feature SQL
+            'PolyBase', # Part of parent feature SQL
+            'PolyBaseCore', # Part of parent feature SQL
+            'PolyBaseJava', # Part of parent feature SQL
+            'AdvancedAnalytics', # Part of parent feature SQL
+            'SQL_INST_MR', # Part of parent feature SQL
+            'SQL_INST_MPY', # Part of parent feature SQL
+            'SQL_INST_JAVA', # Part of parent feature SQL
+            'AS',
+            'RS',
+            'RS_SHP',
+            'RS_SHPWFE', # cspell: disable-line
+            'DQC',
+            'IS',
+            'IS_Master', # Part of parent feature IS
+            'IS_Worker', # Part of parent feature IS
+            'MDS',
+            'SQL_SHARED_MPY',
+            'SQL_SHARED_MR',
+            'Tools',
+            'BC', # Part of parent feature Tools
+            'Conn', # Part of parent feature Tools
+            'DREPLAY_CTLR', # Part of parent feature Tools (cspell: disable-line)
+            'DREPLAY_CLT', # Part of parent feature Tools (cspell: disable-line)
+            'SNAC_SDK', # Part of parent feature Tools (cspell: disable-line)
+            'SDK', # Part of parent feature Tools
+            'LocalDB', # Part of parent feature Tools
+            'AZUREEXTENSION'
+        )]
+        [System.String[]]
+        $Features,
+
+        [Parameter()]
+        [System.UInt32]
+        $Timeout = 7200,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Force,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $SuppressPrivacyStatementNotice
+    )
+
+    Invoke-SetupAction -Uninstall @PSBoundParameters -ErrorAction 'Stop'
+}
+#EndRegion '.\Public\Uninstall-SqlDscServer.ps1' 119
+#Region '.\suffix.ps1' 0
+<#
+    This check is made so that the real SqlServer or SQLPS module is not loaded into
+    the session when the CI runs unit tests of SqlServerDsc. It would conflict with
+    the stub types and stub commands used in the unit tests. This is a workaround
+    because we cannot set a specific module as a nested module in the module manifest,
+    the user must be able to choose to use either SQLPS or SqlServer.
+#>
+if (-not $env:SqlServerDscCI)
+{
+    try
+    {
+        <#
+            Import SQL commands and types into the session, so that types used
+            by commands can be parsed.
+        #>
+        Import-SqlDscPreferredModule -ErrorAction 'Stop'
+    }
+    catch
+    {
+        <#
+            It is not possible to throw the error from Import-SqlDscPreferredModule
+            since it will just fail the command Import-Module with an obscure error.
+        #>
+        Write-Warning -Message $_.Exception.Message
+    }
+}
+#EndRegion '.\suffix.ps1' 27

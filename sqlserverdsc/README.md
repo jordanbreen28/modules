@@ -9,8 +9,8 @@
 
 ## Description
 
-This is an auto-generated module, using the [Puppet DSC Builder](https://www.powershellgallery.com/packages/puppet.dsc) to vendor and expose the [SqlServerDsc](https://www.powershellgallery.com/packages/SqlServerDsc/16.0.0) PowerShell module's DSC resources as Puppet resources.
-The _functionality_ of this module comes entirely from the vendored PowerShell resources, which are pinned at [**v16.0.0**](https://www.powershellgallery.com/packages/SqlServerDsc/16.0.0).
+This is an auto-generated module, using the [Puppet DSC Builder](https://www.powershellgallery.com/packages/puppet.dsc) to vendor and expose the [SqlServerDsc](https://www.powershellgallery.com/packages/SqlServerDsc/16.5.0) PowerShell module's DSC resources as Puppet resources.
+The _functionality_ of this module comes entirely from the vendored PowerShell resources, which are pinned at [**v16.5.0**](https://www.powershellgallery.com/packages/SqlServerDsc/16.5.0).
 The PowerShell module describes itself like this:
 
 > _Module with DSC resources for deployment and configuration of Microsoft SQL Server._
@@ -202,7 +202,7 @@ In general, there are three broad categories of problems:
 1. Problems with calling the underlying DSC resource - the parameters aren't being passed correctly or the resource can't be found
 
 Unfortunately, problems with the way the underlying DSC resource works are something we can't help _directly_ with.
-You'll need to [file an issue](https://github.com/dsccommunity/SqlServerDsc) with the upstream maintainers for the [PowerShell module](https://www.powershellgallery.com/packages/SqlServerDsc/16.0.0).
+You'll need to [file an issue](https://github.com/dsccommunity/SqlServerDsc) with the upstream maintainers for the [PowerShell module](https://www.powershellgallery.com/packages/SqlServerDsc/16.5.0).
 
 Problems with the type definition are when a value that should be valid according to the DSC resource's documentation and code is not accepted by the Puppet wrapper. If and when you run across one of these, please [file an issue](https://github.com/puppetlabs/Puppet.Dsc/issues/new/choose) with the Puppet DSC Builder; this is where the conversion happens and once we know of a problem we can fix it and regenerate the Puppet modules. To help us identify the issue, please specify the DSC module, version, resource, property and values that are giving you issues. Once a fix is available we will regenerate and release updated versions of this Puppet wrapper.
 

@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlProtocol',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlProtocol resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -25,6 +25,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'Specifies if the protocol should be enabled or disabled.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -43,6 +45,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'Specifies the name of the _SQL Server_ instance to enable the protocol for.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -53,6 +56,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'Specifies the host name of the _SQL Server_ to be configured. If the SQL Server belongs to a cluster or availability group specify the host name for the listener or cluster group. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -61,6 +65,7 @@ Puppet::ResourceApi.register_type(
     dsc_keepalive: {
       type: 'Optional[Integer[-2147483648, 2147483647]]',
       desc: 'Specifies the keep alive duration in milliseconds. Only used for the _TCP/IP_ protocol, ignored for all other protocols.',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -71,6 +76,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'Specifies to listen on all IP addresses. Only used for the _TCP/IP_ protocol, ignored for all other protocols.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -80,14 +86,16 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'If set to `$true` then the any attempt by the resource to restart the service is suppressed. The default value is `$false`.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
       mof_is_embedded: false,
     },
     dsc_protocolname: {
-      type: "Enum['SharedMemory', 'NamedPipes', 'TcpIp', 'sharedmemory', 'namedpipes', 'tcpip']",
+      type: "Enum['SharedMemory', 'sharedmemory', 'NamedPipes', 'namedpipes', 'TcpIp', 'tcpip']",
       desc: 'Specifies the name of network protocol to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -97,6 +105,7 @@ Puppet::ResourceApi.register_type(
     dsc_hasmultiipaddresses: {
       type: 'Optional[Boolean]',
       desc: 'Returns `$true` or `$false` whether the instance has multiple IP addresses or not.',
+
       behaviour: :read_only,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -107,6 +116,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 65535]]',
       desc: 'Timeout value for restarting the _SQL Server_ services. The default value is `120` seconds.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt16',
@@ -115,6 +125,17 @@ Puppet::ResourceApi.register_type(
     dsc_pipename: {
       type: 'Optional[String]',
       desc: 'Specifies the name of the named pipe. Only used for the _Named Pipes_ protocol, ignored for all other protocols.',
+
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
+      mof_is_embedded: false,
+    },
+    ensurable: {
+      type: 'Boolean[false]',
+      desc: 'Default attribute added to all dsc types without an ensure property. This resource is not ensurable.',
+      default: false,
 
       mandatory_for_get: false,
       mandatory_for_set: false,

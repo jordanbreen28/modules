@@ -1,6 +1,97 @@
 #Region './prefix.ps1' 0
 $script:modulesFolderPath = Split-Path -Path $PSScriptRoot -Parent
 #EndRegion './prefix.ps1' 2
+#Region './Private/Assert-RequiredCommandParameter.ps1' 0
+<#
+    .SYNOPSIS
+        Assert that required parameters has been specified.
+
+    .DESCRIPTION
+        Assert that required parameters has been specified, and throws an exception if not.
+
+    .PARAMETER BoundParameterList
+       A hashtable containing the parameters to evaluate. Normally this is set to
+       $PSBoundParameters.
+
+    .PARAMETER RequiredParameter
+       One or more parameter names that is required to have been specified.
+
+    .PARAMETER IfParameterPresent
+       One or more parameter names that if specified will trigger the evaluation.
+       If neither of the parameter names has been specified the evaluation of required
+       parameters are not made.
+
+    .EXAMPLE
+        Assert-RequiredCommandParameter -BoundParameter $PSBoundParameters -RequiredParameter @('PBStartPortRange', 'PBEndPortRange')
+
+        Throws an exception if either of the two parameters are not specified.
+
+    .EXAMPLE
+        Assert-RequiredCommandParameter -BoundParameter $PSBoundParameters -RequiredParameter @('Property2', 'Property3') -IfParameterPresent @('Property1')
+
+        Throws an exception if the parameter 'Property1' is specified and either of the required parameters are not.
+
+    .OUTPUTS
+        None.
+#>
+function Assert-RequiredCommandParameter
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.Collections.Hashtable]
+        $BoundParameterList,
+
+        [Parameter(Mandatory = $true)]
+        [System.String[]]
+        $RequiredParameter,
+
+        [Parameter()]
+        [System.String[]]
+        $IfParameterPresent
+    )
+
+    $evaluateRequiredParameter = $true
+
+    if ($PSBoundParameters.ContainsKey('IfParameterPresent'))
+    {
+        $hasIfParameterPresent = $BoundParameterList.Keys.Where( { $_ -in $IfParameterPresent } )
+
+        if (-not $hasIfParameterPresent)
+        {
+            $evaluateRequiredParameter = $false
+        }
+    }
+
+    if ($evaluateRequiredParameter)
+    {
+        foreach ($parameter in $RequiredParameter)
+        {
+             if ($parameter -notin $BoundParameterList.Keys)
+             {
+                $errorMessage = if ($PSBoundParameters.ContainsKey('IfParameterPresent'))
+                {
+                    $script:localizedData.RequiredCommandParameter_SpecificParametersMustAllBeSetWhenParameterExist -f ($RequiredParameter -join ''', '''), ($IfParameterPresent -join ''', ''')
+                }
+                else
+                {
+                    $script:localizedData.RequiredCommandParameter_SpecificParametersMustAllBeSet -f ($RequiredParameter -join ''', ''')
+                }
+
+                $PSCmdlet.ThrowTerminatingError(
+                    [System.Management.Automation.ErrorRecord]::new(
+                        $errorMessage,
+                        'ARCP0001', # cspell: disable-line
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        'Command parameters'
+                    )
+                )
+             }
+        }
+    }
+}
+#EndRegion './Private/Assert-RequiredCommandParameter.ps1' 90
 #Region './Private/Test-DscObjectHasProperty.ps1' 0
 <#
     .SYNOPSIS
@@ -42,6 +133,63 @@ function Test-DscObjectHasProperty
     return $false
 }
 #EndRegion './Private/Test-DscObjectHasProperty.ps1' 40
+#Region './Private/Test-DscPropertyIsAssigned.ps1' 0
+<#
+    .SYNOPSIS
+        Tests whether the class-based resource property is assigned a non-null value.
+
+    .DESCRIPTION
+        Tests whether the class-based resource property is assigned a non-null value.
+
+    .PARAMETER InputObject
+        Specifies the object that contain the property.
+
+    .PARAMETER Name
+        Specifies the name of the property.
+
+    .EXAMPLE
+        Test-DscPropertyIsAssigned -InputObject $this -Name 'MyDscProperty'
+
+        Returns $true or $false whether the property is assigned or not.
+
+    .OUTPUTS
+        [System.Boolean]
+
+    .NOTES
+        This command only works with nullable data types, if using a non-nullable
+        type make sure to make it nullable, e.g. [nullable[System.Int32]].
+#>
+function Test-DscPropertyIsAssigned
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [PSObject]
+        $InputObject,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name
+    )
+
+    begin
+    {
+        $isAssigned = $false
+    }
+
+    process
+    {
+        $isAssigned = -not ($null -eq $InputObject.$Name)
+    }
+
+    end
+    {
+        return $isAssigned
+    }
+}
+#EndRegion './Private/Test-DscPropertyIsAssigned.ps1' 56
 #Region './Private/Test-DscPropertyState.ps1' 0
 <#
     .SYNOPSIS
@@ -313,6 +461,14 @@ function Test-DscPropertyState
         An array of parameter names that are not allowed to be bound at the
         same time as those in MutuallyExclusiveList1.
 
+    .PARAMETER RequiredParameter
+       One or more parameter names that is required to have been specified.
+
+    .PARAMETER IfParameterPresent
+       One or more parameter names that if specified will trigger the evaluation.
+       If neither of the parameter names has been specified the evaluation of required
+       parameters are not made.
+
     .EXAMPLE
         $assertBoundParameterParameters = @{
             BoundParameterList = $PSBoundParameters
@@ -328,6 +484,16 @@ function Test-DscPropertyState
 
         This example throws an exception if `$PSBoundParameters` contains both
         the parameters `Parameter1` and `Parameter2`.
+
+    .EXAMPLE
+        Assert-BoundParameter -BoundParameterList $PSBoundParameters -RequiredParameter @('PBStartPortRange', 'PBEndPortRange')
+
+        Throws an exception if either of the two parameters are not specified.
+
+    .EXAMPLE
+        Assert-BoundParameter -BoundParameterList $PSBoundParameters -RequiredParameter @('Property2', 'Property3') -IfParameterPresent @('Property1')
+
+        Throws an exception if the parameter 'Property1' is specified and either of the required parameters are not.
 #>
 function Assert-BoundParameter
 {
@@ -339,28 +505,98 @@ function Assert-BoundParameter
         [System.Collections.Hashtable]
         $BoundParameterList,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'MutuallyExclusiveParameters', Mandatory = $true)]
         [System.String[]]
         $MutuallyExclusiveList1,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'MutuallyExclusiveParameters', Mandatory = $true)]
         [System.String[]]
-        $MutuallyExclusiveList2
+        $MutuallyExclusiveList2,
+
+        [Parameter(ParameterSetName = 'RequiredParameter', Mandatory = $true)]
+        [System.String[]]
+        $RequiredParameter,
+
+        [Parameter(ParameterSetName = 'RequiredParameter')]
+        [System.String[]]
+        $IfParameterPresent
     )
 
-    $itemFoundFromList1 = $BoundParameterList.Keys.Where({ $_ -in $MutuallyExclusiveList1 })
-    $itemFoundFromList2 = $BoundParameterList.Keys.Where({ $_ -in $MutuallyExclusiveList2 })
-
-    if ($itemFoundFromList1.Count -gt 0 -and $itemFoundFromList2.Count -gt 0)
+    switch ($PSCmdlet.ParameterSetName)
     {
-        $errorMessage = `
-            $script:localizedData.ParameterUsageWrong `
-                -f ($MutuallyExclusiveList1 -join "','"), ($MutuallyExclusiveList2 -join "','")
+        'MutuallyExclusiveParameters'
+        {
+            $itemFoundFromList1 = $BoundParameterList.Keys.Where({ $_ -in $MutuallyExclusiveList1 })
+            $itemFoundFromList2 = $BoundParameterList.Keys.Where({ $_ -in $MutuallyExclusiveList2 })
 
-        New-InvalidArgumentException -ArgumentName 'Parameters' -Message $errorMessage
+            if ($itemFoundFromList1.Count -gt 0 -and $itemFoundFromList2.Count -gt 0)
+            {
+                $errorMessage = `
+                    $script:localizedData.ParameterUsageWrong `
+                        -f ($MutuallyExclusiveList1 -join "','"), ($MutuallyExclusiveList2 -join "','")
+
+                New-InvalidArgumentException -ArgumentName 'Parameters' -Message $errorMessage
+            }
+
+            break
+        }
+
+        'RequiredParameter'
+        {
+            Assert-RequiredCommandParameter @PSBoundParameters
+
+            break
+        }
     }
 }
-#EndRegion './Public/Assert-BoundParameter.ps1' 70
+#EndRegion './Public/Assert-BoundParameter.ps1' 111
+#Region './Public/Assert-ElevatedUser.ps1' 0
+<#
+    .SYNOPSIS
+        Assert that the user has elevated the PowerShell session.
+
+    .DESCRIPTION
+        Assert that the user has elevated the PowerShell session.
+
+    .EXAMPLE
+        Assert-ElevatedUser
+
+        Throws an exception if the user has not elevated the PowerShell session.
+
+    .OUTPUTS
+        None.
+#>
+function Assert-ElevatedUser
+{
+    [CmdletBinding()]
+    param ()
+
+    $isElevated = $false
+
+    if ($IsMacOS -or $IsLinux)
+    {
+        $isElevated = (id -u) -eq 0
+    }
+    else
+    {
+        [Security.Principal.WindowsPrincipal] $user = [Security.Principal.WindowsIdentity]::GetCurrent()
+
+        $isElevated = $user.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+    }
+
+    if (-not $isElevated)
+    {
+        $PSCmdlet.ThrowTerminatingError(
+            [System.Management.Automation.ErrorRecord]::new(
+                $script:localizedData.ElevatedUser_UserNotElevated,
+                'UserNotElevated',
+                [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                'Command parameters'
+            )
+        )
+    }
+}
+#EndRegion './Public/Assert-ElevatedUser.ps1' 46
 #Region './Public/Assert-IPAddress.ps1' 0
 <#
     .SYNOPSIS
@@ -1572,6 +1808,178 @@ function Get-ComputerName
     return $computerName
 }
 #EndRegion './Public/Get-ComputerName.ps1' 38
+#Region './Public/Get-DscProperty.ps1' 0
+
+<#
+    .SYNOPSIS
+        Returns DSC resource properties that is part of a class-based DSC resource.
+
+    .DESCRIPTION
+        Returns DSC resource properties that is part of a class-based DSC resource.
+        The properties can be filtered using name, attribute, or if it has been
+        assigned a value.
+
+    .PARAMETER InputObject
+        The object that contain one or more key properties.
+
+    .PARAMETER Name
+        Specifies one or more property names to return. If left out all properties
+        are returned.
+
+    .PARAMETER ExcludeName
+        Specifies one or more property names to exclude.
+
+    .PARAMETER Attribute
+        Specifies one or more property attributes to return. If left out all property
+        types are returned.
+
+    .PARAMETER HasValue
+        Specifies to return only properties that has been assigned a non-null value.
+        If left out all properties are returned regardless if there is a value
+        assigned or not.
+
+    .EXAMPLE
+        Get-DscProperty -InputObject $this
+
+        Returns all DSC resource properties of the DSC resource.
+
+    .EXAMPLE
+        $this | Get-DscProperty
+
+        Returns all DSC resource properties of the DSC resource.
+
+    .EXAMPLE
+        Get-DscProperty -InputObject $this -Name @('MyProperty1', 'MyProperty2')
+
+        Returns the DSC resource properties with the specified names.
+
+    .EXAMPLE
+        Get-DscProperty -InputObject $this -Attribute @('Mandatory', 'Optional')
+
+        Returns the DSC resource properties that has the specified attributes.
+
+    .EXAMPLE
+        Get-DscProperty -InputObject $this -Attribute @('Optional') -HasValue
+
+        Returns the DSC resource properties that has the specified attributes and
+        has a non-null value assigned.
+
+    .OUTPUTS
+        [System.Collections.Hashtable]
+
+    .NOTES
+        This command only works with nullable data types, if using a non-nullable
+        type make sure to make it nullable, e.g. [Nullable[System.Int32]].
+#>
+function Get-DscProperty
+{
+    [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [PSObject]
+        $InputObject,
+
+        [Parameter()]
+        [System.String[]]
+        $Name,
+
+        [Parameter()]
+        [System.String[]]
+        $ExcludeName,
+
+        [Parameter()]
+        [ValidateSet('Key', 'Mandatory', 'NotConfigurable', 'Optional')]
+        [Alias('Type')]
+        [System.String[]]
+        $Attribute,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $HasValue
+    )
+
+    process
+    {
+        $property = $InputObject.PSObject.Properties.Name |
+            Where-Object -FilterScript {
+                <#
+                    Return all properties if $Name is not assigned, or if assigned
+                    just those properties.
+                #>
+                (-not $Name -or $_ -in $Name) -and
+
+                <#
+                    Return all properties if $ExcludeName is not assigned. Skip
+                    property if it is included in $ExcludeName.
+                #>
+                (-not $ExcludeName -or ($_ -notin $ExcludeName)) -and
+
+                # Only return the property if it is a DSC property.
+                $InputObject.GetType().GetMember($_).CustomAttributes.Where(
+                    {
+                        $_.AttributeType.Name -eq 'DscPropertyAttribute'
+                    }
+                )
+            }
+
+        if (-not [System.String]::IsNullOrEmpty($property))
+        {
+            if ($PSBoundParameters.ContainsKey('Attribute'))
+            {
+                $propertiesOfAttribute = @()
+
+                $propertiesOfAttribute += $property | Where-Object -FilterScript {
+                    $InputObject.GetType().GetMember($_).CustomAttributes.Where(
+                        {
+                            <#
+                                To simplify the code, ignoring that this will compare
+                                MemberNAme against type 'Optional' which does not exist.
+                            #>
+                            $_.NamedArguments.MemberName -in $Attribute
+                        }
+                    ).NamedArguments.TypedValue.Value -eq $true
+                }
+
+                # Include all optional parameter if it was requested.
+                if ($Attribute -contains 'Optional')
+                {
+                    $propertiesOfAttribute += $property | Where-Object -FilterScript {
+                        $InputObject.GetType().GetMember($_).CustomAttributes.Where(
+                            {
+                                $_.NamedArguments.MemberName -notin @('Key', 'Mandatory', 'NotConfigurable')
+                            }
+                        )
+                    }
+                }
+
+                $property = $propertiesOfAttribute
+            }
+        }
+
+        # Return a hashtable containing each key property and its value.
+        $getPropertyResult = @{}
+
+        foreach ($currentProperty in $property)
+        {
+            if ($HasValue.IsPresent)
+            {
+                $isAssigned = Test-DscPropertyIsAssigned -Name $currentProperty -InputObject $InputObject
+
+                if (-not $isAssigned)
+                {
+                    continue
+                }
+            }
+
+            $getPropertyResult.$currentProperty = $InputObject.$currentProperty
+        }
+
+        return $getPropertyResult
+    }
+}
+#EndRegion './Public/Get-DscProperty.ps1' 171
 #Region './Public/Get-LocalizedData.ps1' 0
 
 <#
@@ -2743,6 +3151,81 @@ function Set-PSModulePath
     }
 }
 #EndRegion './Public/Set-PSModulePath.ps1' 53
+#Region './Public/Test-AccountRequirePassword.ps1' 0
+<#
+    .SYNOPSIS
+        Returns whether the specified account require a password to be provided.
+
+    .DESCRIPTION
+        Returns whether the specified account require a password to be provided.
+        If the account is a (global) managed service account, virtual account, or a
+        built-in account then there is no need to provide a password.
+
+    .PARAMETER Name
+        Credential name for the account.
+
+    .EXAMPLE
+        Test-AccountRequirePassword -Name 'DOMAIN\MyMSA$'
+
+        Returns $false as a manged service account does not need a password.
+
+    .EXAMPLE
+        Test-AccountRequirePassword -Name 'DOMAIN\MySqlUser'
+
+        Returns $true as a user account need a password.
+
+    .EXAMPLE
+        Test-AccountRequirePassword -Name 'NT SERVICE\MSSQL$PAYROLL'
+
+        Returns $false as a virtual account does not need a password.
+
+    .OUTPUTS
+        [System.Boolean]
+#>
+function Test-AccountRequirePassword
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name
+    )
+
+    # Assume local or domain service account.
+    $requirePassword = $true
+
+    switch -Regex ($Name.ToUpper())
+    {
+        # Built-in account.
+        '^(?:NT ?AUTHORITY\\)?(SYSTEM|LOCALSERVICE|LOCAL SERVICE|NETWORKSERVICE|NETWORK SERVICE)$' # CSpell: disable-line
+        {
+            $requirePassword = $false
+
+            break
+        }
+
+        # Virtual account.
+        '^(?:NT SERVICE\\)(.*)$'
+        {
+            $requirePassword = $false
+
+            break
+        }
+
+        # (Global) Managed Service Account.
+        '\$$'
+        {
+            $requirePassword = $false
+
+            break
+        }
+    }
+
+    return $requirePassword
+}
+#EndRegion './Public/Test-AccountRequirePassword.ps1' 74
 #Region './Public/Test-DscParameterState.ps1' 0
 <#
     .SYNOPSIS
@@ -2874,6 +3357,109 @@ function Test-DscParameterState
     return $returnValue
 }
 #EndRegion './Public/Test-DscParameterState.ps1' 130
+#Region './Public/Test-DscProperty.ps1' 0
+<#
+    .SYNOPSIS
+        Tests whether the class-based resource has the specified property.
+
+    .DESCRIPTION
+        Tests whether the class-based resource has the specified property.
+
+    .PARAMETER InputObject
+        Specifies the object that should be tested for existens of the specified
+        property.
+
+    .PARAMETER Name
+        Specifies the name of the property.
+
+    .PARAMETER HasValue
+        Specifies if the property should be evaluated to have a non-value. If
+        the property exist but is assigned `$null` the command returns `$false`.
+
+    .PARAMETER Attribute
+        Specifies if the property should be evaluated to have a specific attribute.
+        If the property exist but is not the specific attribute the command returns
+        `$false`.
+
+    .EXAMPLE
+        Test-DscProperty -InputObject $this -Name 'MyDscProperty'
+
+        Returns $true or $false whether the property exist or not.
+
+    .EXAMPLE
+        $this | Test-DscProperty -Name 'MyDscProperty'
+
+        Returns $true or $false whether the property exist or not.
+
+    .EXAMPLE
+        Test-DscProperty -InputObject $this -Name 'MyDscProperty' -HasValue
+
+        Returns $true if the property exist and is assigned a non-null value, if not
+        $false is returned.
+
+    .EXAMPLE
+        Test-DscProperty -InputObject $this -Name 'MyDscProperty' -Attribute 'Optional'
+
+        Returns `$true` if the property exist and is an optional property.
+
+    .EXAMPLE
+        Test-DscProperty -InputObject $this -Name 'MyDscProperty' -Attribute 'Optional' -HasValue
+
+        Returns `$true` if the property exist, is an optional property, and is
+        assigned a non-null value.
+
+    .OUTPUTS
+        [System.Boolean]
+
+    .NOTES
+        This command only works with nullable data types, if using a non-nullable
+        type make sure to make it nullable, e.g. [Nullable[System.Int32]].
+#>
+function Test-DscProperty
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [PSObject]
+        $InputObject,
+
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $HasValue,
+
+        [Parameter()]
+        [ValidateSet('Key', 'Mandatory', 'NotConfigurable', 'Optional')]
+        [System.String[]]
+        $Attribute
+    )
+
+    begin
+    {
+        $hasProperty = $false
+    }
+
+    process
+    {
+        $isDscProperty = (Get-DscProperty @PSBoundParameters).ContainsKey($Name)
+
+        if ($isDscProperty)
+        {
+            $hasProperty = $true
+        }
+    }
+
+    end
+    {
+        return $hasProperty
+    }
+}
+#EndRegion './Public/Test-DscProperty.ps1' 102
 #Region './Public/Test-IsNanoServer.ps1' 0
 <#
     .SYNOPSIS
@@ -2904,6 +3490,76 @@ function Test-IsNanoServer
     return ($operatingSystemSKU -in ($productDatacenterNanoServer, $productStandardNanoServer))
 }
 #EndRegion './Public/Test-IsNanoServer.ps1' 29
+#Region './Public/Test-IsNumericType.ps1' 0
+<#
+    .SYNOPSIS
+        Returns whether the specified object is of a numeric type.
+
+    .DESCRIPTION
+        Returns whether the specified object is of a numeric type.
+
+    .PARAMETER Object
+       The object to test if it is a numeric type.
+
+    .EXAMPLE
+        Test-IsNumericType -Object ([System.UInt32] 1)
+
+        Returns $true since the object passed is of a numeric type.
+
+    .EXAMPLE
+        ('a', 2, 'b') | Test-IsNumericType
+
+        Returns $true since one of the values in the array is of a numeric type.
+
+    .OUTPUTS
+        [System.Boolean]
+
+    .NOTES
+        When passing in an array of values from the pipeline, the command will return
+        $true if any of the values in the array is numeric.
+#>
+function Test-IsNumericType
+{
+    [CmdletBinding()]
+    [OutputType([System.Boolean])]
+    param
+    (
+        [Parameter(ValueFromPipeline = $true)]
+        [System.Object]
+        $Object
+    )
+
+    begin
+    {
+        $isNumeric = $false
+    }
+
+    process
+    {
+        if (
+            $Object -is [System.Byte] -or
+            $Object -is [System.Int16] -or
+            $Object -is [System.Int32] -or
+            $Object -is [System.Int64] -or
+            $Object -is [System.SByte] -or
+            $Object -is [System.UInt16] -or
+            $Object -is [System.UInt32] -or
+            $Object -is [System.UInt64] -or
+            $Object -is [System.Decimal] -or
+            $Object -is [System.Double] -or
+            $Object -is [System.Single]
+        )
+        {
+            $isNumeric = $true
+        }
+    }
+
+    end
+    {
+        return $isNumeric
+    }
+}
+#EndRegion './Public/Test-IsNumericType.ps1' 69
 #Region './suffix.ps1' 0
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 #EndRegion './suffix.ps1' 2

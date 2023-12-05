@@ -84,6 +84,11 @@
     Allowed values: Automatic, Manual
     Specifies the failover mode. When creating a group the default is 'Manual'.
 
+.PARAMETER SeedingMode
+    Write - String
+    Allowed values: Automatic, Manual
+    Specifies the seeding mode. When creating a group the default is 'Manual'.
+
 .PARAMETER HealthCheckTimeout
     Write - UInt32
     Specifies the length of time, in milliseconds, after which AlwaysOn Availability Groups declare an unresponsive server to be unhealthy. When creating a group the default is 30000.

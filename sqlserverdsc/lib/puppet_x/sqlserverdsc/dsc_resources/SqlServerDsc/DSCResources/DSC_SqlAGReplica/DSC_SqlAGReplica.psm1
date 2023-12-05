@@ -5,6 +5,7 @@ Import-Module -Name $script:sqlServerDscHelperModulePath
 Import-Module -Name $script:resourceHelperModulePath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
+
 <#
     .SYNOPSIS
         Gets the specified Availability Group Replica from the specified Availability Group.
@@ -50,7 +51,10 @@ function Get-TargetResource
     )
 
     # Connect to the instance
-    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
+    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'Stop'
+
+    # Define current version for check compatibility
+    $sqlMajorVersion = $serverObject.Version.Major
 
     # Is this node actively hosting the SQL instance?
     $isActiveNode = Test-ActiveNode -ServerObject $serverObject
@@ -65,8 +69,8 @@ function Get-TargetResource
     # Create the return object
     $alwaysOnAvailabilityGroupReplicaResource = @{
         Ensure                        = 'Absent'
-        Name                          = ''
-        AvailabilityGroupName         = ''
+        Name                          = $Name
+        AvailabilityGroupName         = $AvailabilityGroupName
         AvailabilityMode              = ''
         BackupPriority                = ''
         ConnectionModeInPrimaryRole   = ''
@@ -82,14 +86,16 @@ function Get-TargetResource
         EndpointHostName              = $serverObject.NetName
     }
 
+    if ( ( $sqlMajorVersion -ge 13 ) )
+    {
+        $alwaysOnAvailabilityGroupReplicaResource.Add('SeedingMode', '')
+    }
+
     # Get the availability group
     $availabilityGroup = $serverObject.AvailabilityGroups[$AvailabilityGroupName]
 
     if ( $availabilityGroup )
     {
-        # Add the Availability Group name to the results
-        $alwaysOnAvailabilityGroupReplicaResource.AvailabilityGroupName = $availabilityGroup.Name
-
         # Try to find the replica
         $availabilityGroupReplica = $availabilityGroup.AvailabilityReplicas[$Name]
 
@@ -97,7 +103,6 @@ function Get-TargetResource
         {
             # Add the Availability Group Replica properties to the results
             $alwaysOnAvailabilityGroupReplicaResource.Ensure = 'Present'
-            $alwaysOnAvailabilityGroupReplicaResource.Name = $availabilityGroupReplica.Name
             $alwaysOnAvailabilityGroupReplicaResource.AvailabilityMode = $availabilityGroupReplica.AvailabilityMode
             $alwaysOnAvailabilityGroupReplicaResource.BackupPriority = $availabilityGroupReplica.BackupPriority
             $alwaysOnAvailabilityGroupReplicaResource.ConnectionModeInPrimaryRole = $availabilityGroupReplica.ConnectionModeInPrimaryRole
@@ -106,6 +111,18 @@ function Get-TargetResource
             $alwaysOnAvailabilityGroupReplicaResource.EndpointUrl = $availabilityGroupReplica.EndpointUrl
             $alwaysOnAvailabilityGroupReplicaResource.ReadOnlyRoutingConnectionUrl = $availabilityGroupReplica.ReadOnlyRoutingConnectionUrl
             $alwaysOnAvailabilityGroupReplicaResource.ReadOnlyRoutingList = $availabilityGroupReplica.ReadOnlyRoutingList
+
+            if (  $sqlMajorVersion -ge 13  )
+            {
+                if ( (Get-Command -Name 'New-SqlAvailabilityReplica').Parameters.ContainsKey('SeedingMode') )
+                {
+                    $alwaysOnAvailabilityGroupReplicaResource.'SeedingMode' = $availabilityGroupReplica.SeedingMode
+                }
+                else
+                {
+                    $alwaysOnAvailabilityGroupReplicaResource.'SeedingMode' = $null
+                }
+            }
         }
     }
 
@@ -165,6 +182,10 @@ function Get-TargetResource
     .PARAMETER ProcessOnlyOnActiveNode
         Specifies that the resource will only determine if a change is needed if the target node is the active host of the SQL Server Instance.
         Not used in Set-TargetResource.
+
+    .PARAMETER SeedingMode
+        Specifies the seeding mode. When creating a replica the default is 'Manual'.
+        This parameter can only be used when the module SqlServer is installed.
 #>
 function Set-TargetResource
 {
@@ -239,13 +260,21 @@ function Set-TargetResource
 
         [Parameter()]
         [System.Boolean]
-        $ProcessOnlyOnActiveNode
+        $ProcessOnlyOnActiveNode,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Manual')]
+        [System.String]
+        $SeedingMode = 'Manual'
     )
 
-    Import-SQLPSModule
+    Import-SqlDscPreferredModule
 
     # Connect to the instance
-    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
+    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'Stop'
+
+    # Define current version for check compatibility
+    $sqlMajorVersion = $serverObject.Version.Major
 
     # Determine if HADR is enabled on the instance. If not, throw an error
     if ( -not $serverObject.IsHadrEnabled )
@@ -323,33 +352,41 @@ function Set-TargetResource
                 $availabilityGroupReplica = $availabilityGroup.AvailabilityReplicas[$Name]
                 if ( $availabilityGroupReplica )
                 {
+                    $availabilityGroupReplicaUpdatesRequired = $false
+
                     # Get the parameters that were submitted to the function
                     [System.Array] $submittedParameters = $PSBoundParameters.Keys
+
+                    if ( ( $submittedParameters -contains 'FailoverMode' ) -and ( $FailoverMode -ne $availabilityGroupReplica.FailoverMode ) )
+                    {
+                        $availabilityGroupReplica.FailoverMode = $FailoverMode
+                        $availabilityGroupReplicaUpdatesRequired = $true
+                    }
 
                     if ( ( $submittedParameters -contains 'AvailabilityMode' ) -and (  $AvailabilityMode -ne $availabilityGroupReplica.AvailabilityMode ) )
                     {
                         $availabilityGroupReplica.AvailabilityMode = $AvailabilityMode
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     if ( ( $submittedParameters -contains 'BackupPriority' ) -and ( $BackupPriority -ne $availabilityGroupReplica.BackupPriority ) )
                     {
                         $availabilityGroupReplica.BackupPriority = $BackupPriority
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     # Make sure ConnectionModeInPrimaryRole has a value in order to avoid false positive matches when the parameter is not defined
                     if ( ( -not [System.String]::IsNullOrEmpty($ConnectionModeInPrimaryRole) ) -and ( $ConnectionModeInPrimaryRole -ne $availabilityGroupReplica.ConnectionModeInPrimaryRole ) )
                     {
                         $availabilityGroupReplica.ConnectionModeInPrimaryRole = $ConnectionModeInPrimaryRole
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     # Make sure ConnectionModeInSecondaryRole has a value in order to avoid false positive matches when the parameter is not defined
                     if ( ( -not [System.String]::IsNullOrEmpty($ConnectionModeInSecondaryRole) ) -and ( $ConnectionModeInSecondaryRole -ne $availabilityGroupReplica.ConnectionModeInSecondaryRole ) )
                     {
                         $availabilityGroupReplica.ConnectionModeInSecondaryRole = $ConnectionModeInSecondaryRole
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     # Break out the EndpointUrl properties
@@ -359,33 +396,27 @@ function Set-TargetResource
                     {
                         $newEndpointUrl = $availabilityGroupReplica.EndpointUrl.Replace($currentEndpointPort, $endpoint.Protocol.Tcp.ListenerPort)
                         $availabilityGroupReplica.EndpointUrl = $newEndpointUrl
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     if ( ( $submittedParameters -contains 'EndpointHostName' ) -and ( $EndpointHostName -ne $currentEndpointHostName ) )
                     {
                         $newEndpointUrl = $availabilityGroupReplica.EndpointUrl.Replace($currentEndpointHostName, $EndpointHostName)
                         $availabilityGroupReplica.EndpointUrl = $newEndpointUrl
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     if ( $currentEndpointProtocol -ne 'TCP' )
                     {
                         $newEndpointUrl = $availabilityGroupReplica.EndpointUrl.Replace($currentEndpointProtocol, 'TCP')
                         $availabilityGroupReplica.EndpointUrl = $newEndpointUrl
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
-                    }
-
-                    if ( ( $submittedParameters -contains 'FailoverMode' ) -and ( $FailoverMode -ne $availabilityGroupReplica.FailoverMode ) )
-                    {
-                        $availabilityGroupReplica.FailoverMode = $FailoverMode
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     if ( ( $submittedParameters -contains 'ReadOnlyRoutingConnectionUrl' ) -and ( $ReadOnlyRoutingConnectionUrl -ne $availabilityGroupReplica.ReadOnlyRoutingConnectionUrl ) )
                     {
                         $availabilityGroupReplica.ReadOnlyRoutingConnectionUrl = $ReadOnlyRoutingConnectionUrl
-                        Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
+                        $availabilityGroupReplicaUpdatesRequired = $true
                     }
 
                     if ( ( $submittedParameters -contains 'ReadOnlyRoutingList' ) -and ( ( $ReadOnlyRoutingList -join ',' ) -ne ( $availabilityGroupReplica.ReadOnlyRoutingList -join ',' ) ) )
@@ -395,6 +426,20 @@ function Set-TargetResource
                         {
                             $availabilityGroupReplica.ReadOnlyRoutingList.Add($readOnlyRoutingListEntry) | Out-Null
                         }
+                        $availabilityGroupReplicaUpdatesRequired = $true
+                    }
+
+                    if ( ( $submittedParameters -contains 'SeedingMode' ) -and ( $sqlMajorVersion -ge 13 ) -and ( $SeedingMode -ne $availabilityGroupReplica.SeedingMode ) )
+                    {
+                        if ((Get-Command -Name 'New-SqlAvailabilityReplica').Parameters.ContainsKey('SeedingMode'))
+                        {
+                            $availabilityGroupReplica.SeedingMode = $SeedingMode
+                            $availabilityGroupReplicaUpdatesRequired = $true
+                        }
+                    }
+
+                    if ( $availabilityGroupReplicaUpdatesRequired )
+                    {
                         Update-AvailabilityGroupReplica -AvailabilityGroupReplica $availabilityGroupReplica
                     }
                 }
@@ -407,7 +452,7 @@ function Set-TargetResource
             else
             {
                 # Connect to the instance that is supposed to house the primary replica
-                $primaryReplicaServerObject = Connect-SQL -ServerName $PrimaryReplicaServerName -InstanceName $PrimaryReplicaInstanceName
+                $primaryReplicaServerObject = Connect-SQL -ServerName $PrimaryReplicaServerName -InstanceName $PrimaryReplicaInstanceName -ErrorAction 'Stop'
 
                 # Verify the Availability Group exists on the supplied primary replica
                 $primaryReplicaAvailabilityGroup = $primaryReplicaServerObject.AvailabilityGroups[$AvailabilityGroupName]
@@ -452,6 +497,11 @@ function Set-TargetResource
                     if ( $ReadOnlyRoutingList )
                     {
                         $newAvailabilityGroupReplicaParams.Add('ReadOnlyRoutingList', $ReadOnlyRoutingList)
+                    }
+
+                    if ( ( $sqlMajorVersion -ge 13 ) -and (Get-Command -Name 'New-SqlAvailabilityReplica').Parameters.ContainsKey('SeedingMode') )
+                    {
+                        $newAvailabilityGroupReplicaParams.Add('SeedingMode', $SeedingMode)
                     }
 
                     # Create the Availability Group Replica
@@ -547,10 +597,14 @@ function Set-TargetResource
 
     .PARAMETER ProcessOnlyOnActiveNode
         Specifies that the resource will only determine if a change is needed if the target node is the active host of the SQL Server Instance.
+
+    .PARAMETER SeedingMode
+        Specifies the seeding mode. When creating a replica the default is 'Manual'.
+        This parameter can only be used when the module SqlServer is installed.
 #>
 function Test-TargetResource
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification='The command Connect-Sql is called when Get-TargetResource is called')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('SqlServerDsc.AnalyzerRules\Measure-CommandsNeededToLoadSMO', '', Justification = 'The command Connect-Sql is called when Get-TargetResource is called')]
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
@@ -623,7 +677,12 @@ function Test-TargetResource
 
         [Parameter()]
         [System.Boolean]
-        $ProcessOnlyOnActiveNode
+        $ProcessOnlyOnActiveNode,
+
+        [Parameter()]
+        [ValidateSet('Automatic', 'Manual')]
+        [System.String]
+        $SeedingMode = 'Manual'
     )
 
     $getTargetResourceParameters = @{
@@ -672,11 +731,6 @@ function Test-TargetResource
         'Present'
         {
             $parametersToCheck = @(
-                'Name',
-                'AvailabilityGroupName',
-                'ServerName',
-                'InstanceName',
-                'Ensure',
                 'AvailabilityMode',
                 'BackupPriority',
                 'ConnectionModeInPrimaryRole',
@@ -685,6 +739,10 @@ function Test-TargetResource
                 'ReadOnlyRoutingConnectionUrl',
                 'ReadOnlyRoutingList'
             )
+            if ( $getTargetResourceResult.SeedingMode)
+            {
+                $parametersToCheck += 'SeedingMode'
+            }
 
             if ( $getTargetResourceResult.Ensure -eq 'Present' )
             {
@@ -721,13 +779,8 @@ function Test-TargetResource
                 # Get the Endpoint URL properties
                 $currentEndpointProtocol, $currentEndpointHostName, $currentEndpointPort = $getTargetResourceResult.EndpointUrl.Replace('//', '').Split(':')
 
-                if ( -not $EndpointHostName )
-                {
-                    $EndpointHostName = $getTargetResourceResult.EndpointHostName
-                }
-
                 # Verify the hostname in the endpoint URL is correct
-                if ( $EndpointHostName -ne $currentEndpointHostName )
+                if ( $PSBoundParameters.ContainsKey('EndpointHostName') -and $EndpointHostName -ne $currentEndpointHostName )
                 {
                     Write-Verbose -Message (
                         $script:localizedData.ParameterNotInDesiredState -f 'EndpointHostName', $EndpointHostName, $currentEndpointHostName

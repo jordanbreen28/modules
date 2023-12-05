@@ -67,9 +67,10 @@
     - SSMS
     - ADV_SSMS
 
-    > Note: It is not possible to add or remove features to a SQL Server failover
-    >cluster. This is a limitation of SQL Server. See article
-    >https://support.microsoft.com/en-us/help/2547273/you-cannot-add-or-remove-features-to-a-sql-server-2008,-sql-server-2008-r2,-or-sql-server-2012-failover-cluster.
+    > [!NOTE]
+    > It is not possible to add or remove features to a SQL Server failover
+    > cluster. This is a limitation of SQL Server. See article
+    > https://support.microsoft.com/en-us/help/2547273/you-cannot-add-or-remove-features-to-a-sql-server-2008,-sql-server-2008-r2,-or-sql-server-2012-failover-cluster.
 
     ## Skip rules
 
@@ -142,8 +143,9 @@
     more feature flags can be added to the parameter FeatureFlag, i.e.
     FeatureFlag = @('DetectionSharedFeatures').
 
-    >Note: The functionality, exposed with a feature flag, can be changed
-    >from one release to another, including having breaking changes.
+    > [!NOTE]
+    > The functionality, exposed with a feature flag, can be changed
+    > from one release to another, including having breaking changes.
 
     <!-- markdownlint-disable MD013 -->
     Feature flag | Description
@@ -159,7 +161,7 @@
 .PARAMETER Action
     Write - String
     Allowed values: Install, Upgrade, InstallFailoverCluster, AddNode, PrepareFailoverCluster, CompleteFailoverCluster
-    The action to be performed. Default value is 'Install'. NOTE: AddNode is not currently functional.
+    The action to be performed. Default value is 'Install'. <br />> [!NOTE] AddNode is not currently functional.
 
 .PARAMETER SourcePath
     Required - String
@@ -434,6 +436,14 @@
     Write - StringArray
     Specifies optional skip rules during setup.
 
+.PARAMETER ServerName
+    Write - String
+    Specifies the host or network name of the SQL Server instance. If the SQL Server belongs to a cluster or availability group it could be set to the host name for the listener or cluster group. If using a secure connection the specified value should be the same name that is used in the certificate. Default value is the current computer name.
+
+.PARAMETER SqlVersion
+    Write - String
+    Specifies the SQL Server version that should be installed. Only the major version will be used, but the provided value must be set to at least major and minor version (e.g. 14.0). When providing this parameter the media will not be used to evaluate version. Although, if the setup action is Upgrade then setting this parameter will throw an exception as the version from the install media is required.
+
 .PARAMETER IsClustered
     Read - Boolean
     Returns a boolean value of $true if the instance is clustered, otherwise it returns $false.
@@ -473,6 +483,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -567,6 +578,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -662,6 +674,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -775,6 +788,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -896,6 +910,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -975,6 +990,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -1072,6 +1088,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost
@@ -1167,6 +1184,7 @@ Configuration Example
         $SqlAgentServiceCredential = $SqlServiceCredential
     )
 
+    Import-DscResource -ModuleName 'xPSDesiredStateConfiguration' -ModuleVersion '9.1.0'
     Import-DscResource -ModuleName 'SqlServerDsc'
 
     node localhost

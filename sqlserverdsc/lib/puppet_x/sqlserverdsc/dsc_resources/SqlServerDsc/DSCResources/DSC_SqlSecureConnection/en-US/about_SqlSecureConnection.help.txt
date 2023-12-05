@@ -6,9 +6,10 @@
     to be encrypted. Read more about encrypted connections in this article
     https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/enable-encrypted-connections-to-the-database-engine.
 
-    >Note: The 'LocalSystem' service account will return a connection
-    >error, even though the connection has been successful. In that case,
-    >the 'SYSTEM' service account can be used.
+    > [!NOTE]
+    > The 'LocalSystem' service account will return a connection
+    > error, even though the connection has been successful. In that case,
+    > the 'SYSTEM' service account can be used.
 
     ## Requirements
 
@@ -51,6 +52,10 @@
     Allowed values: Present, Absent
     If encryption should be enabled ('Present') or disabled ('Absent').
 
+.PARAMETER ServerName
+    Write - String
+    Specifies the host name that will be used when restarting the SQL Server instance. If the SQL Server belongs to a cluster or availability group specify the host name for the listener or cluster group. The specified name must match the name that is used by the certificate specified for the parameter Thumbprint. Default value is localhost.
+
 .EXAMPLE 1
 
 This example performs a standard Sql encryption setup. Forcing all connections to be encrypted.
@@ -68,6 +73,7 @@ Configuration Example
             ForceEncryption = $true
             Ensure          = 'Present'
             ServiceAccount  = 'SqlSvc'
+            ServerName      = 'host.company.local'
         }
     }
 }

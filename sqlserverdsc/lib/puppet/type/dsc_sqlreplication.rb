@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlReplication',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlReplication resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -26,6 +26,7 @@ Puppet::ResourceApi.register_type(
       type: 'String',
       desc: 'Publisher working directory.',
 
+
       mandatory_for_get: true,
       mandatory_for_set: true,
       mof_type: 'String',
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: "Distribution database name. If the parameter **DistributionMode**  is set to `'Local'` this will be created, if `'Remote'` needs to match distribution database on remote distributor. Default value is `'distributor'`.",
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -43,6 +45,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -53,6 +56,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'Force flag for uninstall procedure. Default values is `$trueÂ´.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -61,6 +65,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'Specifies the _SQL Server_ instance name where replication distribution will be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -68,8 +73,9 @@ Puppet::ResourceApi.register_type(
       mof_is_embedded: false,
     },
     dsc_ensure: {
-      type: "Optional[Enum['Present', 'Absent', 'present', 'absent']]",
+      type: "Optional[Enum['Present', 'present', 'Absent', 'absent']]",
       desc: "`'Present'` will configure replication, `'Absent'` will disable (remove) replication. Default value is `'Present'`.",
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -79,6 +85,7 @@ Puppet::ResourceApi.register_type(
     dsc_adminlinkcredentials: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: 'AdminLink password to be used when setting up publisher distributor relationship.',
+
       behaviour: :parameter,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -89,14 +96,16 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: "Specifies the _SQL Server_ network name that will be used as distributor for local instance. Required if parameter **DistributionMode**  is set to `'Remote'`.",
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
       mof_is_embedded: false,
     },
     dsc_distributormode: {
-      type: "Enum['Local', 'Remote', 'local', 'remote']",
+      type: "Enum['Local', 'local', 'Remote', 'remote']",
       desc: "`'Local'` - Instance will be configured as it's own distributor. `'Remote'` - Instance will be configure with remote distributor (remote distributor needs to be already configured for distribution).",
+
 
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -106,6 +115,7 @@ Puppet::ResourceApi.register_type(
     dsc_usetrustedconnection: {
       type: 'Optional[Boolean]',
       desc: 'Publisher security mode. Default value is `$true`.',
+
 
       mandatory_for_get: false,
       mandatory_for_set: false,

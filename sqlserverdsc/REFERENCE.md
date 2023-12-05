@@ -6,51 +6,51 @@
 
 ### Resource types
 
-* [`dsc_sqlag`](#dsc_sqlag): The DSC SqlAG resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlagdatabase`](#dsc_sqlagdatabase): The DSC SqlAGDatabase resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlagentalert`](#dsc_sqlagentalert): The DSC SqlAgentAlert resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlagentfailsafe`](#dsc_sqlagentfailsafe): The DSC SqlAgentFailsafe resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlagentoperator`](#dsc_sqlagentoperator): The DSC SqlAgentOperator resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlaglistener`](#dsc_sqlaglistener): The DSC SqlAGListener resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlagreplica`](#dsc_sqlagreplica): The DSC SqlAGReplica resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlalias`](#dsc_sqlalias): The DSC SqlAlias resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlalwaysonservice`](#dsc_sqlalwaysonservice): The DSC SqlAlwaysOnService resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlaudit`](#dsc_sqlaudit): The DSC SqlAudit resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlconfiguration`](#dsc_sqlconfiguration): The DSC SqlConfiguration resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabase`](#dsc_sqldatabase): The DSC SqlDatabase resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabasedefaultlocation`](#dsc_sqldatabasedefaultlocation): The DSC SqlDatabaseDefaultLocation resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabasemail`](#dsc_sqldatabasemail): The DSC SqlDatabaseMail resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabaseobjectpermission`](#dsc_sqldatabaseobjectpermission): The DSC SqlDatabaseObjectPermission resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabasepermission`](#dsc_sqldatabasepermission): The DSC SqlDatabasePermission resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabaserole`](#dsc_sqldatabaserole): The DSC SqlDatabaseRole resource type. Automatically generated from version 16.0.0
-* [`dsc_sqldatabaseuser`](#dsc_sqldatabaseuser): The DSC SqlDatabaseUser resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlendpoint`](#dsc_sqlendpoint): The DSC SqlEndpoint resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlendpointpermission`](#dsc_sqlendpointpermission): The DSC SqlEndpointPermission resource type. Automatically generated from version 16.0.0
-* [`dsc_sqllogin`](#dsc_sqllogin): The DSC SqlLogin resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlmaxdop`](#dsc_sqlmaxdop): The DSC SqlMaxDop resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlmemory`](#dsc_sqlmemory): The DSC SqlMemory resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlpermission`](#dsc_sqlpermission): The DSC SqlPermission resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlprotocol`](#dsc_sqlprotocol): The DSC SqlProtocol resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlprotocoltcpip`](#dsc_sqlprotocoltcpip): The DSC SqlProtocolTcpIp resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlreplication`](#dsc_sqlreplication): The DSC SqlReplication resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlrole`](#dsc_sqlrole): The DSC SqlRole resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlrs`](#dsc_sqlrs): The DSC SqlRS resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlrssetup`](#dsc_sqlrssetup): The DSC SqlRSSetup resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlscript`](#dsc_sqlscript): The DSC SqlScript resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlscriptquery`](#dsc_sqlscriptquery): The DSC SqlScriptQuery resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlsecureconnection`](#dsc_sqlsecureconnection): The DSC SqlSecureConnection resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlserviceaccount`](#dsc_sqlserviceaccount): The DSC SqlServiceAccount resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlsetup`](#dsc_sqlsetup): The DSC SqlSetup resource type. Automatically generated from version 16.0.0
-* [`dsc_sqltraceflag`](#dsc_sqltraceflag): The DSC SqlTraceFlag resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlwaitforag`](#dsc_sqlwaitforag): The DSC SqlWaitForAG resource type. Automatically generated from version 16.0.0
-* [`dsc_sqlwindowsfirewall`](#dsc_sqlwindowsfirewall): The DSC SqlWindowsFirewall resource type. Automatically generated from version 16.0.0
+* [`dsc_sqlag`](#dsc_sqlag): The DSC SqlAG resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlagdatabase`](#dsc_sqlagdatabase): The DSC SqlAGDatabase resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlagentalert`](#dsc_sqlagentalert): The DSC SqlAgentAlert resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlagentfailsafe`](#dsc_sqlagentfailsafe): The DSC SqlAgentFailsafe resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlagentoperator`](#dsc_sqlagentoperator): The DSC SqlAgentOperator resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlaglistener`](#dsc_sqlaglistener): The DSC SqlAGListener resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlagreplica`](#dsc_sqlagreplica): The DSC SqlAGReplica resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlalias`](#dsc_sqlalias): The DSC SqlAlias resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlalwaysonservice`](#dsc_sqlalwaysonservice): The DSC SqlAlwaysOnService resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlaudit`](#dsc_sqlaudit): The DSC SqlAudit resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlconfiguration`](#dsc_sqlconfiguration): The DSC SqlConfiguration resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabase`](#dsc_sqldatabase): The DSC SqlDatabase resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabasedefaultlocation`](#dsc_sqldatabasedefaultlocation): The DSC SqlDatabaseDefaultLocation resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabasemail`](#dsc_sqldatabasemail): The DSC SqlDatabaseMail resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabaseobjectpermission`](#dsc_sqldatabaseobjectpermission): The DSC SqlDatabaseObjectPermission resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabasepermission`](#dsc_sqldatabasepermission): The DSC SqlDatabasePermission resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabaserole`](#dsc_sqldatabaserole): The DSC SqlDatabaseRole resource type. Automatically generated from version 16.5.0
+* [`dsc_sqldatabaseuser`](#dsc_sqldatabaseuser): The DSC SqlDatabaseUser resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlendpoint`](#dsc_sqlendpoint): The DSC SqlEndpoint resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlendpointpermission`](#dsc_sqlendpointpermission): The DSC SqlEndpointPermission resource type. Automatically generated from version 16.5.0
+* [`dsc_sqllogin`](#dsc_sqllogin): The DSC SqlLogin resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlmaxdop`](#dsc_sqlmaxdop): The DSC SqlMaxDop resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlmemory`](#dsc_sqlmemory): The DSC SqlMemory resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlpermission`](#dsc_sqlpermission): The DSC SqlPermission resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlprotocol`](#dsc_sqlprotocol): The DSC SqlProtocol resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlprotocoltcpip`](#dsc_sqlprotocoltcpip): The DSC SqlProtocolTcpIp resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlreplication`](#dsc_sqlreplication): The DSC SqlReplication resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlrole`](#dsc_sqlrole): The DSC SqlRole resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlrs`](#dsc_sqlrs): The DSC SqlRS resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlrssetup`](#dsc_sqlrssetup): The DSC SqlRSSetup resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlscript`](#dsc_sqlscript): The DSC SqlScript resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlscriptquery`](#dsc_sqlscriptquery): The DSC SqlScriptQuery resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlsecureconnection`](#dsc_sqlsecureconnection): The DSC SqlSecureConnection resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlserviceaccount`](#dsc_sqlserviceaccount): The DSC SqlServiceAccount resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlsetup`](#dsc_sqlsetup): The DSC SqlSetup resource type. Automatically generated from version 16.5.0
+* [`dsc_sqltraceflag`](#dsc_sqltraceflag): The DSC SqlTraceFlag resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlwaitforag`](#dsc_sqlwaitforag): The DSC SqlWaitForAG resource type. Automatically generated from version 16.5.0
+* [`dsc_sqlwindowsfirewall`](#dsc_sqlwindowsfirewall): The DSC SqlWindowsFirewall resource type. Automatically generated from version 16.5.0
 
 ## Resource types
 
 ### <a name="dsc_sqlag"></a>`dsc_sqlag`
 
 The DSC SqlAG resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -58,13 +58,13 @@ The following properties are available in the `dsc_sqlag` type.
 
 ##### `dsc_automatedbackuppreference`
 
-Data type: `Optional[Enum['Primary', 'SecondaryOnly', 'Secondary', 'None', 'primary', 'secondaryonly', 'secondary', 'none']]`
+Data type: `Optional[Enum['Primary', 'primary', 'SecondaryOnly', 'secondaryonly', 'Secondary', 'secondary', 'None', 'none']]`
 
 Specifies the automated backup preference for the availability group. When creating a group the default is `'None'`.
 
 ##### `dsc_availabilitymode`
 
-Data type: `Optional[Enum['AsynchronousCommit', 'SynchronousCommit', 'asynchronouscommit', 'synchronouscommit']]`
+Data type: `Optional[Enum['AsynchronousCommit', 'asynchronouscommit', 'SynchronousCommit', 'synchronouscommit']]`
 
 Specifies the replica availability mode. When creating a group the default is `'AsynchronousCommit'`.
 
@@ -82,13 +82,13 @@ Specifies the type of availability group is Basic. This is only available is _SQ
 
 ##### `dsc_connectionmodeinprimaryrole`
 
-Data type: `Optional[Enum['AllowAllConnections', 'AllowReadWriteConnections', 'allowallconnections', 'allowreadwriteconnections']]`
+Data type: `Optional[Enum['AllowAllConnections', 'allowallconnections', 'AllowReadWriteConnections', 'allowreadwriteconnections']]`
 
 Specifies how the availability replica handles connections when in the primary role.
 
 ##### `dsc_connectionmodeinsecondaryrole`
 
-Data type: `Optional[Enum['AllowNoConnections', 'AllowReadIntentConnectionsOnly', 'AllowAllConnections', 'allownoconnections', 'allowreadintentconnectionsonly', 'allowallconnections']]`
+Data type: `Optional[Enum['AllowNoConnections', 'allownoconnections', 'AllowReadIntentConnectionsOnly', 'allowreadintentconnectionsonly', 'AllowAllConnections', 'allowallconnections']]`
 
 Specifies how the availability replica handles connections when in the secondary role.
 
@@ -124,19 +124,19 @@ Returns the URL of the availability group replica endpoint.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the availability group should be present or absent. Default value is `'Present'`.
 
 ##### `dsc_failovermode`
 
-Data type: `Optional[Enum['Automatic', 'Manual', 'automatic', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Manual', 'manual']]`
 
 Specifies the failover mode. When creating a group the default is `'Manual'`.
 
 ##### `dsc_failureconditionlevel`
 
-Data type: `Optional[Enum['OnServerDown', 'OnServerUnresponsive', 'OnCriticalServerErrors', 'OnModerateServerErrors', 'OnAnyQualifiedFailureCondition', 'onserverdown', 'onserverunresponsive', 'oncriticalservererrors', 'onmoderateservererrors', 'onanyqualifiedfailurecondition']]`
+Data type: `Optional[Enum['OnServerDown', 'onserverdown', 'OnServerUnresponsive', 'onserverunresponsive', 'OnCriticalServerErrors', 'oncriticalservererrors', 'OnModerateServerErrors', 'onmoderateservererrors', 'OnAnyQualifiedFailureCondition', 'onanyqualifiedfailurecondition']]`
 
 Specifies the automatic failover behavior of the availability group.
 
@@ -158,6 +158,12 @@ Data type: `Optional[Boolean]`
 
 Specifies that the resource will only determine if a change is needed if the target node is the active host of the _SQL Server_ instance.
 
+##### `dsc_seedingmode`
+
+Data type: `Optional[Enum['Automatic', 'automatic', 'Manual', 'manual']]`
+
+Specifies the seeding mode. When creating a group the default is `'Manual`'.
+
 ##### `dsc_servername`
 
 Data type: `String`
@@ -174,13 +180,13 @@ Returns the major version of the _SQL Server_ instance.
 
 The following parameters are available in the `dsc_sqlag` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlag--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlag--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlag--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlag--name)
+* [`validation_mode`](#-dsc_sqlag--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlag--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -188,7 +194,7 @@ Data type: `String`
 
 Name of the SQL instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlag--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -196,13 +202,13 @@ Data type: `String`
 
 Specifies the name of the availability group.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlag--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlag--name"></a>`name`
 
 namevar
 
@@ -210,7 +216,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlag--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -222,7 +228,7 @@ Default value: `property`
 ### <a name="dsc_sqlagdatabase"></a>`dsc_sqlagdatabase`
 
 The DSC SqlAGDatabase resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -242,7 +248,7 @@ The name of the database(s) to add to the availability group. This accepts wildc
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies the membership of the database(s) in the availability group. The option `'Present'` means that the defined database(s) are added to the availability group. All other databases that may be a member of the availability group are ignored. The option `'Absent'` means that the defined database(s) are removed from the availability group. All other databases that may be a member of the availability group are ignored. The default is `'Present'`.
 
@@ -280,15 +286,15 @@ Set the query timeout in seconds for the backup and restore operations. The defa
 
 The following parameters are available in the `dsc_sqlagdatabase` type.
 
-* [`dsc_availabilitygroupname`](#dsc_availabilitygroupname)
-* [`dsc_force`](#dsc_force)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_servername`](#dsc_servername)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_availabilitygroupname`](#-dsc_sqlagdatabase--dsc_availabilitygroupname)
+* [`dsc_force`](#-dsc_sqlagdatabase--dsc_force)
+* [`dsc_instancename`](#-dsc_sqlagdatabase--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlagdatabase--dsc_psdscrunascredential)
+* [`dsc_servername`](#-dsc_sqlagdatabase--dsc_servername)
+* [`name`](#-dsc_sqlagdatabase--name)
+* [`validation_mode`](#-dsc_sqlagdatabase--validation_mode)
 
-##### <a name="dsc_availabilitygroupname"></a>`dsc_availabilitygroupname`
+##### <a name="-dsc_sqlagdatabase--dsc_availabilitygroupname"></a>`dsc_availabilitygroupname`
 
 namevar
 
@@ -296,14 +302,14 @@ Data type: `String`
 
 The name of the availability group in which to manage the database membership(s).
 
-##### <a name="dsc_force"></a>`dsc_force`
+##### <a name="-dsc_sqlagdatabase--dsc_force"></a>`dsc_force`
 
 Data type: `Optional[Boolean]`
 
 When parameter **Ensure** is set to `'Present'` it ensures the specified database(s) are the only databases that are a
 member of the specified Availability Group. This parameter is ignored when parameter **Ensure** is set to `'Absent'`.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlagdatabase--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -312,13 +318,13 @@ Data type: `String`
 Name of the _SQL Server_ instance where the primary replica of the availability group lives. If the availability group
 is not currently on this instance, the resource will attempt to connect to the instance where the primary replica lives.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlagdatabase--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_servername"></a>`dsc_servername`
+##### <a name="-dsc_sqlagdatabase--dsc_servername"></a>`dsc_servername`
 
 namevar
 
@@ -327,7 +333,7 @@ Data type: `String`
 Hostname of the _SQL Server_ where the primary replica of the availability group lives. If the availability group is not
 currently on this server, the resource will attempt to connect to the server where the primary replica lives.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlagdatabase--name"></a>`name`
 
 namevar
 
@@ -335,7 +341,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlagdatabase--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -347,7 +353,7 @@ Default value: `property`
 ### <a name="dsc_sqlagentalert"></a>`dsc_sqlagentalert`
 
 The DSC SqlAgentAlert resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -355,7 +361,7 @@ The following properties are available in the `dsc_sqlagentalert` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the _SQL Server Agent_ alert should be present or absent. Default value is `'Present'`.
 
@@ -381,13 +387,13 @@ The severity of the _SQL Server Agent_ alert.
 
 The following parameters are available in the `dsc_sqlagentalert` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlagentalert--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlagentalert--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlagentalert--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlagentalert--name)
+* [`validation_mode`](#-dsc_sqlagentalert--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlagentalert--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -395,7 +401,7 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlagentalert--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -403,13 +409,13 @@ Data type: `String`
 
 The name of the _SQL Server Agent_ alert.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlagentalert--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlagentalert--name"></a>`name`
 
 namevar
 
@@ -417,7 +423,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlagentalert--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -429,7 +435,7 @@ Default value: `property`
 ### <a name="dsc_sqlagentfailsafe"></a>`dsc_sqlagentfailsafe`
 
 The DSC SqlAgentFailsafe resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -437,7 +443,7 @@ The following properties are available in the `dsc_sqlagentfailsafe` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the _SQL Server Agent_ failsafe operator should be present or absent. Default value is `'Present'`.
 
@@ -449,7 +455,7 @@ The name of the _SQL Server Agent_ failsafe operator.
 
 ##### `dsc_notificationmethod`
 
-Data type: `Optional[Enum['None', 'NotifyEmail', 'Pager', 'NetSend', 'NotifyAll', 'none', 'notifyemail', 'pager', 'netsend', 'notifyall']]`
+Data type: `Optional[Enum['None', 'none', 'NotifyEmail', 'notifyemail', 'Pager', 'pager', 'NetSend', 'netsend', 'NotifyAll', 'notifyall']]`
 
 The method of notification for the failsafe operator. The default value is `'None'`.
 
@@ -463,12 +469,12 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlagentfailsafe` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlagentfailsafe--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlagentfailsafe--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlagentfailsafe--name)
+* [`validation_mode`](#-dsc_sqlagentfailsafe--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlagentfailsafe--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -476,13 +482,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlagentfailsafe--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlagentfailsafe--name"></a>`name`
 
 namevar
 
@@ -490,7 +496,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlagentfailsafe--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -502,7 +508,7 @@ Default value: `property`
 ### <a name="dsc_sqlagentoperator"></a>`dsc_sqlagentoperator`
 
 The DSC SqlAgentOperator resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -516,7 +522,7 @@ The email address to be used for the _SQL Server Agent_ operator.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the _SQL Server Agent_ operator should be present or absent. Default value is `'Present'`.
 
@@ -530,13 +536,13 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlagentoperator` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlagentoperator--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlagentoperator--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlagentoperator--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlagentoperator--name)
+* [`validation_mode`](#-dsc_sqlagentoperator--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlagentoperator--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -544,7 +550,7 @@ Data type: `String`
 
 The name of the SQL Server instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlagentoperator--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -552,13 +558,13 @@ Data type: `String`
 
 The name of the _SQL Server Agent_ operator.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlagentoperator--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlagentoperator--name"></a>`name`
 
 namevar
 
@@ -566,7 +572,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlagentoperator--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -578,7 +584,7 @@ Default value: `property`
 ### <a name="dsc_sqlaglistener"></a>`dsc_sqlaglistener`
 
 The DSC SqlAGListener resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -592,7 +598,7 @@ If DHCP should be used for the availability group listener instead of static IP 
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 If the availability group listener should be present or absent. Default value is `'Present'`.
 
@@ -601,6 +607,12 @@ If the availability group listener should be present or absent. Default value is
 Data type: `Optional[Array[String]]`
 
 The IP address used for the availability group listener, in the format `'192.168.10.45/255.255.252.0'`. If using DHCP, set to the first IP-address of the DHCP subnet, in the format `'192.168.8.1/255.255.252.0'`. Must be valid in the cluster-allowed IP range.
+
+##### `dsc_isactivenode`
+
+Data type: `Optional[Boolean]`
+
+Determines if the current node is actively hosting the SQL Server instance.
 
 ##### `dsc_name`
 
@@ -614,6 +626,12 @@ Data type: `Optional[Integer[0, 65535]]`
 
 The port used for the availability group listener.
 
+##### `dsc_processonlyonactivenode`
+
+Data type: `Optional[Boolean]`
+
+Specifies that the resource will only determine if a change is needed if the target node is the active host of the SQL Server instance.
+
 ##### `dsc_servername`
 
 Data type: `String`
@@ -624,13 +642,13 @@ The host name or fully qualified domain name (FQDN) of the primary replica.
 
 The following parameters are available in the `dsc_sqlaglistener` type.
 
-* [`dsc_availabilitygroup`](#dsc_availabilitygroup)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_availabilitygroup`](#-dsc_sqlaglistener--dsc_availabilitygroup)
+* [`dsc_instancename`](#-dsc_sqlaglistener--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlaglistener--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlaglistener--name)
+* [`validation_mode`](#-dsc_sqlaglistener--validation_mode)
 
-##### <a name="dsc_availabilitygroup"></a>`dsc_availabilitygroup`
+##### <a name="-dsc_sqlaglistener--dsc_availabilitygroup"></a>`dsc_availabilitygroup`
 
 namevar
 
@@ -638,7 +656,7 @@ Data type: `String`
 
 The name of the availability group to which the availability group listener is or will be connected.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlaglistener--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -646,13 +664,13 @@ Data type: `String`
 
 The _SQL Server_ instance name of the primary replica.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlaglistener--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlaglistener--name"></a>`name`
 
 namevar
 
@@ -660,7 +678,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlaglistener--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -672,7 +690,7 @@ Default value: `property`
 ### <a name="dsc_sqlagreplica"></a>`dsc_sqlagreplica`
 
 The DSC SqlAGReplica resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -680,7 +698,7 @@ The following properties are available in the `dsc_sqlagreplica` type.
 
 ##### `dsc_availabilitymode`
 
-Data type: `Optional[Enum['AsynchronousCommit', 'SynchronousCommit', 'asynchronouscommit', 'synchronouscommit']]`
+Data type: `Optional[Enum['AsynchronousCommit', 'asynchronouscommit', 'SynchronousCommit', 'synchronouscommit']]`
 
 Specifies the replica availability mode. When creating a replica the default is `'AsynchronousCommit'`.
 
@@ -692,13 +710,13 @@ Specifies the desired priority of the replicas in performing backups. The accept
 
 ##### `dsc_connectionmodeinprimaryrole`
 
-Data type: `Optional[Enum['AllowAllConnections', 'AllowReadWriteConnections', 'allowallconnections', 'allowreadwriteconnections']]`
+Data type: `Optional[Enum['AllowAllConnections', 'allowallconnections', 'AllowReadWriteConnections', 'allowreadwriteconnections']]`
 
 Specifies how the availability replica handles connections when in the primary role.
 
 ##### `dsc_connectionmodeinsecondaryrole`
 
-Data type: `Optional[Enum['AllowNoConnections', 'AllowReadIntentConnectionsOnly', 'AllowAllConnections', 'allownoconnections', 'allowreadintentconnectionsonly', 'allowallconnections']]`
+Data type: `Optional[Enum['AllowNoConnections', 'allownoconnections', 'AllowReadIntentConnectionsOnly', 'allowreadintentconnectionsonly', 'AllowAllConnections', 'allowallconnections']]`
 
 Specifies how the availability replica handles connections when in the secondary role.
 
@@ -722,13 +740,13 @@ Returns the URL of the availability group replica endpoint.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the availability group replica should be present or absent. Default value is `'Present'`.
 
 ##### `dsc_failovermode`
 
-Data type: `Optional[Enum['Automatic', 'Manual', 'automatic', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Manual', 'manual']]`
 
 Specifies the failover mode. When creating a replica the default value is `'Manual'`.
 
@@ -768,6 +786,12 @@ Data type: `Optional[Array[String]]`
 
 Specifies an ordered list of replica server names that represent the probe sequence for connection director to use when redirecting read-only connections through this availability replica. This parameter applies if the availability replica is the current primary replica of the availability group.
 
+##### `dsc_seedingmode`
+
+Data type: `Optional[Enum['Automatic', 'automatic', 'Manual', 'manual']]`
+
+Specifies the seeding mode. When creating a replica the default value is `'Manual`'.
+
 ##### `dsc_servername`
 
 Data type: `String`
@@ -778,14 +802,14 @@ Hostname of the _SQL Server_ to be configured.
 
 The following parameters are available in the `dsc_sqlagreplica` type.
 
-* [`dsc_availabilitygroupname`](#dsc_availabilitygroupname)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_availabilitygroupname`](#-dsc_sqlagreplica--dsc_availabilitygroupname)
+* [`dsc_instancename`](#-dsc_sqlagreplica--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlagreplica--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlagreplica--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlagreplica--name)
+* [`validation_mode`](#-dsc_sqlagreplica--validation_mode)
 
-##### <a name="dsc_availabilitygroupname"></a>`dsc_availabilitygroupname`
+##### <a name="-dsc_sqlagreplica--dsc_availabilitygroupname"></a>`dsc_availabilitygroupname`
 
 namevar
 
@@ -793,7 +817,7 @@ Data type: `String`
 
 The name of the availability group.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlagreplica--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -801,7 +825,7 @@ Data type: `String`
 
 Name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlagreplica--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -810,13 +834,13 @@ Data type: `String`
 The name of the availability group replica. For named instances this must be in the following format
 `'ServerName\InstanceName'`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlagreplica--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlagreplica--name"></a>`name`
 
 namevar
 
@@ -824,7 +848,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlagreplica--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -836,7 +860,7 @@ Default value: `property`
 ### <a name="dsc_sqlalias"></a>`dsc_sqlalias`
 
 The DSC SqlAlias resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -844,7 +868,7 @@ The following properties are available in the `dsc_sqlalias` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Determines whether the alias should be added (`'Present'`) or removed (`'Absent'`). Default value is `'Present'`.
 
@@ -856,7 +880,7 @@ Returns the _Named Pipes_ path if **Protocol** is set to `'NP'`.
 
 ##### `dsc_protocol`
 
-Data type: `Optional[Enum['TCP', 'NP', 'tcp', 'np']]`
+Data type: `Optional[Enum['TCP', 'tcp', 'NP', 'np']]`
 
 Protocol to use when connecting. Valid values are `'TCP'` (_TCP/IP_) or `'NP'` (_Named Pipes_). Default value is `'TCP'`.
 
@@ -882,12 +906,12 @@ Specifies that the Net-Library will determine the port dynamically. The port num
 
 The following parameters are available in the `dsc_sqlalias` type.
 
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_name`](#-dsc_sqlalias--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlalias--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlalias--name)
+* [`validation_mode`](#-dsc_sqlalias--validation_mode)
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlalias--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -895,13 +919,13 @@ Data type: `String`
 
 The name of Alias (e.g. `'svr01\inst01'`).
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlalias--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlalias--name"></a>`name`
 
 namevar
 
@@ -909,7 +933,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlalias--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -921,7 +945,7 @@ Default value: `property`
 ### <a name="dsc_sqlalwaysonservice"></a>`dsc_sqlalwaysonservice`
 
 The DSC SqlAlwaysOnService resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -929,7 +953,7 @@ The following properties are available in the `dsc_sqlalwaysonservice` type.
 
 ##### `dsc_ensure`
 
-Data type: `Enum['Present', 'Absent', 'present', 'absent']`
+Data type: `Enum['Present', 'present', 'Absent', 'absent']`
 
 An enumerated value that describes if the _SQL Server_ should have _Always On High Availability and Disaster Recovery_ (HADR) property enabled (`'Present'`) or disabled (`'Absent'`).
 
@@ -949,12 +973,12 @@ The hostname of the _SQL Server_ to be configured. Default value is the current 
 
 The following parameters are available in the `dsc_sqlalwaysonservice` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlalwaysonservice--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlalwaysonservice--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlalwaysonservice--name)
+* [`validation_mode`](#-dsc_sqlalwaysonservice--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlalwaysonservice--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -962,13 +986,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlalwaysonservice--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlalwaysonservice--name"></a>`name`
 
 namevar
 
@@ -976,7 +1000,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlalwaysonservice--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -988,7 +1012,7 @@ Default value: `property`
 ### <a name="dsc_sqlaudit"></a>`dsc_sqlaudit`
 
 The DSC SqlAudit resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1014,13 +1038,13 @@ Data type: `Optional[Boolean]`
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
  
 
 ##### `dsc_logtype`
 
-Data type: `Optional[Enum['SecurityLog', 'ApplicationLog', 'securitylog', 'applicationlog']]`
+Data type: `Optional[Enum['SecurityLog', 'securitylog', 'ApplicationLog', 'applicationlog']]`
 
  
 
@@ -1038,7 +1062,7 @@ Data type: `Optional[Integer[0, 4294967295]]`
 
 ##### `dsc_maximumfilesizeunit`
 
-Data type: `Optional[Enum['Megabyte', 'Gigabyte', 'Terabyte', 'megabyte', 'gigabyte', 'terabyte']]`
+Data type: `Optional[Enum['Megabyte', 'megabyte', 'Gigabyte', 'gigabyte', 'Terabyte', 'terabyte']]`
 
  
 
@@ -1050,7 +1074,7 @@ Data type: `Optional[Integer[0, 4294967295]]`
 
 ##### `dsc_onfailure`
 
-Data type: `Optional[Enum['Continue', 'FailOperation', 'Shutdown', 'continue', 'failoperation', 'shutdown']]`
+Data type: `Optional[Enum['Continue', 'continue', 'FailOperation', 'failoperation', 'Shutdown', 'shutdown']]`
 
  
 
@@ -1091,27 +1115,27 @@ Data type: `Optional[String]`
 
 The following parameters are available in the `dsc_sqlaudit` type.
 
-* [`dsc_credential`](#dsc_credential)
-* [`dsc_force`](#dsc_force)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_credential`](#-dsc_sqlaudit--dsc_credential)
+* [`dsc_force`](#-dsc_sqlaudit--dsc_force)
+* [`dsc_instancename`](#-dsc_sqlaudit--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlaudit--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlaudit--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlaudit--name)
+* [`validation_mode`](#-dsc_sqlaudit--validation_mode)
 
-##### <a name="dsc_credential"></a>`dsc_credential`
+##### <a name="-dsc_sqlaudit--dsc_credential"></a>`dsc_credential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_force"></a>`dsc_force`
+##### <a name="-dsc_sqlaudit--dsc_force"></a>`dsc_force`
 
 Data type: `Optional[Boolean]`
 
  
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlaudit--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1119,7 +1143,7 @@ Data type: `String`
 
  
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlaudit--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -1127,13 +1151,13 @@ Data type: `String`
 
  
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlaudit--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlaudit--name"></a>`name`
 
 namevar
 
@@ -1141,7 +1165,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlaudit--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1153,7 +1177,7 @@ Default value: `property`
 ### <a name="dsc_sqlconfiguration"></a>`dsc_sqlconfiguration`
 
 The DSC SqlConfiguration resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1183,17 +1207,23 @@ Data type: `Optional[String]`
 
 The hostname of the _SQL Server_ to be configured. Default value is the current computer name.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlconfiguration` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_optionname`](#dsc_optionname)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlconfiguration--dsc_instancename)
+* [`dsc_optionname`](#-dsc_sqlconfiguration--dsc_optionname)
+* [`dsc_psdscrunascredential`](#-dsc_sqlconfiguration--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlconfiguration--name)
+* [`validation_mode`](#-dsc_sqlconfiguration--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlconfiguration--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1201,7 +1231,7 @@ Data type: `String`
 
 Name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_optionname"></a>`dsc_optionname`
+##### <a name="-dsc_sqlconfiguration--dsc_optionname"></a>`dsc_optionname`
 
 namevar
 
@@ -1212,13 +1242,13 @@ article [Server Configuration Options (SQL
 Server)](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/server-configuration-options-sql-server)
 or run `sp_configure`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlconfiguration--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlconfiguration--name"></a>`name`
 
 namevar
 
@@ -1226,7 +1256,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlconfiguration--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1238,7 +1268,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabase"></a>`dsc_sqldatabase`
 
 The DSC SqlDatabase resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1252,13 +1282,13 @@ The name of the collation to use for the new database. Default value is the coll
 
 ##### `dsc_compatibilitylevel`
 
-Data type: `Optional[Enum['Version80', 'Version90', 'Version100', 'Version110', 'Version120', 'Version130', 'Version140', 'Version150', 'version80', 'version90', 'version100', 'version110', 'version120', 'version130', 'version140', 'version150']]`
+Data type: `Optional[Enum['Version80', 'version80', 'Version90', 'version90', 'Version100', 'version100', 'Version110', 'version110', 'Version120', 'version120', 'Version130', 'version130', 'Version140', 'version140', 'Version150', 'version150', 'Version160', 'version160']]`
 
 Specifies the version of the _SQL Database Compatibility Level_ to use for the specified database.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 When set to `'Present'`, the database will be created. When set to `'Absent'`, the database will be dropped. Default value is `'Present'`.
 
@@ -1270,7 +1300,7 @@ Specifies the name of the login that should be the owner of the database.
 
 ##### `dsc_recoverymodel`
 
-Data type: `Optional[Enum['Simple', 'Full', 'BulkLogged', 'simple', 'full', 'bulklogged']]`
+Data type: `Optional[Enum['Simple', 'simple', 'Full', 'full', 'BulkLogged', 'bulklogged']]`
 
 The recovery model for the specified database.
 
@@ -1284,13 +1314,13 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqldatabase` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqldatabase--dsc_instancename)
+* [`dsc_name`](#-dsc_sqldatabase--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabase--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqldatabase--name)
+* [`validation_mode`](#-dsc_sqldatabase--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabase--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1298,7 +1328,7 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqldatabase--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -1306,13 +1336,13 @@ Data type: `String`
 
 The name of the _SQL Server_ database.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabase--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabase--name"></a>`name`
 
 namevar
 
@@ -1320,7 +1350,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabase--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1332,7 +1362,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabasedefaultlocation"></a>`dsc_sqldatabasedefaultlocation`
 
 The DSC SqlDatabaseDefaultLocation resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1368,17 +1398,23 @@ Data type: `Optional[String]`
 
 The host name of the _SQL Server_ to be configured. Default value is the current computer name.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqldatabasedefaultlocation` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_type`](#dsc_type)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqldatabasedefaultlocation--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabasedefaultlocation--dsc_psdscrunascredential)
+* [`dsc_type`](#-dsc_sqldatabasedefaultlocation--dsc_type)
+* [`name`](#-dsc_sqldatabasedefaultlocation--name)
+* [`validation_mode`](#-dsc_sqldatabasedefaultlocation--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabasedefaultlocation--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1386,21 +1422,21 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabasedefaultlocation--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_type"></a>`dsc_type`
+##### <a name="-dsc_sqldatabasedefaultlocation--dsc_type"></a>`dsc_type`
 
 namevar
 
-Data type: `Enum['Data', 'Log', 'Backup', 'data', 'log', 'backup']`
+Data type: `Enum['Data', 'data', 'Log', 'log', 'Backup', 'backup']`
 
 The type of database default location to be configured.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabasedefaultlocation--name"></a>`name`
 
 namevar
 
@@ -1408,7 +1444,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabasedefaultlocation--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1420,7 +1456,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabasemail"></a>`dsc_sqldatabasemail`
 
 The DSC SqlDatabaseMail resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1446,13 +1482,13 @@ The e-mail address from which mail will originate.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies the desired state of the _Database Mail_ account. When set to `'Present'` the _Database Mail_ account will be created. When set to `'Absent'` the _Database Mail_ account will be removed. Default value is `'Present'`.
 
 ##### `dsc_logginglevel`
 
-Data type: `Optional[Enum['Normal', 'Extended', 'Verbose', 'normal', 'extended', 'verbose']]`
+Data type: `Optional[Enum['Normal', 'normal', 'Extended', 'extended', 'Verbose', 'verbose']]`
 
 The logging level that the _Database Mail_ will use. If not specified the default logging level is `'Extended'`.
 
@@ -1490,13 +1526,13 @@ The TCP port used for communication. Default value is port `25`.
 
 The following parameters are available in the `dsc_sqldatabasemail` type.
 
-* [`dsc_accountname`](#dsc_accountname)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_accountname`](#-dsc_sqldatabasemail--dsc_accountname)
+* [`dsc_instancename`](#-dsc_sqldatabasemail--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabasemail--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqldatabasemail--name)
+* [`validation_mode`](#-dsc_sqldatabasemail--validation_mode)
 
-##### <a name="dsc_accountname"></a>`dsc_accountname`
+##### <a name="-dsc_sqldatabasemail--dsc_accountname"></a>`dsc_accountname`
 
 namevar
 
@@ -1504,7 +1540,7 @@ Data type: `String`
 
 The name of the _Database Mail_ account.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabasemail--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1512,13 +1548,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabasemail--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabasemail--name"></a>`name`
 
 namevar
 
@@ -1526,7 +1562,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabasemail--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1538,7 +1574,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabaseobjectpermission"></a>`dsc_sqldatabaseobjectpermission`
 
 The DSC SqlDatabaseObjectPermission resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1548,8 +1584,8 @@ The following properties are available in the `dsc_sqldatabaseobjectpermission` 
 
 Data type: `Array[Struct[{
               permission => Optional[String],
-              ensure => Optional[Enum['Present', 'Absent', 'present', 'absent']],
-              state => Optional[Enum['Grant', 'Deny', 'GrantWithGrant', 'grant', 'deny', 'grantwithgrant']]
+              ensure => Optional[Enum['Present', 'present', 'Absent', 'absent']],
+              state => Optional[Enum['Grant', 'grant', 'Deny', 'deny', 'GrantWithGrant', 'grantwithgrant']]
             }]]`
 
 Specifies the permissions for the database object and the principal. The permissions is an array of embedded instances of the `DSC_DatabaseObjectPermission` CIM class.
@@ -1560,22 +1596,28 @@ Data type: `Optional[String]`
 
 Specifies the host name of the _SQL Server_ to be configured. Default value is the current computer name.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqldatabaseobjectpermission` type.
 
-* [`dsc_databasename`](#dsc_databasename)
-* [`dsc_force`](#dsc_force)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_objectname`](#dsc_objectname)
-* [`dsc_objecttype`](#dsc_objecttype)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_schemaname`](#dsc_schemaname)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_databasename`](#-dsc_sqldatabaseobjectpermission--dsc_databasename)
+* [`dsc_force`](#-dsc_sqldatabaseobjectpermission--dsc_force)
+* [`dsc_instancename`](#-dsc_sqldatabaseobjectpermission--dsc_instancename)
+* [`dsc_name`](#-dsc_sqldatabaseobjectpermission--dsc_name)
+* [`dsc_objectname`](#-dsc_sqldatabaseobjectpermission--dsc_objectname)
+* [`dsc_objecttype`](#-dsc_sqldatabaseobjectpermission--dsc_objecttype)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabaseobjectpermission--dsc_psdscrunascredential)
+* [`dsc_schemaname`](#-dsc_sqldatabaseobjectpermission--dsc_schemaname)
+* [`name`](#-dsc_sqldatabaseobjectpermission--name)
+* [`validation_mode`](#-dsc_sqldatabaseobjectpermission--validation_mode)
 
-##### <a name="dsc_databasename"></a>`dsc_databasename`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_databasename"></a>`dsc_databasename`
 
 namevar
 
@@ -1583,7 +1625,7 @@ Data type: `String`
 
 Specifies the name of the database where the object resides.
 
-##### <a name="dsc_force"></a>`dsc_force`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_force"></a>`dsc_force`
 
 Data type: `Optional[Boolean]`
 
@@ -1592,7 +1634,7 @@ always be enforced even if that encompasses cascading revocations. An example if
 current state is `'GrantWithGrant'`. If parameter **Force** is set to `$true` the _With Grant_ permission is revoked, if
 set to `$false` an exception is thrown since the desired state could not be set. Default is to throw an exception.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1600,7 +1642,7 @@ Data type: `String`
 
 Specifies the name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -1609,7 +1651,7 @@ Data type: `String`
 Specifies the name of the database user, user-defined database role, or database application role that will have the
 permission.
 
-##### <a name="dsc_objectname"></a>`dsc_objectname`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_objectname"></a>`dsc_objectname`
 
 namevar
 
@@ -1618,21 +1660,21 @@ Data type: `String`
 Specifies the name of the database object to set permission for. Can be an empty value when setting permission for a
 schema.
 
-##### <a name="dsc_objecttype"></a>`dsc_objecttype`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_objecttype"></a>`dsc_objecttype`
 
 namevar
 
-Data type: `Enum['Schema', 'Table', 'View', 'StoredProcedure', 'schema', 'table', 'view', 'storedprocedure']`
+Data type: `Enum['Schema', 'schema', 'Table', 'table', 'View', 'view', 'StoredProcedure', 'storedprocedure']`
 
 Specifies the type of the database object specified in parameter **ObjectName**.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_schemaname"></a>`dsc_schemaname`
+##### <a name="-dsc_sqldatabaseobjectpermission--dsc_schemaname"></a>`dsc_schemaname`
 
 namevar
 
@@ -1640,7 +1682,7 @@ Data type: `String`
 
 Specifies the name of the schema for the database object.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabaseobjectpermission--name"></a>`name`
 
 namevar
 
@@ -1648,7 +1690,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabaseobjectpermission--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1660,7 +1702,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabasepermission"></a>`dsc_sqldatabasepermission`
 
 The DSC SqlDatabasePermission resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1669,8 +1711,8 @@ The following properties are available in the `dsc_sqldatabasepermission` type.
 ##### `dsc_permission`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['Alter', 'AlterAnyAsymmetricKey', 'AlterAnyApplicationRole', 'AlterAnyAssembly', 'AlterAnyCertificate', 'AlterAnyDatabaseAudit', 'AlterAnyDataspace', 'AlterAnyDatabaseEventNotification', 'AlterAnyExternalDataSource', 'AlterAnyExternalFileFormat', 'AlterAnyFulltextCatalog', 'AlterAnyMask', 'AlterAnyMessageType', 'AlterAnyRole', 'AlterAnyRoute', 'AlterAnyRemoteServiceBinding', 'AlterAnyContract', 'AlterAnySymmetricKey', 'AlterAnySchema', 'AlterAnySecurityPolicy', 'AlterAnyService', 'AlterAnyDatabaseDdlTrigger', 'AlterAnyUser', 'Authenticate', 'BackupDatabase', 'BackupLog', 'Control', 'Connect', 'ConnectReplication', 'Checkpoint', 'CreateAggregate', 'CreateAsymmetricKey', 'CreateAssembly', 'CreateCertificate', 'CreateDatabase', 'CreateDefault', 'CreateDatabaseDdlEventNotification', 'CreateFunction', 'CreateFulltextCatalog', 'CreateMessageType', 'CreateProcedure', 'CreateQueue', 'CreateRole', 'CreateRoute', 'CreateRule', 'CreateRemoteServiceBinding', 'CreateContract', 'CreateSymmetricKey', 'CreateSchema', 'CreateSynonym', 'CreateService', 'CreateTable', 'CreateType', 'CreateView', 'CreateXmlSchemaCollection', 'Delete', 'Execute', 'Insert', 'References', 'Select', 'Showplan', 'SubscribeQueryNotifications', 'TakeOwnership', 'Unmask', 'Update', 'ViewDefinition', 'ViewDatabaseState', 'alter', 'alteranyasymmetrickey', 'alteranyapplicationrole', 'alteranyassembly', 'alteranycertificate', 'alteranydatabaseaudit', 'alteranydataspace', 'alteranydatabaseeventnotification', 'alteranyexternaldatasource', 'alteranyexternalfileformat', 'alteranyfulltextcatalog', 'alteranymask', 'alteranymessagetype', 'alteranyrole', 'alteranyroute', 'alteranyremoteservicebinding', 'alteranycontract', 'alteranysymmetrickey', 'alteranyschema', 'alteranysecuritypolicy', 'alteranyservice', 'alteranydatabaseddltrigger', 'alteranyuser', 'authenticate', 'backupdatabase', 'backuplog', 'control', 'connect', 'connectreplication', 'checkpoint', 'createaggregate', 'createasymmetrickey', 'createassembly', 'createcertificate', 'createdatabase', 'createdefault', 'createdatabaseddleventnotification', 'createfunction', 'createfulltextcatalog', 'createmessagetype', 'createprocedure', 'createqueue', 'createrole', 'createroute', 'createrule', 'createremoteservicebinding', 'createcontract', 'createsymmetrickey', 'createschema', 'createsynonym', 'createservice', 'createtable', 'createtype', 'createview', 'createxmlschemacollection', 'delete', 'execute', 'insert', 'references', 'select', 'showplan', 'subscribequerynotifications', 'takeownership', 'unmask', 'update', 'viewdefinition', 'viewdatabasestate']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerDatabaseBulkOperations', 'administerdatabasebulkoperations', 'Alter', 'alter', 'AlterAnyApplicationRole', 'alteranyapplicationrole', 'AlterAnyAssembly', 'alteranyassembly', 'AlterAnyAsymmetricKey', 'alteranyasymmetrickey', 'AlterAnyCertificate', 'alteranycertificate', 'AlterAnyColumnEncryptionKey', 'alteranycolumnencryptionkey', 'AlterAnyColumnMasterKey', 'alteranycolumnmasterkey', 'AlterAnyContract', 'alteranycontract', 'AlterAnyDatabaseAudit', 'alteranydatabaseaudit', 'AlterAnyDatabaseDdlTrigger', 'alteranydatabaseddltrigger', 'AlterAnyDatabaseEventNotification', 'alteranydatabaseeventnotification', 'AlterAnyDatabaseEventSession', 'alteranydatabaseeventsession', 'AlterAnyDatabaseEventSessionAddEvent', 'alteranydatabaseeventsessionaddevent', 'AlterAnyDatabaseEventSessionAddTarget', 'alteranydatabaseeventsessionaddtarget', 'AlterAnyDatabaseEventSessionDisable', 'alteranydatabaseeventsessiondisable', 'AlterAnyDatabaseEventSessionDropEvent', 'alteranydatabaseeventsessiondropevent', 'AlterAnyDatabaseEventSessionDropTarget', 'alteranydatabaseeventsessiondroptarget', 'AlterAnyDatabaseEventSessionEnable', 'alteranydatabaseeventsessionenable', 'AlterAnyDatabaseEventSessionOption', 'alteranydatabaseeventsessionoption', 'AlterAnyDatabaseScopedConfiguration', 'alteranydatabasescopedconfiguration', 'AlterAnyDataspace', 'alteranydataspace', 'AlterAnyExternalDataSource', 'alteranyexternaldatasource', 'AlterAnyExternalFileFormat', 'alteranyexternalfileformat', 'AlterAnyExternalJob', 'alteranyexternaljob', 'AlterAnyExternalLanguage', 'alteranyexternallanguage', 'AlterAnyExternalLibrary', 'alteranyexternallibrary', 'AlterAnyExternalStream', 'alteranyexternalstream', 'AlterAnyFulltextCatalog', 'alteranyfulltextcatalog', 'AlterAnyMask', 'alteranymask', 'AlterAnyMessageType', 'alteranymessagetype', 'AlterAnyRemoteServiceBinding', 'alteranyremoteservicebinding', 'AlterAnyRole', 'alteranyrole', 'AlterAnyRoute', 'alteranyroute', 'AlterAnySchema', 'alteranyschema', 'AlterAnySecurityPolicy', 'alteranysecuritypolicy', 'AlterAnySensitivityClassification', 'alteranysensitivityclassification', 'AlterAnyService', 'alteranyservice', 'AlterAnySymmetricKey', 'alteranysymmetrickey', 'AlterAnyUser', 'alteranyuser', 'AlterLedger', 'alterledger', 'AlterLedgerConfiguration', 'alterledgerconfiguration', 'Authenticate', 'authenticate', 'BackupDatabase', 'backupdatabase', 'BackupLog', 'backuplog', 'Checkpoint', 'checkpoint', 'Connect', 'connect', 'ConnectReplication', 'connectreplication', 'Control', 'control', 'CreateAggregate', 'createaggregate', 'CreateAnyDatabaseEventSession', 'createanydatabaseeventsession', 'CreateAssembly', 'createassembly', 'CreateAsymmetricKey', 'createasymmetrickey', 'CreateCertificate', 'createcertificate', 'CreateContract', 'createcontract', 'CreateDatabase', 'createdatabase', 'CreateDatabaseDdlEventNotification', 'createdatabaseddleventnotification', 'CreateDefault', 'createdefault', 'CreateExternalLanguage', 'createexternallanguage', 'CreateExternalLibrary', 'createexternallibrary', 'CreateFulltextCatalog', 'createfulltextcatalog', 'CreateFunction', 'createfunction', 'CreateMessageType', 'createmessagetype', 'CreateProcedure', 'createprocedure', 'CreateQueue', 'createqueue', 'CreateRemoteServiceBinding', 'createremoteservicebinding', 'CreateRole', 'createrole', 'CreateRoute', 'createroute', 'CreateRule', 'createrule', 'CreateSchema', 'createschema', 'CreateService', 'createservice', 'CreateSymmetricKey', 'createsymmetrickey', 'CreateSynonym', 'createsynonym', 'CreateTable', 'createtable', 'CreateType', 'createtype', 'CreateUser', 'createuser', 'CreateView', 'createview', 'CreateXmlSchemaCollection', 'createxmlschemacollection', 'Delete', 'delete', 'DropAnyDatabaseEventSession', 'dropanydatabaseeventsession', 'EnableLedger', 'enableledger', 'Execute', 'execute', 'ExecuteAnyExternalEndpoint', 'executeanyexternalendpoint', 'ExecuteAnyExternalScript', 'executeanyexternalscript', 'Insert', 'insert', 'KillDatabaseConnection', 'killdatabaseconnection', 'OwnershipChaining', 'ownershipchaining', 'References', 'references', 'Select', 'select', 'Showplan', 'showplan', 'SubscribeQueryNotifications', 'subscribequerynotifications', 'TakeOwnership', 'takeownership', 'Unmask', 'unmask', 'Update', 'update', 'ViewAnyColumnEncryptionKeyDefinition', 'viewanycolumnencryptionkeydefinition', 'ViewAnyColumnMasterKeyDefinition', 'viewanycolumnmasterkeydefinition', 'ViewAnySensitivityClassification', 'viewanysensitivityclassification', 'ViewCryptographicallySecuredDefinition', 'viewcryptographicallysecureddefinition', 'ViewDatabasePerformanceState', 'viewdatabaseperformancestate', 'ViewDatabaseSecurityAudit', 'viewdatabasesecurityaudit', 'ViewDatabaseSecurityState', 'viewdatabasesecuritystate', 'ViewDatabaseState', 'viewdatabasestate', 'ViewDefinition', 'viewdefinition', 'ViewLedgerContent', 'viewledgercontent', 'ViewPerformanceDefinition', 'viewperformancedefinition', 'ViewSecurityDefinition', 'viewsecuritydefinition']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -1678,8 +1720,8 @@ Data type: `Optional[Array[Struct[{
 ##### `dsc_permissiontoexclude`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['Alter', 'AlterAnyAsymmetricKey', 'AlterAnyApplicationRole', 'AlterAnyAssembly', 'AlterAnyCertificate', 'AlterAnyDatabaseAudit', 'AlterAnyDataspace', 'AlterAnyDatabaseEventNotification', 'AlterAnyExternalDataSource', 'AlterAnyExternalFileFormat', 'AlterAnyFulltextCatalog', 'AlterAnyMask', 'AlterAnyMessageType', 'AlterAnyRole', 'AlterAnyRoute', 'AlterAnyRemoteServiceBinding', 'AlterAnyContract', 'AlterAnySymmetricKey', 'AlterAnySchema', 'AlterAnySecurityPolicy', 'AlterAnyService', 'AlterAnyDatabaseDdlTrigger', 'AlterAnyUser', 'Authenticate', 'BackupDatabase', 'BackupLog', 'Control', 'Connect', 'ConnectReplication', 'Checkpoint', 'CreateAggregate', 'CreateAsymmetricKey', 'CreateAssembly', 'CreateCertificate', 'CreateDatabase', 'CreateDefault', 'CreateDatabaseDdlEventNotification', 'CreateFunction', 'CreateFulltextCatalog', 'CreateMessageType', 'CreateProcedure', 'CreateQueue', 'CreateRole', 'CreateRoute', 'CreateRule', 'CreateRemoteServiceBinding', 'CreateContract', 'CreateSymmetricKey', 'CreateSchema', 'CreateSynonym', 'CreateService', 'CreateTable', 'CreateType', 'CreateView', 'CreateXmlSchemaCollection', 'Delete', 'Execute', 'Insert', 'References', 'Select', 'Showplan', 'SubscribeQueryNotifications', 'TakeOwnership', 'Unmask', 'Update', 'ViewDefinition', 'ViewDatabaseState', 'alter', 'alteranyasymmetrickey', 'alteranyapplicationrole', 'alteranyassembly', 'alteranycertificate', 'alteranydatabaseaudit', 'alteranydataspace', 'alteranydatabaseeventnotification', 'alteranyexternaldatasource', 'alteranyexternalfileformat', 'alteranyfulltextcatalog', 'alteranymask', 'alteranymessagetype', 'alteranyrole', 'alteranyroute', 'alteranyremoteservicebinding', 'alteranycontract', 'alteranysymmetrickey', 'alteranyschema', 'alteranysecuritypolicy', 'alteranyservice', 'alteranydatabaseddltrigger', 'alteranyuser', 'authenticate', 'backupdatabase', 'backuplog', 'control', 'connect', 'connectreplication', 'checkpoint', 'createaggregate', 'createasymmetrickey', 'createassembly', 'createcertificate', 'createdatabase', 'createdefault', 'createdatabaseddleventnotification', 'createfunction', 'createfulltextcatalog', 'createmessagetype', 'createprocedure', 'createqueue', 'createrole', 'createroute', 'createrule', 'createremoteservicebinding', 'createcontract', 'createsymmetrickey', 'createschema', 'createsynonym', 'createservice', 'createtable', 'createtype', 'createview', 'createxmlschemacollection', 'delete', 'execute', 'insert', 'references', 'select', 'showplan', 'subscribequerynotifications', 'takeownership', 'unmask', 'update', 'viewdefinition', 'viewdatabasestate']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerDatabaseBulkOperations', 'administerdatabasebulkoperations', 'Alter', 'alter', 'AlterAnyApplicationRole', 'alteranyapplicationrole', 'AlterAnyAssembly', 'alteranyassembly', 'AlterAnyAsymmetricKey', 'alteranyasymmetrickey', 'AlterAnyCertificate', 'alteranycertificate', 'AlterAnyColumnEncryptionKey', 'alteranycolumnencryptionkey', 'AlterAnyColumnMasterKey', 'alteranycolumnmasterkey', 'AlterAnyContract', 'alteranycontract', 'AlterAnyDatabaseAudit', 'alteranydatabaseaudit', 'AlterAnyDatabaseDdlTrigger', 'alteranydatabaseddltrigger', 'AlterAnyDatabaseEventNotification', 'alteranydatabaseeventnotification', 'AlterAnyDatabaseEventSession', 'alteranydatabaseeventsession', 'AlterAnyDatabaseEventSessionAddEvent', 'alteranydatabaseeventsessionaddevent', 'AlterAnyDatabaseEventSessionAddTarget', 'alteranydatabaseeventsessionaddtarget', 'AlterAnyDatabaseEventSessionDisable', 'alteranydatabaseeventsessiondisable', 'AlterAnyDatabaseEventSessionDropEvent', 'alteranydatabaseeventsessiondropevent', 'AlterAnyDatabaseEventSessionDropTarget', 'alteranydatabaseeventsessiondroptarget', 'AlterAnyDatabaseEventSessionEnable', 'alteranydatabaseeventsessionenable', 'AlterAnyDatabaseEventSessionOption', 'alteranydatabaseeventsessionoption', 'AlterAnyDatabaseScopedConfiguration', 'alteranydatabasescopedconfiguration', 'AlterAnyDataspace', 'alteranydataspace', 'AlterAnyExternalDataSource', 'alteranyexternaldatasource', 'AlterAnyExternalFileFormat', 'alteranyexternalfileformat', 'AlterAnyExternalJob', 'alteranyexternaljob', 'AlterAnyExternalLanguage', 'alteranyexternallanguage', 'AlterAnyExternalLibrary', 'alteranyexternallibrary', 'AlterAnyExternalStream', 'alteranyexternalstream', 'AlterAnyFulltextCatalog', 'alteranyfulltextcatalog', 'AlterAnyMask', 'alteranymask', 'AlterAnyMessageType', 'alteranymessagetype', 'AlterAnyRemoteServiceBinding', 'alteranyremoteservicebinding', 'AlterAnyRole', 'alteranyrole', 'AlterAnyRoute', 'alteranyroute', 'AlterAnySchema', 'alteranyschema', 'AlterAnySecurityPolicy', 'alteranysecuritypolicy', 'AlterAnySensitivityClassification', 'alteranysensitivityclassification', 'AlterAnyService', 'alteranyservice', 'AlterAnySymmetricKey', 'alteranysymmetrickey', 'AlterAnyUser', 'alteranyuser', 'AlterLedger', 'alterledger', 'AlterLedgerConfiguration', 'alterledgerconfiguration', 'Authenticate', 'authenticate', 'BackupDatabase', 'backupdatabase', 'BackupLog', 'backuplog', 'Checkpoint', 'checkpoint', 'Connect', 'connect', 'ConnectReplication', 'connectreplication', 'Control', 'control', 'CreateAggregate', 'createaggregate', 'CreateAnyDatabaseEventSession', 'createanydatabaseeventsession', 'CreateAssembly', 'createassembly', 'CreateAsymmetricKey', 'createasymmetrickey', 'CreateCertificate', 'createcertificate', 'CreateContract', 'createcontract', 'CreateDatabase', 'createdatabase', 'CreateDatabaseDdlEventNotification', 'createdatabaseddleventnotification', 'CreateDefault', 'createdefault', 'CreateExternalLanguage', 'createexternallanguage', 'CreateExternalLibrary', 'createexternallibrary', 'CreateFulltextCatalog', 'createfulltextcatalog', 'CreateFunction', 'createfunction', 'CreateMessageType', 'createmessagetype', 'CreateProcedure', 'createprocedure', 'CreateQueue', 'createqueue', 'CreateRemoteServiceBinding', 'createremoteservicebinding', 'CreateRole', 'createrole', 'CreateRoute', 'createroute', 'CreateRule', 'createrule', 'CreateSchema', 'createschema', 'CreateService', 'createservice', 'CreateSymmetricKey', 'createsymmetrickey', 'CreateSynonym', 'createsynonym', 'CreateTable', 'createtable', 'CreateType', 'createtype', 'CreateUser', 'createuser', 'CreateView', 'createview', 'CreateXmlSchemaCollection', 'createxmlschemacollection', 'Delete', 'delete', 'DropAnyDatabaseEventSession', 'dropanydatabaseeventsession', 'EnableLedger', 'enableledger', 'Execute', 'execute', 'ExecuteAnyExternalEndpoint', 'executeanyexternalendpoint', 'ExecuteAnyExternalScript', 'executeanyexternalscript', 'Insert', 'insert', 'KillDatabaseConnection', 'killdatabaseconnection', 'OwnershipChaining', 'ownershipchaining', 'References', 'references', 'Select', 'select', 'Showplan', 'showplan', 'SubscribeQueryNotifications', 'subscribequerynotifications', 'TakeOwnership', 'takeownership', 'Unmask', 'unmask', 'Update', 'update', 'ViewAnyColumnEncryptionKeyDefinition', 'viewanycolumnencryptionkeydefinition', 'ViewAnyColumnMasterKeyDefinition', 'viewanycolumnmasterkeydefinition', 'ViewAnySensitivityClassification', 'viewanysensitivityclassification', 'ViewCryptographicallySecuredDefinition', 'viewcryptographicallysecureddefinition', 'ViewDatabasePerformanceState', 'viewdatabaseperformancestate', 'ViewDatabaseSecurityAudit', 'viewdatabasesecurityaudit', 'ViewDatabaseSecurityState', 'viewdatabasesecuritystate', 'ViewDatabaseState', 'viewdatabasestate', 'ViewDefinition', 'viewdefinition', 'ViewLedgerContent', 'viewledgercontent', 'ViewPerformanceDefinition', 'viewperformancedefinition', 'ViewSecurityDefinition', 'viewsecuritydefinition']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -1687,8 +1729,8 @@ Data type: `Optional[Array[Struct[{
 ##### `dsc_permissiontoinclude`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['Alter', 'AlterAnyAsymmetricKey', 'AlterAnyApplicationRole', 'AlterAnyAssembly', 'AlterAnyCertificate', 'AlterAnyDatabaseAudit', 'AlterAnyDataspace', 'AlterAnyDatabaseEventNotification', 'AlterAnyExternalDataSource', 'AlterAnyExternalFileFormat', 'AlterAnyFulltextCatalog', 'AlterAnyMask', 'AlterAnyMessageType', 'AlterAnyRole', 'AlterAnyRoute', 'AlterAnyRemoteServiceBinding', 'AlterAnyContract', 'AlterAnySymmetricKey', 'AlterAnySchema', 'AlterAnySecurityPolicy', 'AlterAnyService', 'AlterAnyDatabaseDdlTrigger', 'AlterAnyUser', 'Authenticate', 'BackupDatabase', 'BackupLog', 'Control', 'Connect', 'ConnectReplication', 'Checkpoint', 'CreateAggregate', 'CreateAsymmetricKey', 'CreateAssembly', 'CreateCertificate', 'CreateDatabase', 'CreateDefault', 'CreateDatabaseDdlEventNotification', 'CreateFunction', 'CreateFulltextCatalog', 'CreateMessageType', 'CreateProcedure', 'CreateQueue', 'CreateRole', 'CreateRoute', 'CreateRule', 'CreateRemoteServiceBinding', 'CreateContract', 'CreateSymmetricKey', 'CreateSchema', 'CreateSynonym', 'CreateService', 'CreateTable', 'CreateType', 'CreateView', 'CreateXmlSchemaCollection', 'Delete', 'Execute', 'Insert', 'References', 'Select', 'Showplan', 'SubscribeQueryNotifications', 'TakeOwnership', 'Unmask', 'Update', 'ViewDefinition', 'ViewDatabaseState', 'alter', 'alteranyasymmetrickey', 'alteranyapplicationrole', 'alteranyassembly', 'alteranycertificate', 'alteranydatabaseaudit', 'alteranydataspace', 'alteranydatabaseeventnotification', 'alteranyexternaldatasource', 'alteranyexternalfileformat', 'alteranyfulltextcatalog', 'alteranymask', 'alteranymessagetype', 'alteranyrole', 'alteranyroute', 'alteranyremoteservicebinding', 'alteranycontract', 'alteranysymmetrickey', 'alteranyschema', 'alteranysecuritypolicy', 'alteranyservice', 'alteranydatabaseddltrigger', 'alteranyuser', 'authenticate', 'backupdatabase', 'backuplog', 'control', 'connect', 'connectreplication', 'checkpoint', 'createaggregate', 'createasymmetrickey', 'createassembly', 'createcertificate', 'createdatabase', 'createdefault', 'createdatabaseddleventnotification', 'createfunction', 'createfulltextcatalog', 'createmessagetype', 'createprocedure', 'createqueue', 'createrole', 'createroute', 'createrule', 'createremoteservicebinding', 'createcontract', 'createsymmetrickey', 'createschema', 'createsynonym', 'createservice', 'createtable', 'createtype', 'createview', 'createxmlschemacollection', 'delete', 'execute', 'insert', 'references', 'select', 'showplan', 'subscribequerynotifications', 'takeownership', 'unmask', 'update', 'viewdefinition', 'viewdatabasestate']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerDatabaseBulkOperations', 'administerdatabasebulkoperations', 'Alter', 'alter', 'AlterAnyApplicationRole', 'alteranyapplicationrole', 'AlterAnyAssembly', 'alteranyassembly', 'AlterAnyAsymmetricKey', 'alteranyasymmetrickey', 'AlterAnyCertificate', 'alteranycertificate', 'AlterAnyColumnEncryptionKey', 'alteranycolumnencryptionkey', 'AlterAnyColumnMasterKey', 'alteranycolumnmasterkey', 'AlterAnyContract', 'alteranycontract', 'AlterAnyDatabaseAudit', 'alteranydatabaseaudit', 'AlterAnyDatabaseDdlTrigger', 'alteranydatabaseddltrigger', 'AlterAnyDatabaseEventNotification', 'alteranydatabaseeventnotification', 'AlterAnyDatabaseEventSession', 'alteranydatabaseeventsession', 'AlterAnyDatabaseEventSessionAddEvent', 'alteranydatabaseeventsessionaddevent', 'AlterAnyDatabaseEventSessionAddTarget', 'alteranydatabaseeventsessionaddtarget', 'AlterAnyDatabaseEventSessionDisable', 'alteranydatabaseeventsessiondisable', 'AlterAnyDatabaseEventSessionDropEvent', 'alteranydatabaseeventsessiondropevent', 'AlterAnyDatabaseEventSessionDropTarget', 'alteranydatabaseeventsessiondroptarget', 'AlterAnyDatabaseEventSessionEnable', 'alteranydatabaseeventsessionenable', 'AlterAnyDatabaseEventSessionOption', 'alteranydatabaseeventsessionoption', 'AlterAnyDatabaseScopedConfiguration', 'alteranydatabasescopedconfiguration', 'AlterAnyDataspace', 'alteranydataspace', 'AlterAnyExternalDataSource', 'alteranyexternaldatasource', 'AlterAnyExternalFileFormat', 'alteranyexternalfileformat', 'AlterAnyExternalJob', 'alteranyexternaljob', 'AlterAnyExternalLanguage', 'alteranyexternallanguage', 'AlterAnyExternalLibrary', 'alteranyexternallibrary', 'AlterAnyExternalStream', 'alteranyexternalstream', 'AlterAnyFulltextCatalog', 'alteranyfulltextcatalog', 'AlterAnyMask', 'alteranymask', 'AlterAnyMessageType', 'alteranymessagetype', 'AlterAnyRemoteServiceBinding', 'alteranyremoteservicebinding', 'AlterAnyRole', 'alteranyrole', 'AlterAnyRoute', 'alteranyroute', 'AlterAnySchema', 'alteranyschema', 'AlterAnySecurityPolicy', 'alteranysecuritypolicy', 'AlterAnySensitivityClassification', 'alteranysensitivityclassification', 'AlterAnyService', 'alteranyservice', 'AlterAnySymmetricKey', 'alteranysymmetrickey', 'AlterAnyUser', 'alteranyuser', 'AlterLedger', 'alterledger', 'AlterLedgerConfiguration', 'alterledgerconfiguration', 'Authenticate', 'authenticate', 'BackupDatabase', 'backupdatabase', 'BackupLog', 'backuplog', 'Checkpoint', 'checkpoint', 'Connect', 'connect', 'ConnectReplication', 'connectreplication', 'Control', 'control', 'CreateAggregate', 'createaggregate', 'CreateAnyDatabaseEventSession', 'createanydatabaseeventsession', 'CreateAssembly', 'createassembly', 'CreateAsymmetricKey', 'createasymmetrickey', 'CreateCertificate', 'createcertificate', 'CreateContract', 'createcontract', 'CreateDatabase', 'createdatabase', 'CreateDatabaseDdlEventNotification', 'createdatabaseddleventnotification', 'CreateDefault', 'createdefault', 'CreateExternalLanguage', 'createexternallanguage', 'CreateExternalLibrary', 'createexternallibrary', 'CreateFulltextCatalog', 'createfulltextcatalog', 'CreateFunction', 'createfunction', 'CreateMessageType', 'createmessagetype', 'CreateProcedure', 'createprocedure', 'CreateQueue', 'createqueue', 'CreateRemoteServiceBinding', 'createremoteservicebinding', 'CreateRole', 'createrole', 'CreateRoute', 'createroute', 'CreateRule', 'createrule', 'CreateSchema', 'createschema', 'CreateService', 'createservice', 'CreateSymmetricKey', 'createsymmetrickey', 'CreateSynonym', 'createsynonym', 'CreateTable', 'createtable', 'CreateType', 'createtype', 'CreateUser', 'createuser', 'CreateView', 'createview', 'CreateXmlSchemaCollection', 'createxmlschemacollection', 'Delete', 'delete', 'DropAnyDatabaseEventSession', 'dropanydatabaseeventsession', 'EnableLedger', 'enableledger', 'Execute', 'execute', 'ExecuteAnyExternalEndpoint', 'executeanyexternalendpoint', 'ExecuteAnyExternalScript', 'executeanyexternalscript', 'Insert', 'insert', 'KillDatabaseConnection', 'killdatabaseconnection', 'OwnershipChaining', 'ownershipchaining', 'References', 'references', 'Select', 'select', 'Showplan', 'showplan', 'SubscribeQueryNotifications', 'subscribequerynotifications', 'TakeOwnership', 'takeownership', 'Unmask', 'unmask', 'Update', 'update', 'ViewAnyColumnEncryptionKeyDefinition', 'viewanycolumnencryptionkeydefinition', 'ViewAnyColumnMasterKeyDefinition', 'viewanycolumnmasterkeydefinition', 'ViewAnySensitivityClassification', 'viewanysensitivityclassification', 'ViewCryptographicallySecuredDefinition', 'viewcryptographicallysecureddefinition', 'ViewDatabasePerformanceState', 'viewdatabaseperformancestate', 'ViewDatabaseSecurityAudit', 'viewdatabasesecurityaudit', 'ViewDatabaseSecurityState', 'viewdatabasesecuritystate', 'ViewDatabaseState', 'viewdatabasestate', 'ViewDefinition', 'viewdefinition', 'ViewLedgerContent', 'viewledgercontent', 'ViewPerformanceDefinition', 'viewperformancedefinition', 'ViewSecurityDefinition', 'viewsecuritydefinition']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -1708,55 +1750,61 @@ Data type: `Optional[String]`
 
  
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqldatabasepermission` type.
 
-* [`dsc_credential`](#dsc_credential)
-* [`dsc_databasename`](#dsc_databasename)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_credential`](#-dsc_sqldatabasepermission--dsc_credential)
+* [`dsc_databasename`](#-dsc_sqldatabasepermission--dsc_databasename)
+* [`dsc_instancename`](#-dsc_sqldatabasepermission--dsc_instancename)
+* [`dsc_name`](#-dsc_sqldatabasepermission--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabasepermission--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqldatabasepermission--name)
+* [`validation_mode`](#-dsc_sqldatabasepermission--validation_mode)
 
-##### <a name="dsc_credential"></a>`dsc_credential`
-
-Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
-
- 
-
-##### <a name="dsc_databasename"></a>`dsc_databasename`
-
-namevar
-
-Data type: `String`
-
- 
-
-##### <a name="dsc_instancename"></a>`dsc_instancename`
-
-namevar
-
-Data type: `String`
-
- 
-
-##### <a name="dsc_name"></a>`dsc_name`
-
-namevar
-
-Data type: `String`
-
- 
-
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabasepermission--dsc_credential"></a>`dsc_credential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabasepermission--dsc_databasename"></a>`dsc_databasename`
+
+namevar
+
+Data type: `String`
+
+ 
+
+##### <a name="-dsc_sqldatabasepermission--dsc_instancename"></a>`dsc_instancename`
+
+namevar
+
+Data type: `String`
+
+ 
+
+##### <a name="-dsc_sqldatabasepermission--dsc_name"></a>`dsc_name`
+
+namevar
+
+Data type: `String`
+
+ 
+
+##### <a name="-dsc_sqldatabasepermission--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+
+Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
+
+ 
+
+##### <a name="-dsc_sqldatabasepermission--name"></a>`name`
 
 namevar
 
@@ -1764,7 +1812,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabasepermission--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1776,7 +1824,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabaserole"></a>`dsc_sqldatabaserole`
 
 The DSC SqlDatabaseRole resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1790,7 +1838,7 @@ Returns if the database is updatable. If the database is updatable, this will re
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 If `'Present'` then the role will be added to the database and the role membership will be set. If `'Absent'` then the role will be removed from the database. Default value is `'Present'`.
 
@@ -1828,14 +1876,14 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqldatabaserole` type.
 
-* [`dsc_databasename`](#dsc_databasename)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_databasename`](#-dsc_sqldatabaserole--dsc_databasename)
+* [`dsc_instancename`](#-dsc_sqldatabaserole--dsc_instancename)
+* [`dsc_name`](#-dsc_sqldatabaserole--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabaserole--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqldatabaserole--name)
+* [`validation_mode`](#-dsc_sqldatabaserole--validation_mode)
 
-##### <a name="dsc_databasename"></a>`dsc_databasename`
+##### <a name="-dsc_sqldatabaserole--dsc_databasename"></a>`dsc_databasename`
 
 namevar
 
@@ -1843,7 +1891,7 @@ Data type: `String`
 
 The name of the database in which the role should be configured.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabaserole--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1851,7 +1899,7 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqldatabaserole--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -1859,13 +1907,13 @@ Data type: `String`
 
 The name of the database role to be added or removed.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabaserole--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabaserole--name"></a>`name`
 
 namevar
 
@@ -1873,7 +1921,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabaserole--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -1885,7 +1933,7 @@ Default value: `property`
 ### <a name="dsc_sqldatabaseuser"></a>`dsc_sqldatabaseuser`
 
 The DSC SqlDatabaseUser resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -1917,7 +1965,7 @@ Returns if the database is updatable. If the database is updatable, this will re
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Specifies if the database user should be present or absent. If `'Present'` then the database user will be added to the database and, if needed, the login mapping will be updated. If `'Absent'` then the database user will be removed from the database. Default value is `'Present'`.
 
@@ -1941,7 +1989,7 @@ Specifies the host name of the _SQL Server_ on which the instance exist. Default
 
 ##### `dsc_usertype`
 
-Data type: `Optional[Enum['Login', 'NoLogin', 'Certificate', 'AsymmetricKey', 'login', 'nologin', 'certificate', 'asymmetrickey']]`
+Data type: `Optional[Enum['Login', 'login', 'NoLogin', 'nologin', 'Certificate', 'certificate', 'AsymmetricKey', 'asymmetrickey']]`
 
 Specifies the type of the database user. Default value is `'NoLogin'`.
 
@@ -1949,15 +1997,15 @@ Specifies the type of the database user. Default value is `'NoLogin'`.
 
 The following parameters are available in the `dsc_sqldatabaseuser` type.
 
-* [`dsc_databasename`](#dsc_databasename)
-* [`dsc_force`](#dsc_force)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_databasename`](#-dsc_sqldatabaseuser--dsc_databasename)
+* [`dsc_force`](#-dsc_sqldatabaseuser--dsc_force)
+* [`dsc_instancename`](#-dsc_sqldatabaseuser--dsc_instancename)
+* [`dsc_name`](#-dsc_sqldatabaseuser--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqldatabaseuser--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqldatabaseuser--name)
+* [`validation_mode`](#-dsc_sqldatabaseuser--validation_mode)
 
-##### <a name="dsc_databasename"></a>`dsc_databasename`
+##### <a name="-dsc_sqldatabaseuser--dsc_databasename"></a>`dsc_databasename`
 
 namevar
 
@@ -1965,14 +2013,14 @@ Data type: `String`
 
 Specifies the name of the database in which to configure the database user.
 
-##### <a name="dsc_force"></a>`dsc_force`
+##### <a name="-dsc_sqldatabaseuser--dsc_force"></a>`dsc_force`
 
 Data type: `Optional[Boolean]`
 
 Specifies if it is allowed to re-create the database user if either the user type, the asymmetric key, or the
 certificate changes. Default value is `$false` not allowing database users to be re-created.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqldatabaseuser--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -1980,7 +2028,7 @@ Data type: `String`
 
 Specifies the _SQL Server_ instance in which the database exist.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqldatabaseuser--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -1988,13 +2036,13 @@ Data type: `String`
 
 Specifies the name of the database user to be added or removed.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqldatabaseuser--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqldatabaseuser--name"></a>`name`
 
 namevar
 
@@ -2002,7 +2050,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqldatabaseuser--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2014,7 +2062,7 @@ Default value: `property`
 ### <a name="dsc_sqlendpoint"></a>`dsc_sqlendpoint`
 
 The DSC SqlEndpoint resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2022,13 +2070,13 @@ The following properties are available in the `dsc_sqlendpoint` type.
 
 ##### `dsc_endpointtype`
 
-Data type: `Enum['DatabaseMirroring', 'ServiceBroker', 'databasemirroring', 'servicebroker']`
+Data type: `Enum['DatabaseMirroring', 'databasemirroring', 'ServiceBroker', 'servicebroker']`
 
 Specifies the type of endpoint. Currently the only types that are supported are the _Database Mirroring_ and the _Service Broker_ type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 If the endpoint should be present or absent. Default values is `'Present'`.
 
@@ -2070,7 +2118,7 @@ The host name of the SQL Server to be configured. Default value is the current c
 
 ##### `dsc_state`
 
-Data type: `Optional[Enum['Started', 'Stopped', 'Disabled', 'started', 'stopped', 'disabled']]`
+Data type: `Optional[Enum['Started', 'started', 'Stopped', 'stopped', 'Disabled', 'disabled']]`
 
 Specifies the state of the endpoint. When an endpoint is created and the state is not specified then the endpoint will be started after it is created. The state will not be enforced unless the parameter is specified.
 
@@ -2078,13 +2126,13 @@ Specifies the state of the endpoint. When an endpoint is created and the state i
 
 The following parameters are available in the `dsc_sqlendpoint` type.
 
-* [`dsc_endpointname`](#dsc_endpointname)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_endpointname`](#-dsc_sqlendpoint--dsc_endpointname)
+* [`dsc_instancename`](#-dsc_sqlendpoint--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlendpoint--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlendpoint--name)
+* [`validation_mode`](#-dsc_sqlendpoint--validation_mode)
 
-##### <a name="dsc_endpointname"></a>`dsc_endpointname`
+##### <a name="-dsc_sqlendpoint--dsc_endpointname"></a>`dsc_endpointname`
 
 namevar
 
@@ -2092,7 +2140,7 @@ Data type: `String`
 
 The name of the endpoint.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlendpoint--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2100,13 +2148,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlendpoint--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlendpoint--name"></a>`name`
 
 namevar
 
@@ -2114,7 +2162,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlendpoint--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2126,7 +2174,7 @@ Default value: `property`
 ### <a name="dsc_sqlendpointpermission"></a>`dsc_sqlendpointpermission`
 
 The DSC SqlEndpointPermission resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2134,7 +2182,7 @@ The following properties are available in the `dsc_sqlendpointpermission` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 If the permission should be present or absent. Default value is `'Present'`.
 
@@ -2146,7 +2194,7 @@ The name of the endpoint.
 
 ##### `dsc_permission`
 
-Data type: `Optional[Enum['CONNECT''connect']]`
+Data type: `Optional[Enum['CONNECT', 'connect']]`
 
 The permission to set for the login. Valid value for permission is only `'CONNECT'`.
 
@@ -2160,13 +2208,13 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlendpointpermission` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_principal`](#dsc_principal)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlendpointpermission--dsc_instancename)
+* [`dsc_principal`](#-dsc_sqlendpointpermission--dsc_principal)
+* [`dsc_psdscrunascredential`](#-dsc_sqlendpointpermission--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlendpointpermission--name)
+* [`validation_mode`](#-dsc_sqlendpointpermission--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlendpointpermission--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2174,7 +2222,7 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_principal"></a>`dsc_principal`
+##### <a name="-dsc_sqlendpointpermission--dsc_principal"></a>`dsc_principal`
 
 namevar
 
@@ -2182,13 +2230,13 @@ Data type: `String`
 
 The login to which permission will be set.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlendpointpermission--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlendpointpermission--name"></a>`name`
 
 namevar
 
@@ -2196,7 +2244,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlendpointpermission--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2208,7 +2256,7 @@ Default value: `property`
 ### <a name="dsc_sqllogin"></a>`dsc_sqllogin`
 
 The DSC SqlLogin resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2228,7 +2276,7 @@ Specifies if the login is disabled. Default value is `$false`.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 The specified login should be `'Present'` or `'Absent'`. Default is `'Present'`.
 
@@ -2252,7 +2300,7 @@ Specifies if the login password is required to conform to the password policy sp
 
 ##### `dsc_logintype`
 
-Data type: `Optional[Enum['WindowsUser', 'WindowsGroup', 'SqlLogin', 'Certificate', 'AsymmetricKey', 'ExternalUser', 'ExternalGroup', 'windowsuser', 'windowsgroup', 'sqllogin', 'certificate', 'asymmetrickey', 'externaluser', 'externalgroup']]`
+Data type: `Optional[Enum['WindowsUser', 'windowsuser', 'WindowsGroup', 'windowsgroup', 'SqlLogin', 'sqllogin', 'Certificate', 'certificate', 'AsymmetricKey', 'asymmetrickey', 'ExternalUser', 'externaluser', 'ExternalGroup', 'externalgroup']]`
 
 The type of login to be created. If LoginType is `'WindowsUser'` or `'WindowsGroup'` then provide the name in the format `DOMAIN\name`. Default is `'WindowsUser'`. The login types `'Certificate'`, `'AsymmetricKey'`, `'ExternalUser'`, and `'ExternalGroup'` are not yet implemented and will currently throw an exception if used.
 
@@ -2266,14 +2314,14 @@ The hostname of the _SQL Server_ to be configured. Default value is the current 
 
 The following parameters are available in the `dsc_sqllogin` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_logincredential`](#dsc_logincredential)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqllogin--dsc_instancename)
+* [`dsc_logincredential`](#-dsc_sqllogin--dsc_logincredential)
+* [`dsc_name`](#-dsc_sqllogin--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqllogin--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqllogin--name)
+* [`validation_mode`](#-dsc_sqllogin--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqllogin--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2281,13 +2329,13 @@ Data type: `String`
 
 Name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_logincredential"></a>`dsc_logincredential`
+##### <a name="-dsc_sqllogin--dsc_logincredential"></a>`dsc_logincredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Specifies the password as a `[PSCredential]` object. Only applies to _SQL Logins_.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqllogin--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -2295,13 +2343,13 @@ Data type: `String`
 
 The name of the login.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqllogin--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqllogin--name"></a>`name`
 
 namevar
 
@@ -2309,7 +2357,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqllogin--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2321,7 +2369,7 @@ Default value: `property`
 ### <a name="dsc_sqlmaxdop"></a>`dsc_sqlmaxdop`
 
 The DSC SqlMaxDop resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2335,7 +2383,7 @@ If set to `$true` then max degree of parallelism will be dynamically configured.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 When set to `'Present'` then max degree of parallelism will be set to either the value in parameter **MaxDop** or dynamically configured when parameter **DynamicAlloc** is set to `$true`. When set to `'Absent'` max degree of parallelism will be set to `0` which means no limit in number of processors used in parallel plan execution.
 
@@ -2367,12 +2415,12 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlmaxdop` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlmaxdop--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlmaxdop--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlmaxdop--name)
+* [`validation_mode`](#-dsc_sqlmaxdop--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlmaxdop--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2380,13 +2428,13 @@ Data type: `String`
 
 The name of the SQL instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlmaxdop--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlmaxdop--name"></a>`name`
 
 namevar
 
@@ -2394,7 +2442,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlmaxdop--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2406,7 +2454,7 @@ Default value: `property`
 ### <a name="dsc_sqlmemory"></a>`dsc_sqlmemory`
 
 The DSC SqlMemory resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2420,7 +2468,7 @@ If set to `$true` then max memory will be dynamically configured. When this para
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 When set to `'Present'` then min and max memory will be set to either the value in parameter **MinMemory** and **MaxMemory**, or dynamically configured when parameter **DynamicAlloc** is set to `$true`. When set to `'Absent'` min and max memory will be set to its default values. Default value is `'Present'`.
 
@@ -2470,12 +2518,12 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlmemory` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlmemory--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlmemory--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlmemory--name)
+* [`validation_mode`](#-dsc_sqlmemory--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlmemory--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2483,13 +2531,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlmemory--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlmemory--name"></a>`name`
 
 namevar
 
@@ -2497,7 +2545,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlmemory--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2509,7 +2557,7 @@ Default value: `property`
 ### <a name="dsc_sqlpermission"></a>`dsc_sqlpermission`
 
 The DSC SqlPermission resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2518,8 +2566,8 @@ The following properties are available in the `dsc_sqlpermission` type.
 ##### `dsc_permission`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['AdministerBulkOperations', 'AlterAnyServerAudit', 'AlterAnyCredential', 'AlterAnyConnection', 'AlterAnyDatabase', 'AlterAnyEventNotification', 'AlterAnyEndpoint', 'AlterAnyLogin', 'AlterAnyLinkedServer', 'AlterResources', 'AlterServerState', 'AlterSettings', 'AlterTrace', 'AuthenticateServer', 'ControlServer', 'ConnectSql', 'CreateAnyDatabase', 'CreateDdlEventNotification', 'CreateEndpoint', 'CreateTraceEventNotification', 'Shutdown', 'ViewAnyDefinition', 'ViewAnyDatabase', 'ViewServerState', 'ExternalAccessAssembly', 'UnsafeAssembly', 'AlterAnyServerRole', 'CreateServerRole', 'AlterAnyAvailabilityGroup', 'CreateAvailabilityGroup', 'AlterAnyEventSession', 'SelectAllUserSecurables', 'ConnectAnyDatabase', 'ImpersonateAnyLogin', 'administerbulkoperations', 'alteranyserveraudit', 'alteranycredential', 'alteranyconnection', 'alteranydatabase', 'alteranyeventnotification', 'alteranyendpoint', 'alteranylogin', 'alteranylinkedserver', 'alterresources', 'alterserverstate', 'altersettings', 'altertrace', 'authenticateserver', 'controlserver', 'connectsql', 'createanydatabase', 'createddleventnotification', 'createendpoint', 'createtraceeventnotification', 'shutdown', 'viewanydefinition', 'viewanydatabase', 'viewserverstate', 'externalaccessassembly', 'unsafeassembly', 'alteranyserverrole', 'createserverrole', 'alteranyavailabilitygroup', 'createavailabilitygroup', 'alteranyeventsession', 'selectallusersecurables', 'connectanydatabase', 'impersonateanylogin']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerBulkOperations', 'administerbulkoperations', 'AlterAnyServerAudit', 'alteranyserveraudit', 'AlterAnyCredential', 'alteranycredential', 'AlterAnyConnection', 'alteranyconnection', 'AlterAnyDatabase', 'alteranydatabase', 'AlterAnyEventNotification', 'alteranyeventnotification', 'AlterAnyEndpoint', 'alteranyendpoint', 'AlterAnyLogin', 'alteranylogin', 'AlterAnyLinkedServer', 'alteranylinkedserver', 'AlterResources', 'alterresources', 'AlterServerState', 'alterserverstate', 'AlterSettings', 'altersettings', 'AlterTrace', 'altertrace', 'AuthenticateServer', 'authenticateserver', 'ControlServer', 'controlserver', 'ConnectSql', 'connectsql', 'CreateAnyDatabase', 'createanydatabase', 'CreateDdlEventNotification', 'createddleventnotification', 'CreateEndpoint', 'createendpoint', 'CreateTraceEventNotification', 'createtraceeventnotification', 'Shutdown', 'shutdown', 'ViewAnyDefinition', 'viewanydefinition', 'ViewAnyDatabase', 'viewanydatabase', 'ViewServerState', 'viewserverstate', 'ExternalAccessAssembly', 'externalaccessassembly', 'UnsafeAssembly', 'unsafeassembly', 'AlterAnyServerRole', 'alteranyserverrole', 'CreateServerRole', 'createserverrole', 'AlterAnyAvailabilityGroup', 'alteranyavailabilitygroup', 'CreateAvailabilityGroup', 'createavailabilitygroup', 'AlterAnyEventSession', 'alteranyeventsession', 'SelectAllUserSecurables', 'selectallusersecurables', 'ConnectAnyDatabase', 'connectanydatabase', 'ImpersonateAnyLogin', 'impersonateanylogin']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -2527,8 +2575,8 @@ Data type: `Optional[Array[Struct[{
 ##### `dsc_permissiontoexclude`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['AdministerBulkOperations', 'AlterAnyServerAudit', 'AlterAnyCredential', 'AlterAnyConnection', 'AlterAnyDatabase', 'AlterAnyEventNotification', 'AlterAnyEndpoint', 'AlterAnyLogin', 'AlterAnyLinkedServer', 'AlterResources', 'AlterServerState', 'AlterSettings', 'AlterTrace', 'AuthenticateServer', 'ControlServer', 'ConnectSql', 'CreateAnyDatabase', 'CreateDdlEventNotification', 'CreateEndpoint', 'CreateTraceEventNotification', 'Shutdown', 'ViewAnyDefinition', 'ViewAnyDatabase', 'ViewServerState', 'ExternalAccessAssembly', 'UnsafeAssembly', 'AlterAnyServerRole', 'CreateServerRole', 'AlterAnyAvailabilityGroup', 'CreateAvailabilityGroup', 'AlterAnyEventSession', 'SelectAllUserSecurables', 'ConnectAnyDatabase', 'ImpersonateAnyLogin', 'administerbulkoperations', 'alteranyserveraudit', 'alteranycredential', 'alteranyconnection', 'alteranydatabase', 'alteranyeventnotification', 'alteranyendpoint', 'alteranylogin', 'alteranylinkedserver', 'alterresources', 'alterserverstate', 'altersettings', 'altertrace', 'authenticateserver', 'controlserver', 'connectsql', 'createanydatabase', 'createddleventnotification', 'createendpoint', 'createtraceeventnotification', 'shutdown', 'viewanydefinition', 'viewanydatabase', 'viewserverstate', 'externalaccessassembly', 'unsafeassembly', 'alteranyserverrole', 'createserverrole', 'alteranyavailabilitygroup', 'createavailabilitygroup', 'alteranyeventsession', 'selectallusersecurables', 'connectanydatabase', 'impersonateanylogin']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerBulkOperations', 'administerbulkoperations', 'AlterAnyServerAudit', 'alteranyserveraudit', 'AlterAnyCredential', 'alteranycredential', 'AlterAnyConnection', 'alteranyconnection', 'AlterAnyDatabase', 'alteranydatabase', 'AlterAnyEventNotification', 'alteranyeventnotification', 'AlterAnyEndpoint', 'alteranyendpoint', 'AlterAnyLogin', 'alteranylogin', 'AlterAnyLinkedServer', 'alteranylinkedserver', 'AlterResources', 'alterresources', 'AlterServerState', 'alterserverstate', 'AlterSettings', 'altersettings', 'AlterTrace', 'altertrace', 'AuthenticateServer', 'authenticateserver', 'ControlServer', 'controlserver', 'ConnectSql', 'connectsql', 'CreateAnyDatabase', 'createanydatabase', 'CreateDdlEventNotification', 'createddleventnotification', 'CreateEndpoint', 'createendpoint', 'CreateTraceEventNotification', 'createtraceeventnotification', 'Shutdown', 'shutdown', 'ViewAnyDefinition', 'viewanydefinition', 'ViewAnyDatabase', 'viewanydatabase', 'ViewServerState', 'viewserverstate', 'ExternalAccessAssembly', 'externalaccessassembly', 'UnsafeAssembly', 'unsafeassembly', 'AlterAnyServerRole', 'alteranyserverrole', 'CreateServerRole', 'createserverrole', 'AlterAnyAvailabilityGroup', 'alteranyavailabilitygroup', 'CreateAvailabilityGroup', 'createavailabilitygroup', 'AlterAnyEventSession', 'alteranyeventsession', 'SelectAllUserSecurables', 'selectallusersecurables', 'ConnectAnyDatabase', 'connectanydatabase', 'ImpersonateAnyLogin', 'impersonateanylogin']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -2536,8 +2584,8 @@ Data type: `Optional[Array[Struct[{
 ##### `dsc_permissiontoinclude`
 
 Data type: `Optional[Array[Struct[{
-              permission => Array[Enum['AdministerBulkOperations', 'AlterAnyServerAudit', 'AlterAnyCredential', 'AlterAnyConnection', 'AlterAnyDatabase', 'AlterAnyEventNotification', 'AlterAnyEndpoint', 'AlterAnyLogin', 'AlterAnyLinkedServer', 'AlterResources', 'AlterServerState', 'AlterSettings', 'AlterTrace', 'AuthenticateServer', 'ControlServer', 'ConnectSql', 'CreateAnyDatabase', 'CreateDdlEventNotification', 'CreateEndpoint', 'CreateTraceEventNotification', 'Shutdown', 'ViewAnyDefinition', 'ViewAnyDatabase', 'ViewServerState', 'ExternalAccessAssembly', 'UnsafeAssembly', 'AlterAnyServerRole', 'CreateServerRole', 'AlterAnyAvailabilityGroup', 'CreateAvailabilityGroup', 'AlterAnyEventSession', 'SelectAllUserSecurables', 'ConnectAnyDatabase', 'ImpersonateAnyLogin', 'administerbulkoperations', 'alteranyserveraudit', 'alteranycredential', 'alteranyconnection', 'alteranydatabase', 'alteranyeventnotification', 'alteranyendpoint', 'alteranylogin', 'alteranylinkedserver', 'alterresources', 'alterserverstate', 'altersettings', 'altertrace', 'authenticateserver', 'controlserver', 'connectsql', 'createanydatabase', 'createddleventnotification', 'createendpoint', 'createtraceeventnotification', 'shutdown', 'viewanydefinition', 'viewanydatabase', 'viewserverstate', 'externalaccessassembly', 'unsafeassembly', 'alteranyserverrole', 'createserverrole', 'alteranyavailabilitygroup', 'createavailabilitygroup', 'alteranyeventsession', 'selectallusersecurables', 'connectanydatabase', 'impersonateanylogin']],
-              state => Enum['Grant', 'GrantWithGrant', 'Deny', 'grant', 'grantwithgrant', 'deny']
+              permission => Array[Enum['AdministerBulkOperations', 'administerbulkoperations', 'AlterAnyServerAudit', 'alteranyserveraudit', 'AlterAnyCredential', 'alteranycredential', 'AlterAnyConnection', 'alteranyconnection', 'AlterAnyDatabase', 'alteranydatabase', 'AlterAnyEventNotification', 'alteranyeventnotification', 'AlterAnyEndpoint', 'alteranyendpoint', 'AlterAnyLogin', 'alteranylogin', 'AlterAnyLinkedServer', 'alteranylinkedserver', 'AlterResources', 'alterresources', 'AlterServerState', 'alterserverstate', 'AlterSettings', 'altersettings', 'AlterTrace', 'altertrace', 'AuthenticateServer', 'authenticateserver', 'ControlServer', 'controlserver', 'ConnectSql', 'connectsql', 'CreateAnyDatabase', 'createanydatabase', 'CreateDdlEventNotification', 'createddleventnotification', 'CreateEndpoint', 'createendpoint', 'CreateTraceEventNotification', 'createtraceeventnotification', 'Shutdown', 'shutdown', 'ViewAnyDefinition', 'viewanydefinition', 'ViewAnyDatabase', 'viewanydatabase', 'ViewServerState', 'viewserverstate', 'ExternalAccessAssembly', 'externalaccessassembly', 'UnsafeAssembly', 'unsafeassembly', 'AlterAnyServerRole', 'alteranyserverrole', 'CreateServerRole', 'createserverrole', 'AlterAnyAvailabilityGroup', 'alteranyavailabilitygroup', 'CreateAvailabilityGroup', 'createavailabilitygroup', 'AlterAnyEventSession', 'alteranyeventsession', 'SelectAllUserSecurables', 'selectallusersecurables', 'ConnectAnyDatabase', 'connectanydatabase', 'ImpersonateAnyLogin', 'impersonateanylogin']],
+              state => Enum['Grant', 'grant', 'GrantWithGrant', 'grantwithgrant', 'Deny', 'deny']
             }]]]`
 
  
@@ -2557,24 +2605,30 @@ Data type: `Optional[String]`
 
  
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlpermission` type.
 
-* [`dsc_credential`](#dsc_credential)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_credential`](#-dsc_sqlpermission--dsc_credential)
+* [`dsc_instancename`](#-dsc_sqlpermission--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlpermission--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlpermission--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlpermission--name)
+* [`validation_mode`](#-dsc_sqlpermission--validation_mode)
 
-##### <a name="dsc_credential"></a>`dsc_credential`
+##### <a name="-dsc_sqlpermission--dsc_credential"></a>`dsc_credential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlpermission--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2582,7 +2636,7 @@ Data type: `String`
 
  
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlpermission--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -2590,13 +2644,13 @@ Data type: `String`
 
  
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlpermission--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlpermission--name"></a>`name`
 
 namevar
 
@@ -2604,7 +2658,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlpermission--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2616,7 +2670,7 @@ Default value: `property`
 ### <a name="dsc_sqlprotocol"></a>`dsc_sqlprotocol`
 
 The DSC SqlProtocol resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2670,17 +2724,23 @@ Data type: `Optional[Boolean]`
 
 If set to `$true` then the any attempt by the resource to restart the service is suppressed. The default value is `$false`.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlprotocol` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_protocolname`](#dsc_protocolname)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlprotocol--dsc_instancename)
+* [`dsc_protocolname`](#-dsc_sqlprotocol--dsc_protocolname)
+* [`dsc_psdscrunascredential`](#-dsc_sqlprotocol--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlprotocol--name)
+* [`validation_mode`](#-dsc_sqlprotocol--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlprotocol--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2688,21 +2748,21 @@ Data type: `String`
 
 Specifies the name of the _SQL Server_ instance to enable the protocol for.
 
-##### <a name="dsc_protocolname"></a>`dsc_protocolname`
+##### <a name="-dsc_sqlprotocol--dsc_protocolname"></a>`dsc_protocolname`
 
 namevar
 
-Data type: `Enum['SharedMemory', 'NamedPipes', 'TcpIp', 'sharedmemory', 'namedpipes', 'tcpip']`
+Data type: `Enum['SharedMemory', 'sharedmemory', 'NamedPipes', 'namedpipes', 'TcpIp', 'tcpip']`
 
 Specifies the name of network protocol to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlprotocol--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlprotocol--name"></a>`name`
 
 namevar
 
@@ -2710,7 +2770,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlprotocol--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2722,7 +2782,7 @@ Default value: `property`
 ### <a name="dsc_sqlprotocoltcpip"></a>`dsc_sqlprotocoltcpip`
 
 The DSC SqlProtocolTcpIp resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2788,17 +2848,23 @@ Data type: `Optional[Boolean]`
 
 Specifies whether the _SQL Server_ instance should use a dynamic port. If not specified, the existing value will not be changed. This parameter is not allowed to be used at the same time as the parameter **TcpPort**.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlprotocoltcpip` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_ipaddressgroup`](#dsc_ipaddressgroup)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlprotocoltcpip--dsc_instancename)
+* [`dsc_ipaddressgroup`](#-dsc_sqlprotocoltcpip--dsc_ipaddressgroup)
+* [`dsc_psdscrunascredential`](#-dsc_sqlprotocoltcpip--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlprotocoltcpip--name)
+* [`validation_mode`](#-dsc_sqlprotocoltcpip--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlprotocoltcpip--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2806,7 +2872,7 @@ Data type: `String`
 
 Specifies the name of the _SQL Server_ instance to manage the IP address group for.
 
-##### <a name="dsc_ipaddressgroup"></a>`dsc_ipaddressgroup`
+##### <a name="-dsc_sqlprotocoltcpip--dsc_ipaddressgroup"></a>`dsc_ipaddressgroup`
 
 namevar
 
@@ -2814,13 +2880,13 @@ Data type: `String`
 
 Specifies the name of the IP address group in the TCP/IP protocol, e.g. `'IP1'`, `'IP2'` etc., or `'IPAll'`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlprotocoltcpip--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlprotocoltcpip--name"></a>`name`
 
 namevar
 
@@ -2828,7 +2894,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlprotocoltcpip--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2840,7 +2906,7 @@ Default value: `property`
 ### <a name="dsc_sqlreplication"></a>`dsc_sqlreplication`
 
 The DSC SqlReplication resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2854,13 +2920,13 @@ Distribution database name. If the parameter **DistributionMode**  is set to `'L
 
 ##### `dsc_distributormode`
 
-Data type: `Enum['Local', 'Remote', 'local', 'remote']`
+Data type: `Enum['Local', 'local', 'Remote', 'remote']`
 
 `'Local'` - Instance will be configured as it's own distributor. `'Remote'` - Instance will be configure with remote distributor (remote distributor needs to be already configured for distribution).
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 `'Present'` will configure replication, `'Absent'` will disable (remove) replication. Default value is `'Present'`.
 
@@ -2892,19 +2958,19 @@ Publisher working directory.
 
 The following parameters are available in the `dsc_sqlreplication` type.
 
-* [`dsc_adminlinkcredentials`](#dsc_adminlinkcredentials)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_adminlinkcredentials`](#-dsc_sqlreplication--dsc_adminlinkcredentials)
+* [`dsc_instancename`](#-dsc_sqlreplication--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlreplication--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlreplication--name)
+* [`validation_mode`](#-dsc_sqlreplication--validation_mode)
 
-##### <a name="dsc_adminlinkcredentials"></a>`dsc_adminlinkcredentials`
+##### <a name="-dsc_sqlreplication--dsc_adminlinkcredentials"></a>`dsc_adminlinkcredentials`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 AdminLink password to be used when setting up publisher distributor relationship.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlreplication--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2912,13 +2978,13 @@ Data type: `String`
 
 Specifies the _SQL Server_ instance name where replication distribution will be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlreplication--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlreplication--name"></a>`name`
 
 namevar
 
@@ -2926,7 +2992,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlreplication--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -2938,7 +3004,7 @@ Default value: `property`
 ### <a name="dsc_sqlrole"></a>`dsc_sqlrole`
 
 The DSC SqlRole resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -2946,7 +3012,7 @@ The following properties are available in the `dsc_sqlrole` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 An enumerated value that describes if the server role is added (`'Present'`) or dropped (`'Absent'`). Default value is `'Present'`.
 
@@ -2978,13 +3044,13 @@ The host name of the _SQL Server_ to be configured. Default value is the current
 
 The following parameters are available in the `dsc_sqlrole` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_serverrolename`](#dsc_serverrolename)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlrole--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlrole--dsc_psdscrunascredential)
+* [`dsc_serverrolename`](#-dsc_sqlrole--dsc_serverrolename)
+* [`name`](#-dsc_sqlrole--name)
+* [`validation_mode`](#-dsc_sqlrole--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlrole--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -2992,13 +3058,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlrole--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_serverrolename"></a>`dsc_serverrolename`
+##### <a name="-dsc_sqlrole--dsc_serverrolename"></a>`dsc_serverrolename`
 
 namevar
 
@@ -3006,7 +3072,7 @@ Data type: `String`
 
 The name of of _SQL Server Database Engine_ role to add or remove.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlrole--name"></a>`name`
 
 namevar
 
@@ -3014,7 +3080,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlrole--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3026,7 +3092,7 @@ Default value: `property`
 ### <a name="dsc_sqlrs"></a>`dsc_sqlrs`
 
 The DSC SqlRS resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3043,6 +3109,12 @@ Name of the _SQL Server_ instance to host the _Reporting Services_ database.
 Data type: `String`
 
 Name of the _SQL Server_ to host the _Reporting Services_ database.
+
+##### `dsc_encrypt`
+
+Data type: `Optional[Enum['Mandatory', 'mandatory', 'Optional', 'optional', 'Strict', 'strict']]`
+
+Specifies how encryption should be enforced when using command `Invoke-SqlCmd`. When not specified, the default value is `Mandatory`.
 
 ##### `dsc_isinitialized`
 
@@ -3086,16 +3158,22 @@ Data type: `Optional[Boolean]`
 
 If connections to the _Reporting Services_ must use SSL. If this parameter is not assigned a value, the default is that _Reporting Services_ does not use SSL.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlrs` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlrs--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlrs--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlrs--name)
+* [`validation_mode`](#-dsc_sqlrs--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlrs--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -3103,13 +3181,13 @@ Data type: `String`
 
 Name of the _SQL Server Reporting Services_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlrs--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlrs--name"></a>`name`
 
 namevar
 
@@ -3117,7 +3195,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlrs--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3129,7 +3207,7 @@ Default value: `property`
 ### <a name="dsc_sqlrssetup"></a>`dsc_sqlrssetup`
 
 The DSC SqlRSSetup resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3137,7 +3215,7 @@ The following properties are available in the `dsc_sqlrssetup` type.
 
 ##### `dsc_action`
 
-Data type: `Optional[Enum['Install', 'Uninstall', 'install', 'uninstall']]`
+Data type: `Optional[Enum['Install', 'install', 'Uninstall', 'uninstall']]`
 
 The action to be performed. Default value is `'Install'` which performs either install or upgrade.
 
@@ -3149,7 +3227,7 @@ Returns the current version of the installed _Microsoft SQL Server Reporting Ser
 
 ##### `dsc_edition`
 
-Data type: `Optional[Enum['Development', 'Evaluation', 'ExpressAdvanced', 'development', 'evaluation', 'expressadvanced']]`
+Data type: `Optional[Enum['Development', 'development', 'Evaluation', 'evaluation', 'ExpressAdvanced', 'expressadvanced']]`
 
 Sets the custom free edition. This parameter is mutually exclusive with the parameter **ProductKey**.
 
@@ -3173,7 +3251,7 @@ Forces a restart after installation is finished. If set to `$true` then it will 
 
 ##### `dsc_iacceptlicenseterms`
 
-Data type: `Enum['Yes''yes']`
+Data type: `Enum['Yes', 'yes']`
 
 Accept licens terms. This must be set to `'Yes'`.
 
@@ -3225,37 +3303,43 @@ Data type: `Optional[Boolean]`
 
 Upgrades installed product version if the major product version of the source executable is higher than the currently installed major version. Requires that either the **ProductKey** or the **Edition** parameter is also assigned. Default is `$false`.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlrssetup` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_sourcecredential`](#dsc_sourcecredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlrssetup--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlrssetup--dsc_psdscrunascredential)
+* [`dsc_sourcecredential`](#-dsc_sqlrssetup--dsc_sourcecredential)
+* [`name`](#-dsc_sqlrssetup--name)
+* [`validation_mode`](#-dsc_sqlrssetup--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlrssetup--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
-Data type: `Enum['SSRS''ssrs']`
+Data type: `Enum['SSRS', 'ssrs']`
 
 Name of the _Microsoft SQL Server Reporting Service_ instance to installed. This can only be set to `'SSRS'`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlrssetup--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_sourcecredential"></a>`dsc_sourcecredential`
+##### <a name="-dsc_sqlrssetup--dsc_sourcecredential"></a>`dsc_sourcecredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Credentials used to access the path set in the parameter **SourcePath**.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlrssetup--name"></a>`name`
 
 namevar
 
@@ -3263,7 +3347,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlrssetup--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3275,7 +3359,7 @@ Default value: `property`
 ### <a name="dsc_sqlscript"></a>`dsc_sqlscript`
 
 The DSC SqlScript resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3285,7 +3369,13 @@ The following properties are available in the `dsc_sqlscript` type.
 
 Data type: `Optional[Boolean]`
 
-Specifies, as a boolean, whether or not PowerShell will ignore `Invoke-Sqlcmd` scripting variables that share a format such as `$(variable_name)`. For more information how to use this, please go to the help documentation for [Invoke-Sqlcmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/invoke-sqlcmd).
+Specifies, as a boolean, whether or not PowerShell will ignore `Invoke-SqlCmd` scripting variables that share a format such as `$(variable_name)`. For more information how to use this, please go to the help documentation for [Invoke-SqlCmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-SqlCmd).
+
+##### `dsc_encrypt`
+
+Data type: `Optional[Enum['Mandatory', 'mandatory', 'Optional', 'optional', 'Strict', 'strict']]`
+
+Specifies how encryption should be enforced when using command `Invoke-SqlCmd`. When not specified, the default value is `Mandatory`.
 
 ##### `dsc_getresult`
 
@@ -3297,7 +3387,7 @@ Returns the result from the T-SQL script provided in the parameter **GetFilePath
 
 Data type: `Optional[Integer[0, 4294967295]]`
 
-Specifies, as an integer, the number of seconds after which the T-SQL script execution will time out. In some _SQL Server_ versions there is a bug in `Invoke-Sqlcmd` where the normal default value `0` (no timeout) is not respected and the default value is incorrectly set to 30 seconds.
+Specifies, as an integer, the number of seconds after which the T-SQL script execution will time out. In some _SQL Server_ versions there is a bug in `Invoke-SqlCmd` where the normal default value `0` (no timeout) is not respected and the default value is incorrectly set to 30 seconds.
 
 ##### `dsc_servername`
 
@@ -3309,22 +3399,28 @@ Specifies the host name of the _SQL Server_ to be configured. Default value is t
 
 Data type: `Optional[Array[String]]`
 
-Specifies, as a string array, a scripting variable for use in the T-SQL script, and sets a value for the variable. Use a _Windows PowerShell_ array to specify multiple variables and their values. For more information how to use this, please go to the help documentation for [Invoke-Sqlcmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/invoke-sqlcmd).
+Specifies, as a string array, a scripting variable for use in the T-SQL script, and sets a value for the variable. Use a _Windows PowerShell_ array to specify multiple variables and their values. For more information how to use this, please go to the help documentation for [Invoke-SqlCmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-SqlCmd).
+
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
 
 #### Parameters
 
 The following parameters are available in the `dsc_sqlscript` type.
 
-* [`dsc_credential`](#dsc_credential)
-* [`dsc_getfilepath`](#dsc_getfilepath)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_setfilepath`](#dsc_setfilepath)
-* [`dsc_testfilepath`](#dsc_testfilepath)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_credential`](#-dsc_sqlscript--dsc_credential)
+* [`dsc_getfilepath`](#-dsc_sqlscript--dsc_getfilepath)
+* [`dsc_instancename`](#-dsc_sqlscript--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlscript--dsc_psdscrunascredential)
+* [`dsc_setfilepath`](#-dsc_sqlscript--dsc_setfilepath)
+* [`dsc_testfilepath`](#-dsc_sqlscript--dsc_testfilepath)
+* [`name`](#-dsc_sqlscript--name)
+* [`validation_mode`](#-dsc_sqlscript--validation_mode)
 
-##### <a name="dsc_credential"></a>`dsc_credential`
+##### <a name="-dsc_sqlscript--dsc_credential"></a>`dsc_credential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
@@ -3333,7 +3429,7 @@ assign the credentials to the built-in parameter **PsDscRunAsCredential**. If ne
 or **PsDscRunAsCredential** are assigned, then the SYSTEM account will be used to authenticate using _Windows
 Authentication_.
 
-##### <a name="dsc_getfilepath"></a>`dsc_getfilepath`
+##### <a name="-dsc_sqlscript--dsc_getfilepath"></a>`dsc_getfilepath`
 
 namevar
 
@@ -3342,7 +3438,7 @@ Data type: `String`
 Path to the T-SQL file that will perform _Get_ action. Any values returned by the T-SQL queries will also be returned
 when calling _Get_ (for example by using the cmdlet `Get-DscConfiguration`) through the `'GetResult'` property.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlscript--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -3351,13 +3447,13 @@ Data type: `String`
 Specifies the name of the _SQL Server Database Engine_ instance. For the default instance specify the value
 `'MSSQLSERVER'`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlscript--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_setfilepath"></a>`dsc_setfilepath`
+##### <a name="-dsc_sqlscript--dsc_setfilepath"></a>`dsc_setfilepath`
 
 namevar
 
@@ -3365,17 +3461,17 @@ Data type: `String`
 
 Path to the T-SQL file that will perform _Set_ action.
 
-##### <a name="dsc_testfilepath"></a>`dsc_testfilepath`
+##### <a name="-dsc_sqlscript--dsc_testfilepath"></a>`dsc_testfilepath`
 
 namevar
 
 Data type: `String`
 
 Path to the T-SQL file that will perform _Test_ action. Any script that does not throw an error or returns `NULL` is
-evaluated to `$true`. The cmdlet `Invoke-Sqlcmd` treats T-SQL `PRINT` statements as verbose text, and will not cause the
+evaluated to `$true`. The cmdlet `Invoke-SqlCmd` treats T-SQL `PRINT` statements as verbose text, and will not cause the
 test to return `$false`.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlscript--name"></a>`name`
 
 namevar
 
@@ -3383,7 +3479,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlscript--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3395,7 +3491,7 @@ Default value: `property`
 ### <a name="dsc_sqlscriptquery"></a>`dsc_sqlscriptquery`
 
 The DSC SqlScriptQuery resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3405,7 +3501,13 @@ The following properties are available in the `dsc_sqlscriptquery` type.
 
 Data type: `Optional[Boolean]`
 
-Specifies, as a boolean, whether or not PowerShell will ignore `Invoke-SqlCmd` scripting variables that share a format such as `$(variable_name)`. For more information how to use this, please go to the help documentation for [Invoke-Sqlcmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/invoke-sqlcmd).
+Specifies, as a boolean, whether or not PowerShell will ignore `Invoke-SqlCmd` scripting variables that share a format such as `$(variable_name)`. For more information how to use this, please go to the help documentation for [Invoke-SqlCmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-SqlCmd).
+
+##### `dsc_encrypt`
+
+Data type: `Optional[Enum['Mandatory', 'mandatory', 'Optional', 'optional', 'Strict', 'strict']]`
+
+Specifies how encryption should be enforced when using command `Invoke-SqlCmd`. When not specified, the default value is `Mandatory`.
 
 ##### `dsc_getresult`
 
@@ -3417,7 +3519,7 @@ Returns the result from the T-SQL script provided in the parameter **GetQuery** 
 
 Data type: `Optional[Integer[0, 4294967295]]`
 
-Specifies, as an integer, the number of seconds after which the T-SQL script execution will time out. In some _SQL Server_ versions there is a bug in `Invoke-Sqlcmd` where the normal default value `0` (no timeout) is not respected and the default value is incorrectly set to 30 seconds.
+Specifies, as an integer, the number of seconds after which the T-SQL script execution will time out. In some _SQL Server_ versions there is a bug in `Invoke-SqlCmd` where the normal default value `0` (no timeout) is not respected and the default value is incorrectly set to 30 seconds.
 
 ##### `dsc_servername`
 
@@ -3429,22 +3531,28 @@ Specifies the host name of the _SQL Server_ to be configured. Default value is t
 
 Data type: `Optional[Array[String]]`
 
-Specifies, as a string array, a scripting variable for use in the sql script, and sets a value for the variable. Use a _Windows PowerShell_ array to specify multiple variables and their values. For more information how to use this, please go to the help documentation for [Invoke-Sqlcmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/invoke-sqlcmd).
+Specifies, as a string array, a scripting variable for use in the sql script, and sets a value for the variable. Use a _Windows PowerShell_ array to specify multiple variables and their values. For more information how to use this, please go to the help documentation for [Invoke-SqlCmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-SqlCmd).
+
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
 
 #### Parameters
 
 The following parameters are available in the `dsc_sqlscriptquery` type.
 
-* [`dsc_credential`](#dsc_credential)
-* [`dsc_getquery`](#dsc_getquery)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_setquery`](#dsc_setquery)
-* [`dsc_testquery`](#dsc_testquery)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_credential`](#-dsc_sqlscriptquery--dsc_credential)
+* [`dsc_getquery`](#-dsc_sqlscriptquery--dsc_getquery)
+* [`dsc_instancename`](#-dsc_sqlscriptquery--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlscriptquery--dsc_psdscrunascredential)
+* [`dsc_setquery`](#-dsc_sqlscriptquery--dsc_setquery)
+* [`dsc_testquery`](#-dsc_sqlscriptquery--dsc_testquery)
+* [`name`](#-dsc_sqlscriptquery--name)
+* [`validation_mode`](#-dsc_sqlscriptquery--validation_mode)
 
-##### <a name="dsc_credential"></a>`dsc_credential`
+##### <a name="-dsc_sqlscriptquery--dsc_credential"></a>`dsc_credential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
@@ -3453,7 +3561,7 @@ assign the credentials to the built-in parameter **PsDscRunAsCredential**. If ne
 and **PsDscRunAsCredential** are assigned then the SYSTEM account will be used to authenticate using _Windows
 Authentication_.
 
-##### <a name="dsc_getquery"></a>`dsc_getquery`
+##### <a name="-dsc_sqlscriptquery--dsc_getquery"></a>`dsc_getquery`
 
 namevar
 
@@ -3462,7 +3570,7 @@ Data type: `String`
 Full T-SQL query that will perform _Get_ action. Any values returned by the T-SQL queries will also be returned when
 calling _Get_ (for example by using the cmdlet `Get-DscConfiguration`) through the `'GetResult'` property.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlscriptquery--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -3471,13 +3579,13 @@ Data type: `String`
 Specifies the name of the _SQL Server Database Engine_ instance. For the default instance specify the value
 `'MSSQLSERVER'`.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlscriptquery--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_setquery"></a>`dsc_setquery`
+##### <a name="-dsc_sqlscriptquery--dsc_setquery"></a>`dsc_setquery`
 
 namevar
 
@@ -3485,17 +3593,17 @@ Data type: `String`
 
 Full T-SQL query that will perform _Set_ action.
 
-##### <a name="dsc_testquery"></a>`dsc_testquery`
+##### <a name="-dsc_sqlscriptquery--dsc_testquery"></a>`dsc_testquery`
 
 namevar
 
 Data type: `String`
 
 Full T-SQL query that will perform _Test_ action. Any script that does not throw an error or returns `NULL` is evaluated
-to `$true`. The cmdlet `Invoke-Sqlcmd` treats T-SQL `PRINT` statements as verbose text, and will not cause the test to
+to `$true`. The cmdlet `Invoke-SqlCmd` treats T-SQL `PRINT` statements as verbose text, and will not cause the test to
 return `$false`.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlscriptquery--name"></a>`name`
 
 namevar
 
@@ -3503,7 +3611,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlscriptquery--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3515,7 +3623,7 @@ Default value: `property`
 ### <a name="dsc_sqlsecureconnection"></a>`dsc_sqlsecureconnection`
 
 The DSC SqlSecureConnection resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3523,7 +3631,7 @@ The following properties are available in the `dsc_sqlsecureconnection` type.
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 If encryption should be enabled (`'Present'`) or disabled (`'Absent'`).
 
@@ -3532,6 +3640,12 @@ If encryption should be enabled (`'Present'`) or disabled (`'Absent'`).
 Data type: `Optional[Boolean]`
 
 If all connections to the _SQL Server_ instance should be encrypted. If this parameter is not assigned a value, the default value is `$true` meaning that all connections must be encrypted.
+
+##### `dsc_servername`
+
+Data type: `Optional[String]`
+
+Specifies the host name that will be used when restarting the SQL Server instance. If the SQL Server belongs to a cluster or availability group specify the host name for the listener or cluster group. The specified name must match the name that is used by the certificate specified for the parameter `Thumbprint`. Default value is `localhost`.
 
 ##### `dsc_serviceaccount`
 
@@ -3555,12 +3669,12 @@ Thumbprint of the certificate being used for encryption. If parameter **Ensure**
 
 The following parameters are available in the `dsc_sqlsecureconnection` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlsecureconnection--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlsecureconnection--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlsecureconnection--name)
+* [`validation_mode`](#-dsc_sqlsecureconnection--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlsecureconnection--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -3568,13 +3682,13 @@ Data type: `String`
 
 Name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlsecureconnection--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlsecureconnection--name"></a>`name`
 
 namevar
 
@@ -3582,7 +3696,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlsecureconnection--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3594,7 +3708,7 @@ Default value: `property`
 ### <a name="dsc_sqlserviceaccount"></a>`dsc_sqlserviceaccount`
 
 The DSC SqlServiceAccount resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3624,26 +3738,32 @@ Data type: `Optional[String]`
 
 The version number for the service type to be managed for the instance that is specified in parameter **InstanceName**. Mandatory when parameter **ServiceType** is set to `'IntegrationServices'`.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlserviceaccount` type.
 
-* [`dsc_force`](#dsc_force)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_serviceaccount`](#dsc_serviceaccount)
-* [`dsc_servicetype`](#dsc_servicetype)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_force`](#-dsc_sqlserviceaccount--dsc_force)
+* [`dsc_instancename`](#-dsc_sqlserviceaccount--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlserviceaccount--dsc_psdscrunascredential)
+* [`dsc_serviceaccount`](#-dsc_sqlserviceaccount--dsc_serviceaccount)
+* [`dsc_servicetype`](#-dsc_sqlserviceaccount--dsc_servicetype)
+* [`name`](#-dsc_sqlserviceaccount--name)
+* [`validation_mode`](#-dsc_sqlserviceaccount--validation_mode)
 
-##### <a name="dsc_force"></a>`dsc_force`
+##### <a name="-dsc_sqlserviceaccount--dsc_force"></a>`dsc_force`
 
 Data type: `Optional[Boolean]`
 
 Forces the service account to be updated. Useful for password changes. This will cause _Set_ to be run on each
 consecutive run.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlserviceaccount--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -3651,27 +3771,27 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlserviceaccount--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_serviceaccount"></a>`dsc_serviceaccount`
+##### <a name="-dsc_sqlserviceaccount--dsc_serviceaccount"></a>`dsc_serviceaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 The service account that should be used when running the _Windows_ service.
 
-##### <a name="dsc_servicetype"></a>`dsc_servicetype`
+##### <a name="-dsc_sqlserviceaccount--dsc_servicetype"></a>`dsc_servicetype`
 
 namevar
 
-Data type: `Enum['DatabaseEngine', 'SQLServerAgent', 'Search', 'IntegrationServices', 'AnalysisServices', 'ReportingServices', 'SQLServerBrowser', 'NotificationServices', 'databaseengine', 'sqlserveragent', 'search', 'integrationservices', 'analysisservices', 'reportingservices', 'sqlserverbrowser', 'notificationservices']`
+Data type: `Enum['DatabaseEngine', 'databaseengine', 'SQLServerAgent', 'sqlserveragent', 'Search', 'search', 'IntegrationServices', 'integrationservices', 'AnalysisServices', 'analysisservices', 'ReportingServices', 'reportingservices', 'SQLServerBrowser', 'sqlserverbrowser', 'NotificationServices', 'notificationservices']`
 
 The service type to be managed for the instance that is specified in parameter **InstanceName**.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlserviceaccount--name"></a>`name`
 
 namevar
 
@@ -3679,7 +3799,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlserviceaccount--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -3691,7 +3811,7 @@ Default value: `property`
 ### <a name="dsc_sqlsetup"></a>`dsc_sqlsetup`
 
 The DSC SqlSetup resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -3699,9 +3819,9 @@ The following properties are available in the `dsc_sqlsetup` type.
 
 ##### `dsc_action`
 
-Data type: `Optional[Enum['Install', 'Upgrade', 'InstallFailoverCluster', 'AddNode', 'PrepareFailoverCluster', 'CompleteFailoverCluster', 'install', 'upgrade', 'installfailovercluster', 'addnode', 'preparefailovercluster', 'completefailovercluster']]`
+Data type: `Optional[Enum['Install', 'install', 'Upgrade', 'upgrade', 'InstallFailoverCluster', 'installfailovercluster', 'AddNode', 'addnode', 'PrepareFailoverCluster', 'preparefailovercluster', 'CompleteFailoverCluster', 'completefailovercluster']]`
 
-The action to be performed. Default value is `'Install'`. **NOTE: AddNode is not currently functional.**
+The action to be performed. Default value is `'Install'`. <br />> [!NOTE] **AddNode is not currently functional.**
 
 ##### `dsc_agtsvcaccountusername`
 
@@ -3711,7 +3831,7 @@ Returns the username for the _SQL Agent_'s _Windows_ service.
 
 ##### `dsc_agtsvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for the _SQL Server Agent_'s _Windows_ service.
 
@@ -3747,7 +3867,7 @@ Path for _Analysis Services_'s log files.
 
 ##### `dsc_asservermode`
 
-Data type: `Optional[Enum['MULTIDIMENSIONAL', 'TABULAR', 'POWERPIVOT', 'multidimensional', 'tabular', 'powerpivot']]`
+Data type: `Optional[Enum['MULTIDIMENSIONAL', 'multidimensional', 'TABULAR', 'tabular', 'POWERPIVOT', 'powerpivot']]`
 
 The server mode for _SQL Server Analysis Services_ instance. The default is to install in Multidimensional mode. Valid values in a cluster scenario are `'MULTIDIMENSIONAL'` or `'TABULAR'`. Parameter **ASServerMode** is case-sensitive. **All values must be expressed in upper case**.
 
@@ -3759,7 +3879,7 @@ Returns the username for the _SQL Server Analysis Services_'s _Windows_ service.
 
 ##### `dsc_assvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for the _SQL Server Analysis Services_'s _Windows_ service.
 
@@ -3777,7 +3897,7 @@ Path for _Analysis Services_'s temp files.
 
 ##### `dsc_browsersvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for _SQL Server Browser_'s _Windows_ service.
 
@@ -3873,7 +3993,7 @@ Returns the username for the _Integration Services_'s _Windows_ service.
 
 ##### `dsc_issvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for the _SQL Server Integration Services_'s _Windows_ service.
 
@@ -3891,7 +4011,7 @@ Product key for licensed installations.
 
 ##### `dsc_rsinstallmode`
 
-Data type: `Optional[Enum['SharePointFilesOnlyMode', 'DefaultNativeMode', 'FilesOnlyMode', 'sharepointfilesonlymode', 'defaultnativemode', 'filesonlymode']]`
+Data type: `Optional[Enum['SharePointFilesOnlyMode', 'sharepointfilesonlymode', 'DefaultNativeMode', 'defaultnativemode', 'FilesOnlyMode', 'filesonlymode']]`
 
 Specifies the install mode for _SQL Server Report Services_ service.
 
@@ -3903,15 +4023,21 @@ Returns the username for the _Reporting Services_'s _Windows_ service.
 
 ##### `dsc_rssvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for the _SQL Server Reporting Services_'s _Windows_ service.
 
 ##### `dsc_securitymode`
 
-Data type: `Optional[Enum['SQL', 'Windows', 'sql', 'windows']]`
+Data type: `Optional[Enum['SQL', 'sql', 'Windows', 'windows']]`
 
 Security mode to apply to the _SQL Server_ instance. The value `'SQL'` indicates mixed-mode authentication while the value `'Windows'` indicates _Windows Authentication_. Default value is `'Windows'`.
+
+##### `dsc_servername`
+
+Data type: `Optional[String]`
+
+Specifies the host or network name of the _SQL Server_ instance. If the SQL Server belongs to a cluster or availability group it could be set to the host name for the listener or cluster group. If using a secure connection the specified value should be the same name that is used in the certificate. Default value is the current computer name.
 
 ##### `dsc_setupprocesstimeout`
 
@@ -3951,7 +4077,7 @@ Returns the username for the _SQL Server_'s _Windows_ service.
 
 ##### `dsc_sqlsvcstartuptype`
 
-Data type: `Optional[Enum['Automatic', 'Disabled', 'Manual', 'automatic', 'disabled', 'manual']]`
+Data type: `Optional[Enum['Automatic', 'automatic', 'Disabled', 'disabled', 'Manual', 'manual']]`
 
 Specifies the startup mode for the _SQL Server Database Engine_'s _Windows_ service.
 
@@ -4015,6 +4141,12 @@ Data type: `Optional[String]`
 
 Path for _SQL Server_ log files.
 
+##### `dsc_sqlversion`
+
+Data type: `Optional[String]`
+
+Specifies the SQL Server version that should be installed. Only the major version will be used, but the provided value must be set to at least major and minor version (e.g. `14.0`). When providing this parameter the media will not be used to evaluate version. Although, if the setup action is `Upgrade` then setting this parameter will throw an exception as the version from the install media is required.
+
 ##### `dsc_sqmreporting`
 
 Data type: `Optional[String]`
@@ -4051,42 +4183,48 @@ Data type: `Optional[Boolean]`
 
 Specifies to install the English version of _SQL Server_ on a localized operating system when the installation media includes language packs for both English and the language corresponding to the operating system.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlsetup` type.
 
-* [`dsc_agtsvcaccount`](#dsc_agtsvcaccount)
-* [`dsc_assvcaccount`](#dsc_assvcaccount)
-* [`dsc_ftsvcaccount`](#dsc_ftsvcaccount)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_issvcaccount`](#dsc_issvcaccount)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_rssvcaccount`](#dsc_rssvcaccount)
-* [`dsc_sapwd`](#dsc_sapwd)
-* [`dsc_sourcecredential`](#dsc_sourcecredential)
-* [`dsc_sqlsvcaccount`](#dsc_sqlsvcaccount)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_agtsvcaccount`](#-dsc_sqlsetup--dsc_agtsvcaccount)
+* [`dsc_assvcaccount`](#-dsc_sqlsetup--dsc_assvcaccount)
+* [`dsc_ftsvcaccount`](#-dsc_sqlsetup--dsc_ftsvcaccount)
+* [`dsc_instancename`](#-dsc_sqlsetup--dsc_instancename)
+* [`dsc_issvcaccount`](#-dsc_sqlsetup--dsc_issvcaccount)
+* [`dsc_psdscrunascredential`](#-dsc_sqlsetup--dsc_psdscrunascredential)
+* [`dsc_rssvcaccount`](#-dsc_sqlsetup--dsc_rssvcaccount)
+* [`dsc_sapwd`](#-dsc_sqlsetup--dsc_sapwd)
+* [`dsc_sourcecredential`](#-dsc_sqlsetup--dsc_sourcecredential)
+* [`dsc_sqlsvcaccount`](#-dsc_sqlsetup--dsc_sqlsvcaccount)
+* [`name`](#-dsc_sqlsetup--name)
+* [`validation_mode`](#-dsc_sqlsetup--validation_mode)
 
-##### <a name="dsc_agtsvcaccount"></a>`dsc_agtsvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_agtsvcaccount"></a>`dsc_agtsvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for the _SQL Agent_'s _Windows_ service.
 
-##### <a name="dsc_assvcaccount"></a>`dsc_assvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_assvcaccount"></a>`dsc_assvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for _Analysis Services_'s _Windows_ service.
 
-##### <a name="dsc_ftsvcaccount"></a>`dsc_ftsvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_ftsvcaccount"></a>`dsc_ftsvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for the _Full Text_'s _Windows_ service.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlsetup--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -4094,44 +4232,44 @@ Data type: `String`
 
 Specifies the name of the instance to be installed.
 
-##### <a name="dsc_issvcaccount"></a>`dsc_issvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_issvcaccount"></a>`dsc_issvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for _Integration Services_'s _Windows_ service.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlsetup--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_rssvcaccount"></a>`dsc_rssvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_rssvcaccount"></a>`dsc_rssvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for _Reporting Services_'s _Windows_ service.
 
-##### <a name="dsc_sapwd"></a>`dsc_sapwd`
+##### <a name="-dsc_sqlsetup--dsc_sapwd"></a>`dsc_sapwd`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Specifies the SA account's password. Only applicable if parameter **SecurityMode** is set to `'SQL'`.
 
-##### <a name="dsc_sourcecredential"></a>`dsc_sourcecredential`
+##### <a name="-dsc_sqlsetup--dsc_sourcecredential"></a>`dsc_sourcecredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Credentials used to access the path set in the parameter **SourcePath**. See section [Considerations](#considerations)
 regarding the parameter **SourceCredential**.
 
-##### <a name="dsc_sqlsvcaccount"></a>`dsc_sqlsvcaccount`
+##### <a name="-dsc_sqlsetup--dsc_sqlsvcaccount"></a>`dsc_sqlsvcaccount`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Service account for the _SQL Server_'s _Windows_ service.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlsetup--name"></a>`name`
 
 namevar
 
@@ -4139,7 +4277,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlsetup--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -4151,11 +4289,17 @@ Default value: `property`
 ### <a name="dsc_sqltraceflag"></a>`dsc_sqltraceflag`
 
 The DSC SqlTraceFlag resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
 The following properties are available in the `dsc_sqltraceflag` type.
+
+##### `dsc_clearalltraceflags`
+
+Data type: `Optional[Boolean]`
+
+Specifies that there should be no trace flags set on the instance.
 
 ##### `dsc_restartservice`
 
@@ -4193,16 +4337,22 @@ Data type: `Optional[Array[Integer[0, 4294967295]]]`
 
 An array of trace flags to be added to the existing trace flags.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqltraceflag` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqltraceflag--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqltraceflag--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqltraceflag--name)
+* [`validation_mode`](#-dsc_sqltraceflag--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqltraceflag--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -4210,13 +4360,13 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqltraceflag--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqltraceflag--name"></a>`name`
 
 namevar
 
@@ -4224,7 +4374,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqltraceflag--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -4236,7 +4386,7 @@ Default value: `property`
 ### <a name="dsc_sqlwaitforag"></a>`dsc_sqlwaitforag`
 
 The DSC SqlWaitForAG resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -4266,17 +4416,23 @@ Data type: `Optional[String]`
 
 The host name of the _SQL Server_ to be configured. Default value is the current computer name.
 
+##### `ensurable`
+
+Data type: `Boolean[false]`
+
+Default attribute added to all dsc types without an ensure property. This resource is not ensurable.
+
 #### Parameters
 
 The following parameters are available in the `dsc_sqlwaitforag` type.
 
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_name`](#dsc_name)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_instancename`](#-dsc_sqlwaitforag--dsc_instancename)
+* [`dsc_name`](#-dsc_sqlwaitforag--dsc_name)
+* [`dsc_psdscrunascredential`](#-dsc_sqlwaitforag--dsc_psdscrunascredential)
+* [`name`](#-dsc_sqlwaitforag--name)
+* [`validation_mode`](#-dsc_sqlwaitforag--validation_mode)
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlwaitforag--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -4284,7 +4440,7 @@ Data type: `String`
 
 The name of the _SQL Server_ instance to be configured.
 
-##### <a name="dsc_name"></a>`dsc_name`
+##### <a name="-dsc_sqlwaitforag--dsc_name"></a>`dsc_name`
 
 namevar
 
@@ -4292,13 +4448,13 @@ Data type: `String`
 
 Name of the cluster role/group to look for (normally the same as the _Availability Group_ name).
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlwaitforag--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlwaitforag--name"></a>`name`
 
 namevar
 
@@ -4306,7 +4462,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlwaitforag--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 
@@ -4318,7 +4474,7 @@ Default value: `property`
 ### <a name="dsc_sqlwindowsfirewall"></a>`dsc_sqlwindowsfirewall`
 
 The DSC SqlWindowsFirewall resource type.
-Automatically generated from version 16.0.0
+Automatically generated from version 16.5.0
 
 #### Properties
 
@@ -4344,7 +4500,7 @@ Returns wether the firewall rule(s) for the _SQL Server Database Engine_ is enab
 
 ##### `dsc_ensure`
 
-Data type: `Optional[Enum['Present', 'Absent', 'present', 'absent']]`
+Data type: `Optional[Enum['Present', 'present', 'Absent', 'absent']]`
 
 Ensures that _SQL Server_ services firewall rules are `'Present'` or `'Absent'` on the machine.
 
@@ -4370,14 +4526,14 @@ UNC path to the root of the source files for installation.
 
 The following parameters are available in the `dsc_sqlwindowsfirewall` type.
 
-* [`dsc_features`](#dsc_features)
-* [`dsc_instancename`](#dsc_instancename)
-* [`dsc_psdscrunascredential`](#dsc_psdscrunascredential)
-* [`dsc_sourcecredential`](#dsc_sourcecredential)
-* [`name`](#name)
-* [`validation_mode`](#validation_mode)
+* [`dsc_features`](#-dsc_sqlwindowsfirewall--dsc_features)
+* [`dsc_instancename`](#-dsc_sqlwindowsfirewall--dsc_instancename)
+* [`dsc_psdscrunascredential`](#-dsc_sqlwindowsfirewall--dsc_psdscrunascredential)
+* [`dsc_sourcecredential`](#-dsc_sqlwindowsfirewall--dsc_sourcecredential)
+* [`name`](#-dsc_sqlwindowsfirewall--name)
+* [`validation_mode`](#-dsc_sqlwindowsfirewall--validation_mode)
 
-##### <a name="dsc_features"></a>`dsc_features`
+##### <a name="-dsc_sqlwindowsfirewall--dsc_features"></a>`dsc_features`
 
 namevar
 
@@ -4385,7 +4541,7 @@ Data type: `String`
 
 _SQL Server_ features to enable firewall rules for.
 
-##### <a name="dsc_instancename"></a>`dsc_instancename`
+##### <a name="-dsc_sqlwindowsfirewall--dsc_instancename"></a>`dsc_instancename`
 
 namevar
 
@@ -4393,20 +4549,20 @@ Data type: `String`
 
 _SQL Server_ instance to enable firewall rules for.
 
-##### <a name="dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
+##### <a name="-dsc_sqlwindowsfirewall--dsc_psdscrunascredential"></a>`dsc_psdscrunascredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
  
 
-##### <a name="dsc_sourcecredential"></a>`dsc_sourcecredential`
+##### <a name="-dsc_sqlwindowsfirewall--dsc_sourcecredential"></a>`dsc_sourcecredential`
 
 Data type: `Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]`
 
 Credentials used to access the path set in the parameter **SourcePath**. This parameter is optional either if built-in
 parameter **PsDscRunAsCredential** is used, or if the source path can be access using the SYSTEM account.
 
-##### <a name="name"></a>`name`
+##### <a name="-dsc_sqlwindowsfirewall--name"></a>`name`
 
 namevar
 
@@ -4414,7 +4570,7 @@ Data type: `String`
 
 Description of the purpose for this resource declaration.
 
-##### <a name="validation_mode"></a>`validation_mode`
+##### <a name="-dsc_sqlwindowsfirewall--validation_mode"></a>`validation_mode`
 
 Data type: `Enum[property, resource]`
 

@@ -447,6 +447,9 @@ function Start-SqlSetupProcess
     .PARAMETER StatementTimeout
         Set the query StatementTimeout in seconds. Default 600 seconds (10 minutes).
 
+    .PARAMETER Encrypt
+        Specifies if encryption should be used.
+
     .EXAMPLE
         Connect-SQL
 
@@ -458,7 +461,7 @@ function Start-SqlSetupProcess
         Connects to the instance 'MyInstance' on the local server.
 
     .EXAMPLE
-        Connect-SQL ServerName 'sql.company.local' -InstanceName 'MyInstance'
+        Connect-SQL ServerName 'sql.company.local' -InstanceName 'MyInstance' -ErrorAction 'Stop'
 
         Connects to the instance 'MyInstance' on the server 'sql.company.local'.
 #>
@@ -493,10 +496,14 @@ function Connect-SQL
         [Parameter()]
         [ValidateNotNull()]
         [System.Int32]
-        $StatementTimeout = 600
+        $StatementTimeout = 600,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $Encrypt
     )
 
-    Import-SQLPSModule
+    Import-SqlDscPreferredModule
 
     if ($InstanceName -eq 'MSSQLSERVER')
     {
@@ -511,7 +518,13 @@ function Connect-SQL
     $sqlConnectionContext = $sqlServerObject.ConnectionContext
     $sqlConnectionContext.ServerInstance = $databaseEngineInstance
     $sqlConnectionContext.StatementTimeout = $StatementTimeout
+    $sqlConnectionContext.ConnectTimeout = $StatementTimeout
     $sqlConnectionContext.ApplicationName = 'SqlServerDsc'
+
+    if ($Encrypt.IsPresent)
+    {
+        $sqlConnectionContext.EncryptConnection = $true
+    }
 
     if ($PSCmdlet.ParameterSetName -eq 'SqlServer')
     {
@@ -551,9 +564,44 @@ function Connect-SQL
 
     try
     {
+        $onlineStatus = 'Online'
+        $connectTimer = [System.Diagnostics.StopWatch]::StartNew()
         $sqlConnectionContext.Connect()
 
-        if ($sqlServerObject.Status -match '^Online$')
+        <#
+            The addition of the ConnetTimeout property to the ConnectionContext will force the
+            Connect() method to block until successful.  THe SMO object's Status property may not
+            report 'Online' immediately eventhough the Connect() was successful.  The loop is to
+            ensure the SMO's Status property was been updated.
+        #>
+        $sleepInSeconds = 2
+        do
+        {
+            $instanceStatus = $sqlServerObject.Status
+            if ([System.String]::IsNullOrEmpty($instanceStatus))
+            {
+                $instanceStatus = 'Unknown'
+            }
+            else
+            {
+                # Property Status is of type Enum ServerStatus, we return the string equivalent.
+                $instanceStatus = $instanceStatus.ToString()
+            }
+
+            if ($instanceStatus -eq $onlineStatus)
+            {
+                break
+            }
+
+            Write-Debug -Message (
+                $script:localizedData.WaitForDatabaseEngineInstanceStatus -f $instanceStatus, $onlineStatus, $sleepInSeconds
+            )
+
+            Start-Sleep -Seconds $sleepInSeconds
+            $sqlServerObject.Refresh()
+        } while ($connectTimer.Elapsed.TotalSeconds -lt $StatementTimeout)
+
+        if ($instanceStatus -match '^Online$')
         {
             Write-Verbose -Message (
                 $script:localizedData.ConnectedToDatabaseEngineInstance -f $databaseEngineInstance
@@ -563,16 +611,51 @@ function Connect-SQL
         }
         else
         {
-            throw
+            $errorMessage = $script:localizedData.DatabaseEngineInstanceNotOnline -f @(
+                $databaseEngineInstance,
+                $instanceStatus
+            )
+
+            $invalidOperationException = New-Object -TypeName 'InvalidOperationException' -ArgumentList @($errorMessage)
+
+            $newObjectParameters = @{
+                TypeName     = 'System.Management.Automation.ErrorRecord'
+                ArgumentList = @(
+                    $invalidOperationException,
+                    'CS0001',
+                    'InvalidOperation',
+                    $databaseEngineInstance
+                )
+            }
+
+            $errorRecordToThrow = New-Object @newObjectParameters
+
+            Write-Error -ErrorRecord $errorRecordToThrow
         }
     }
     catch
     {
         $errorMessage = $script:localizedData.FailedToConnectToDatabaseEngineInstance -f $databaseEngineInstance
-        New-InvalidOperationException -Message $errorMessage -ErrorRecord $_
+
+        $invalidOperationException = New-Object -TypeName 'InvalidOperationException' -ArgumentList @($errorMessage, $_.Exception)
+
+        $newObjectParameters = @{
+            TypeName     = 'System.Management.Automation.ErrorRecord'
+            ArgumentList = @(
+                $invalidOperationException,
+                'CS0002',
+                'InvalidOperation',
+                $databaseEngineInstance
+            )
+        }
+
+        $errorRecordToThrow = New-Object @newObjectParameters
+
+        Write-Error -ErrorRecord $errorRecordToThrow
     }
     finally
     {
+        $connectTimer.Stop()
         <#
             Connect will ensure we actually can connect, but we need to disconnect
             from the session so we don't have anything hanging. If we need run a
@@ -650,7 +733,7 @@ function Connect-SQLAnalysis
     {
         if ((Test-FeatureFlag -FeatureFlag $FeatureFlag -TestFlag 'AnalysisServicesConnection'))
         {
-            Import-SQLPSModule
+            Import-SqlDscPreferredModule
 
             $analysisServicesObject = New-Object -TypeName 'Microsoft.AnalysisServices.Server'
 
@@ -815,133 +898,6 @@ function Get-SqlInstanceMajorVersion
 
 <#
     .SYNOPSIS
-        Imports the module SQLPS in a standardized way.
-
-    .PARAMETER Force
-        Forces the removal of the previous SQL module, to load the same or newer
-        version fresh. This is meant to make sure the newest version is used, with
-        the latest assemblies.
-
-#>
-function Import-SQLPSModule
-{
-    [CmdletBinding()]
-    param
-    (
-        [Parameter()]
-        [System.Management.Automation.SwitchParameter]
-        $Force
-    )
-
-    if ($Force.IsPresent)
-    {
-        Write-Verbose -Message $script:localizedData.ModuleForceRemoval -Verbose
-        Remove-Module -Name @('SqlServer', 'SQLPS', 'SQLASCmdlets') -Force -ErrorAction SilentlyContinue
-    }
-
-    <#
-        Check if either of the modules are already loaded into the session.
-        Prefer to use the first one (in order found).
-        NOTE: There should actually only be either SqlServer or SQLPS loaded,
-        otherwise there can be problems with wrong assemblies being loaded.
-    #>
-    $loadedModuleName = (Get-Module -Name @('SqlServer', 'SQLPS') | Select-Object -First 1).Name
-    if ($loadedModuleName)
-    {
-        Write-Verbose -Message ($script:localizedData.PowerShellModuleAlreadyImported -f $loadedModuleName) -Verbose
-        return
-    }
-
-    $availableModuleName = $null
-
-    # Get the newest SqlServer module if more than one exist
-    $availableModule = Get-Module -FullyQualifiedName 'SqlServer' -ListAvailable |
-        Sort-Object -Property 'Version' -Descending |
-        Select-Object -First 1 -Property Name, Path, Version
-
-    if ($availableModule)
-    {
-        $availableModuleName = $availableModule.Name
-        Write-Verbose -Message ($script:localizedData.PreferredModuleFound) -Verbose
-    }
-    else
-    {
-        Write-Verbose -Message ($script:localizedData.PreferredModuleNotFound) -Verbose
-
-        <#
-            After installing SQL Server the current PowerShell session doesn't know about the new path
-            that was added for the SQLPS module.
-            This reloads PowerShell session environment variable PSModulePath to make sure it contains
-            all paths.
-        #>
-        Set-PSModulePath -Path ([System.Environment]::GetEnvironmentVariable('PSModulePath', 'Machine'))
-
-        <#
-            Get the newest SQLPS module if more than one exist.
-        #>
-        $availableModule = Get-Module -FullyQualifiedName 'SQLPS' -ListAvailable |
-            Select-Object -Property Name, Path, @{
-                Name       = 'Version'
-                Expression = {
-                    # Parse the build version number '120', '130' from the Path.
-                    (Select-String -InputObject $_.Path -Pattern '\\([0-9]{3})\\' -List).Matches.Groups[1].Value
-                }
-            } |
-            Sort-Object -Property 'Version' -Descending |
-            Select-Object -First 1
-
-        if ($availableModule)
-        {
-            # This sets $availableModuleName to the Path of the module to be loaded.
-            $availableModuleName = Split-Path -Path $availableModule.Path -Parent
-        }
-    }
-
-    if ($availableModuleName)
-    {
-        try
-        {
-            Write-Debug -Message ($script:localizedData.DebugMessagePushingLocation)
-            Push-Location
-
-            <#
-                SQLPS has unapproved verbs, disable checking to ignore Warnings.
-                Suppressing verbose so all cmdlet is not listed.
-            #>
-            $importedModule = Import-Module -Name $availableModuleName -DisableNameChecking -Verbose:$false -Force:$Force -PassThru -ErrorAction Stop
-
-            <#
-                SQLPS returns two entries, one with module type 'Script' and another with module type 'Manifest'.
-                Only return the object with module type 'Manifest'.
-                SqlServer only returns one object (of module type 'Script'), so no need to do anything for SqlServer module.
-            #>
-            if ($availableModuleName -ne 'SqlServer')
-            {
-                $importedModule = $importedModule | Where-Object -Property 'ModuleType' -EQ -Value 'Manifest'
-            }
-
-            Write-Verbose -Message ($script:localizedData.ImportedPowerShellModule -f $importedModule.Name, $importedModule.Version, $importedModule.Path) -Verbose
-        }
-        catch
-        {
-            $errorMessage = $script:localizedData.FailedToImportPowerShellSqlModule -f $availableModuleName
-            New-InvalidOperationException -Message $errorMessage -ErrorRecord $_
-        }
-        finally
-        {
-            Write-Debug -Message ($script:localizedData.DebugMessagePoppingLocation)
-            Pop-Location
-        }
-    }
-    else
-    {
-        $errorMessage = $script:localizedData.PowerShellSqlModuleNotFound
-        New-InvalidOperationException -Message $errorMessage
-    }
-}
-
-<#
-    .SYNOPSIS
         Restarts a SQL Server instance and associated services
 
     .PARAMETER ServerName
@@ -1028,7 +984,7 @@ function Restart-SqlService
     if (-not $SkipClusterCheck.IsPresent)
     {
         ## Connect to the instance
-        $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
+        $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'Stop'
 
         if ($serverObject.IsClustered)
         {
@@ -1094,10 +1050,12 @@ function Restart-SqlService
     {
         $connectTimer = [System.Diagnostics.StopWatch]::StartNew()
 
+        $connectSqlError = $null
+
         do
         {
             # This call, if it fails, will take between ~9-10 seconds to return.
-            $testConnectionServerObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'SilentlyContinue'
+            $testConnectionServerObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'SilentlyContinue' -ErrorVariable 'connectSqlError'
 
             # Make sure we have an SMO object to test Status
             if ($testConnectionServerObject)
@@ -1110,15 +1068,29 @@ function Restart-SqlService
 
             # Waiting 2 seconds to not hammer the SQL Server instance.
             Start-Sleep -Seconds 2
-        } until ($connectTimer.Elapsed.Seconds -ge $Timeout)
+        } until ($connectTimer.Elapsed.TotalSeconds -ge $Timeout)
 
         $connectTimer.Stop()
 
         # Was the timeout period reach before able to connect to the SQL Server instance?
         if (-not $testConnectionServerObject -or $testConnectionServerObject.Status -ne 'Online')
         {
-            $errorMessage = $script:localizedData.FailedToConnectToInstanceTimeout -f $ServerName, $InstanceName, $Timeout
-            New-InvalidOperationException -Message $errorMessage
+            $errorMessage = $script:localizedData.FailedToConnectToInstanceTimeout -f @(
+                $ServerName,
+                $InstanceName,
+                $Timeout
+            )
+
+            $newInvalidOperationExceptionParameters = @{
+                Message = $errorMessage
+            }
+
+            if ($connectSqlError)
+            {
+                $newInvalidOperationExceptionParameters.ErrorRecord = $connectSqlError[$connectSqlError.Count - 1]
+            }
+
+            New-InvalidOperationException @newInvalidOperationExceptionParameters
         }
     }
 }
@@ -1330,196 +1302,6 @@ function Restart-ReportingServicesService
     }
 }
 
-
-<#
-    .SYNOPSIS
-        Executes a query on the specified database.
-
-    .PARAMETER ServerName
-        The hostname of the server that hosts the SQL instance.
-
-    .PARAMETER InstanceName
-        The name of the SQL instance that hosts the database.
-
-    .PARAMETER Database
-        Specify the name of the database to execute the query on.
-
-    .PARAMETER Query
-        The query string to execute.
-
-    .PARAMETER DatabaseCredential
-        PSCredential object with the credentials to use to impersonate a user
-        when connecting. If this is not provided then the current user will be
-        used to connect to the SQL Server Database Engine instance.
-
-    .PARAMETER LoginType
-        Specifies which type of logon credential should be used. The valid types are
-        Integrated, WindowsUser, and SqlLogin. If WindowsUser or SqlLogin are specified
-        then the SetupCredential needs to be specified as well.
-
-    .PARAMETER SqlServerObject
-        You can pass in an object type of 'Microsoft.SqlServer.Management.Smo.Server'.
-        This can also be passed in through the pipeline. See examples.
-
-    .PARAMETER WithResults
-        Specifies if the query should return results.
-
-    .PARAMETER StatementTimeout
-        Set the query StatementTimeout in seconds. Default 600 seconds (10mins).
-
-    .PARAMETER RedactText
-        One or more strings to redact from the query when verbose messages are
-        written to the console. Strings here will be escaped so they will not
-        be interpreted as regular expressions (RegEx).
-
-    .EXAMPLE
-        Invoke-Query -ServerName Server1 -InstanceName MSSQLSERVER -Database master `
-            -Query 'SELECT name FROM sys.databases' -WithResults
-
-    .EXAMPLE
-        Invoke-Query -ServerName Server1 -InstanceName MSSQLSERVER -Database master `
-            -Query 'RESTORE DATABASE [NorthWinds] WITH RECOVERY'
-
-    .EXAMPLE
-        Connect-SQL @sqlConnectionParameters | Invoke-Query -Database master `
-            -Query 'SELECT name FROM sys.databases' -WithResults
-
-    .EXAMPLE
-        Invoke-Query -ServerName Server1 -InstanceName MSSQLSERVER -Database MyDatabase `
-             -Query "select * from MyTable where password = 'PlaceholderPa\ssw0rd1' and password = 'placeholder secret passphrase'" `
-             -WithResults -RedactText @('PlaceholderPa\sSw0rd1','Placeholder Secret PassPhrase') -Verbose
-
-    .NOTES
-        The script analyzer rule UseSyntacticallyCorrectExamples will fail in VS Code
-        on this function unless the SMO types are loaded (either the real ones or the
-        stubs). When the rule is run in the pipeline the test will load the SMO stub
-        classes for proper testing of the rule.
-#>
-function Invoke-Query
-{
-    [CmdletBinding(DefaultParameterSetName = 'SqlServer')]
-    param
-    (
-        [Parameter(ParameterSetName = 'SqlServer')]
-        [ValidateNotNullOrEmpty()]
-        [System.String]
-        $ServerName = (Get-ComputerName),
-
-        [Parameter(ParameterSetName = 'SqlServer')]
-        [System.String]
-        $InstanceName = 'MSSQLSERVER',
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Database,
-
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $Query,
-
-        [Parameter()]
-        [Alias('SetupCredential')]
-        [System.Management.Automation.PSCredential]
-        $DatabaseCredential,
-
-        [Parameter()]
-        [ValidateSet('Integrated', 'WindowsUser', 'SqlLogin')]
-        [System.String]
-        $LoginType = 'Integrated',
-
-        [Parameter(ValueFromPipeline, ParameterSetName = 'SqlObject', Mandatory = $true)]
-        [ValidateNotNull()]
-        [Microsoft.SqlServer.Management.Smo.Server]
-        $SqlServerObject,
-
-        [Parameter()]
-        [Switch]
-        $WithResults,
-
-        [Parameter()]
-        [ValidateNotNull()]
-        [System.Int32]
-        $StatementTimeout = 600,
-
-        [Parameter()]
-        [System.String[]]
-        $RedactText
-    )
-
-    if ($PSCmdlet.ParameterSetName -eq 'SqlObject')
-    {
-        $serverObject = $SqlServerObject
-    }
-    elseif ($PSCmdlet.ParameterSetName -eq 'SqlServer')
-    {
-        $connectSQLParameters = @{
-            ServerName       = $ServerName
-            InstanceName     = $InstanceName
-            StatementTimeout = $StatementTimeout
-        }
-
-        if ($LoginType -ne 'Integrated')
-        {
-            $connectSQLParameters['LoginType'] = $LoginType
-        }
-
-        if ($PSBoundParameters.ContainsKey('DatabaseCredential'))
-        {
-            $connectSQLParameters.SetupCredential = $DatabaseCredential
-        }
-
-        $serverObject = Connect-SQL @connectSQLParameters
-    }
-
-    $redactedQuery = $Query
-
-    foreach ($redactString in $RedactText)
-    {
-        <#
-            Escaping the string to handle strings which could look like
-            regular expressions, like passwords.
-        #>
-        $escapedRedactedString = [System.Text.RegularExpressions.Regex]::Escape($redactString)
-
-        $redactedQuery = $redactedQuery -ireplace $escapedRedactedString, '*******'
-    }
-
-    if ($WithResults)
-    {
-        try
-        {
-            Write-Verbose -Message (
-                $script:localizedData.ExecuteQueryWithResults -f $redactedQuery
-            ) -Verbose
-
-            $result = $serverObject.Databases[$Database].ExecuteWithResults($Query)
-        }
-        catch
-        {
-            $errorMessage = $script:localizedData.ExecuteQueryWithResultsFailed -f $Database
-            New-InvalidOperationException -Message $errorMessage -ErrorRecord $_
-        }
-    }
-    else
-    {
-        try
-        {
-            Write-Verbose -Message (
-                $script:localizedData.ExecuteNonQuery -f $redactedQuery
-            ) -Verbose
-
-            $serverObject.Databases[$Database].ExecuteNonQuery($Query)
-        }
-        catch
-        {
-            $errorMessage = $script:localizedData.ExecuteNonQueryFailed -f $Database
-            New-InvalidOperationException -Message $errorMessage -ErrorRecord $_
-        }
-    }
-
-    return $result
-}
-
 <#
     .SYNOPSIS
         Executes the alter method on an Availability Group Replica object.
@@ -1627,11 +1409,11 @@ function Test-LoginEffectivePermissions
     # Assume the permissions are not present
     $permissionsPresent = $false
 
-    $invokeQueryParameters = @{
+    $invokeSqlDscQueryParameters = @{
         ServerName   = $ServerName
         InstanceName = $InstanceName
-        Database     = 'master'
-        WithResults  = $true
+        DatabaseName = 'master'
+        PassThru     = $true
     }
 
     if ( [System.String]::IsNullOrEmpty($SecurableName) )
@@ -1655,7 +1437,7 @@ function Test-LoginEffectivePermissions
 
     Write-Verbose -Message ($script:localizedData.GetEffectivePermissionForLogin -f $LoginName, $InstanceName) -Verbose
 
-    $loginEffectivePermissionsResult = Invoke-Query @invokeQueryParameters -Query $queryToGetEffectivePermissionsForLogin
+    $loginEffectivePermissionsResult = Invoke-SqlDscQuery @invokeSqlDscQueryParameters -Query $queryToGetEffectivePermissionsForLogin
     $loginEffectivePermissions = $loginEffectivePermissionsResult.Tables.Rows.permission_name
 
     if ( $null -ne $loginEffectivePermissions )
@@ -1716,16 +1498,16 @@ function Test-AvailabilityReplicaSeedingModeAutomatic
     # Assume automatic seeding is disabled by default
     $availabilityReplicaSeedingModeAutomatic = $false
 
-    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName
+    $serverObject = Connect-SQL -ServerName $ServerName -InstanceName $InstanceName -ErrorAction 'Stop'
 
     # Only check the seeding mode if this is SQL 2016 or newer
     if ( $serverObject.Version -ge 13 )
     {
-        $invokeQueryParams = @{
+        $invokeSqlDscQueryParameters = @{
             ServerName   = $ServerName
             InstanceName = $InstanceName
-            Database     = 'master'
-            WithResults  = $true
+            DatabaseName = 'master'
+            PassThru     = $true
         }
 
         $queryToGetSeedingMode = "
@@ -1735,7 +1517,7 @@ function Test-AvailabilityReplicaSeedingModeAutomatic
             WHERE ag.name = '$AvailabilityGroupName'
                 AND ar.replica_server_name = '$AvailabilityReplicaName'
         "
-        $seedingModeResults = Invoke-Query @invokeQueryParams -Query $queryToGetSeedingMode
+        $seedingModeResults = Invoke-SqlDscQuery @invokeSqlDscQueryParameters -Query $queryToGetSeedingMode
         $seedingMode = $seedingModeResults.Tables.Rows.seeding_mode_desc
 
         if ( $seedingMode -eq 'Automatic' )
@@ -1775,7 +1557,7 @@ function Get-PrimaryReplicaServerObject
     # Determine if we're connected to the primary replica
     if ( ( $AvailabilityGroup.PrimaryReplicaServerName -ne $serverObject.DomainInstanceName ) -and ( -not [System.String]::IsNullOrEmpty($AvailabilityGroup.PrimaryReplicaServerName) ) )
     {
-        $primaryReplicaServerObject = Connect-SQL -ServerName $AvailabilityGroup.PrimaryReplicaServerName
+        $primaryReplicaServerObject = Connect-SQL -ServerName $AvailabilityGroup.PrimaryReplicaServerName -ErrorAction 'Stop'
     }
 
     return $primaryReplicaServerObject
@@ -2084,18 +1866,48 @@ function Test-ActiveNode
     .PARAMETER QueryTimeout
         Specifies, as an integer, the number of seconds after which the T-SQL
         script execution will time out. In some SQL Server versions there is a
-        bug in Invoke-Sqlcmd where the normal default value 0 (no timeout) is not
+        bug in Invoke-SqlCmd where the normal default value 0 (no timeout) is not
         respected and the default value is incorrectly set to 30 seconds.
 
     .PARAMETER Variable
-        Creates a Invoke-Sqlcmd scripting variable for use in the Invoke-Sqlcmd
+        Creates a Invoke-SqlCmd scripting variable for use in the Invoke-SqlCmd
         script, and sets a value for the variable.
 
     .PARAMETER DisableVariables
-        Specifies, as a boolean, whether or not PowerShell will ignore sqlcmd
+        Specifies, as a boolean, whether or not PowerShell will ignore Invoke-SqlCmd
         scripting variables that share a format such as $(variable_name). For more
         information how to use this, please go to the help documentation for
-        [Invoke-Sqlcmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-Sqlcmd).
+        [Invoke-SqlCmd](https://docs.microsoft.com/en-us/powershell/module/sqlserver/Invoke-Sqlcmd).
+
+    .PARAMETER Encrypt
+        Specifies how encryption should be enforced. When not specified, the default
+        value is `Mandatory`.
+
+        This value maps to the Encrypt property SqlConnectionEncryptOption
+        on the SqlConnection object of the Microsoft.Data.SqlClient driver.
+
+        This parameter can only be used when the module SqlServer v22.x.x is installed.
+
+    .NOTES
+        This wrapper for Invoke-SqlCmd make verbose functionality of PRINT and
+        RAISEERROR statements work as those are outputted in the verbose output
+        stream. For some reason having the wrapper in a separate module seems to
+        trigger (so that it works getting) the verbose output for those statements.
+
+        Parameter `Encrypt` controls whether the connection used by `Invoke-SqlCmd`
+        should enforce encryption. This parameter can only be used together with the
+        module _SqlServer_ v22.x (minimum v22.0.49-preview). The parameter will be
+        ignored if an older major versions of the module _SqlServer_ is used.
+        Encryption is mandatory by default, which generates the following exception
+        when the correct certificates are not present:
+
+        "A connection was successfully established with the server, but then
+        an error occurred during the login process. (provider: SSL Provider,
+        error: 0 - The certificate chain was issued by an authority that is
+        not trusted.)"
+
+        For more details, see the article [Connect to SQL Server with strict encryption](https://learn.microsoft.com/en-us/sql/relational-databases/security/networking/connect-with-strict-encryption?view=sql-server-ver16)
+        and [Configure SQL Server Database Engine for encrypting connections](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-sql-server-encryption?view=sql-server-ver16).
 #>
 function Invoke-SqlScript
 {
@@ -2129,10 +1941,15 @@ function Invoke-SqlScript
 
         [Parameter()]
         [System.Boolean]
-        $DisableVariables
+        $DisableVariables,
+
+        [Parameter()]
+        [ValidateSet('Mandatory', 'Optional', 'Strict')]
+        [System.String]
+        $Encrypt
     )
 
-    Import-SQLPSModule
+    Import-SqlDscPreferredModule
 
     if ($PSCmdlet.ParameterSetName -eq 'File')
     {
@@ -2151,6 +1968,21 @@ function Invoke-SqlScript
     }
 
     $null = $PSBoundParameters.Remove('Credential')
+
+    if ($PSBoundParameters.ContainsKey('Encrypt'))
+    {
+        $commandInvokeSqlCmd = Get-Command -Name 'Invoke-SqlCmd'
+
+        if ($null -ne $commandInvokeSqlCmd -and $commandInvokeSqlCmd.Parameters.Keys -notcontains 'Encrypt')
+        {
+            $null = $PSBoundParameters.Remove('Encrypt')
+        }
+    }
+
+    if ([System.String]::IsNullOrEmpty($Variable))
+    {
+        $null = $PSBoundParameters.Remove('Variable')
+    }
 
     Invoke-SqlCmd @PSBoundParameters
 }
@@ -2422,6 +2254,10 @@ function ConvertTo-ServerInstanceName
 
     .PARAMETER Path
         String containing the path to the SQL Server setup.exe executable.
+
+    .NOTES
+        This function should be removed when it is not longer used, and instead
+        the private function Get-FileVersionInformation shall be used.
 #>
 function Get-FilePathMajorVersion
 {

@@ -3,7 +3,7 @@
     RootModule        = 'DscResource.Common.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.11.1'
+    ModuleVersion     = '0.16.0'
 
     # ID used to uniquely identify this module
     GUID              = '9c9daa5b-5c00-472d-a588-c96e8e498450'
@@ -24,7 +24,7 @@
     PowerShellVersion = '4.0'
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Assert-BoundParameter','Assert-IPAddress','Assert-Module','Compare-DscParameterState','Compare-ResourcePropertyState','ConvertFrom-DscResourceInstance','ConvertTo-CimInstance','ConvertTo-HashTable','Get-ComputerName','Get-LocalizedData','Get-LocalizedDataForInvariantCulture','Get-TemporaryFolder','New-InvalidArgumentException','New-InvalidDataException','New-InvalidOperationException','New-InvalidResultException','New-NotImplementedException','New-ObjectNotFoundException','Remove-CommonParameter','Set-DscMachineRebootRequired','Set-PSModulePath','Test-DscParameterState','Test-IsNanoServer')
+    FunctionsToExport = @('Assert-BoundParameter','Assert-ElevatedUser','Assert-IPAddress','Assert-Module','Compare-DscParameterState','Compare-ResourcePropertyState','ConvertFrom-DscResourceInstance','ConvertTo-CimInstance','ConvertTo-HashTable','Find-Certificate','Get-ComputerName','Get-DscProperty','Get-EnvironmentVariable','Get-LocalizedData','Get-LocalizedDataForInvariantCulture','Get-PSModulePath','Get-TemporaryFolder','New-InvalidArgumentException','New-InvalidDataException','New-InvalidOperationException','New-InvalidResultException','New-NotImplementedException','New-ObjectNotFoundException','Remove-CommonParameter','Set-DscMachineRebootRequired','Set-PSModulePath','Test-AccountRequirePassword','Test-DscParameterState','Test-DscProperty','Test-IsNanoServer','Test-IsNumericType')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -52,13 +52,15 @@
             IconUri      = 'https://dsccommunity.org/images/DSC_Logo_300p.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [0.11.1] - 2022-08-18
+            ReleaseNotes = '## [0.16.0] - 2023-04-10
 
-### Changed
+### Added
 
-- DscResource.Common
-  - updating the Get-LocalizedData to bypass Import-LocalizedData when in Globalization-Invariant mode.
-    The command throws when running on an Invariant culture on Linux in the latest PS versions.
+- New public commands.
+  - `Get-EnvironmentVariable` - Get a specific environment variable from a
+    specific environment variable target.
+  - `Get-PSModulePath` - Get the the PSModulePath from one or more environment
+    variable targets - [Issue #103](https://github.com/dsccommunity/DscResource.Common/issues/103)
 
 '
 

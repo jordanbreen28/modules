@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlAlwaysOnService',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlAlwaysOnService resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -25,6 +25,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'The name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The hostname of the _SQL Server_ to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -44,6 +46,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 4294967295]]',
       desc: 'The length of time, in seconds, to wait for the service to restart. Default value is `120` seconds.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32',
@@ -52,6 +55,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -59,8 +63,9 @@ Puppet::ResourceApi.register_type(
       mof_is_embedded: true,
     },
     dsc_ensure: {
-      type: "Enum['Present', 'Absent', 'present', 'absent']",
+      type: "Enum['Present', 'present', 'Absent', 'absent']",
       desc: "An enumerated value that describes if the _SQL Server_ should have _Always On High Availability and Disaster Recovery_ (HADR) property enabled (`'Present'`) or disabled (`'Absent'`).",
+
 
       mandatory_for_get: true,
       mandatory_for_set: true,

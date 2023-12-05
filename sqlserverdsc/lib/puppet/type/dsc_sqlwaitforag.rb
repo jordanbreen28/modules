@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlWaitForAG',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlWaitForAG resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -25,6 +25,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The host name of the _SQL Server_ to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -43,6 +45,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'The name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -53,6 +56,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 4294967295]]',
       desc: 'Maximum number of retries until the resource will timeout and throw an error. Default values is `30` times.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32',
@@ -61,6 +65,7 @@ Puppet::ResourceApi.register_type(
     dsc_name: {
       type: 'String',
       desc: 'Name of the cluster role/group to look for (normally the same as the _Availability Group_ name).',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -71,6 +76,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 18446744073709551615]]',
       desc: 'The interval, in seconds, to check for the presence of the cluster role/group. Default value is `20` seconds. When the cluster role/group has been found the resource will wait for this amount of time once more before returning.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt64',
@@ -79,10 +85,21 @@ Puppet::ResourceApi.register_type(
     dsc_groupexist: {
       type: 'Optional[Boolean]',
       desc: 'Returns `$true` if the cluster role/group exist, otherwise it returns `$false`. Used by _Get_.',
+
       behaviour: :read_only,
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
+      mof_is_embedded: false,
+    },
+    ensurable: {
+      type: 'Boolean[false]',
+      desc: 'Default attribute added to all dsc types without an ensure property. This resource is not ensurable.',
+      default: false,
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
       mof_is_embedded: false,
     },
   },

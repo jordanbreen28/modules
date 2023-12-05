@@ -6,9 +6,9 @@ Puppet::ResourceApi.register_type(
   dscmeta_resource_name: 'DSC_SqlConfiguration',
   dscmeta_resource_implementation: 'MOF',
   dscmeta_module_name: 'SqlServerDsc',
-  dscmeta_module_version: '16.0.0',
+  dscmeta_module_version: '16.5.0',
   docs: 'The DSC SqlConfiguration resource type.
-         Automatically generated from version 16.0.0',
+         Automatically generated from version 16.5.0',
   features: ['simple_get_filter', 'canonicalize', 'custom_insync'],
   attributes: {
     name: {
@@ -25,6 +25,7 @@ Puppet::ResourceApi.register_type(
     dsc_psdscrunascredential: {
       type: 'Optional[Struct[{ user => String[1], password => Sensitive[String[1]] }]]',
       desc: ' ',
+
       behaviour: :parameter,
       mandatory_for_get: false,
       mandatory_for_set: false,
@@ -35,6 +36,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[String]',
       desc: 'The hostname of the _SQL Server_ to be configured. Default value is the current computer name.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'String',
@@ -44,6 +46,7 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Boolean]',
       desc: 'Determines whether the instance should be restarted after updating the configuration option.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'Boolean',
@@ -52,6 +55,7 @@ Puppet::ResourceApi.register_type(
     dsc_instancename: {
       type: 'String',
       desc: 'Name of the _SQL Server_ instance to be configured.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -61,6 +65,7 @@ Puppet::ResourceApi.register_type(
     dsc_optionname: {
       type: 'String',
       desc: 'The name of the _SQL Server Database Engine_ instance configuration option. For all possible values reference the article [Server Configuration Options (SQL Server)](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/server-configuration-options-sql-server) or run `sp_configure`.',
+
       behaviour: :namevar,
       mandatory_for_get: true,
       mandatory_for_set: true,
@@ -71,6 +76,7 @@ Puppet::ResourceApi.register_type(
       type: 'Integer[-2147483648, 2147483647]',
       desc: 'The desired value of the configuration option.',
 
+
       mandatory_for_get: true,
       mandatory_for_set: true,
       mof_type: 'SInt32',
@@ -80,9 +86,20 @@ Puppet::ResourceApi.register_type(
       type: 'Optional[Integer[0, 4294967295]]',
       desc: 'The length of time, in seconds, to wait for the service to restart. Default is `120` seconds.',
 
+
       mandatory_for_get: false,
       mandatory_for_set: false,
       mof_type: 'UInt32',
+      mof_is_embedded: false,
+    },
+    ensurable: {
+      type: 'Boolean[false]',
+      desc: 'Default attribute added to all dsc types without an ensure property. This resource is not ensurable.',
+      default: false,
+
+      mandatory_for_get: false,
+      mandatory_for_set: false,
+      mof_type: 'String',
       mof_is_embedded: false,
     },
   },
